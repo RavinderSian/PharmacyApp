@@ -22,7 +22,7 @@ public class Medicine {
 	
 	@Column(name = "medicine_name")
 	private String name;
-	
+	 
 	@Column(name = "strength_mg")
 	private Integer strength;
 	
