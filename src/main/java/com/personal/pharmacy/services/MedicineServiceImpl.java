@@ -33,8 +33,13 @@ public class MedicineServiceImpl implements MedicineService{
 	}
 
 	@Override
-	public Optional<Medicine> findById(Long id) {
-		return medicineRepository.findById(id);
+	public Medicine findById(Long id) {
+		
+		Optional<Medicine> medicineOptional = medicineRepository.findById(id);
+		if (!medicineOptional.isPresent()) {
+			throw new RuntimeException("No medicine with given id");
+		}
+		return medicineOptional.get();
 	}
 
 	@Override

@@ -32,8 +32,13 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Optional<Patient> findById(Long id) {
-		return patientRepository.findById(id);
+	public Patient findById(Long id) {
+		
+		Optional<Patient> patientOptional = patientRepository.findById(id);
+		if (!patientOptional.isPresent()) {
+			throw new RuntimeException("No medicine with given id");
+		}
+		return patientOptional.get();
 	}
 
 }
