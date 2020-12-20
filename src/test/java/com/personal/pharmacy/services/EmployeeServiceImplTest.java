@@ -118,4 +118,15 @@ class EmployeeServiceImplTest {
 		Assertions.assertThrows(RuntimeException.class, () -> employeeService.findById(1L));
 	}
 	
+	@Test
+	public void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
+		//Arrange
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		//Act
+		employeeService.updateFirstName(employee, "new name");
+		//Assert
+		Assertions.assertEquals("new name", employee.getFirstName());
+	}
+	
 }

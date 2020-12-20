@@ -41,4 +41,10 @@ public class PatientServiceImpl implements PatientService {
 		return patientOptional.get();
 	}
 
+	@Override
+	public Patient updateFirstName(Patient patient, String firstName) {
+		patient.setFirstName(firstName);
+		return patient;
+	}
+
 }

@@ -43,4 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeOptional.get();
 	}
 
+	@Override
+	public Employee updateFirstName(Employee employee, String firstName) {
+		employee.setFirstName(firstName);
+		return employee;
+	}
+
 }
+ 

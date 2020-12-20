@@ -114,4 +114,15 @@ class PatientServiceImplTest {
 
 		Assertions.assertThrows(RuntimeException.class, () -> patientService.findById(1L));
 	}
+	
+	@Test
+	public void test_UpdateFirstName_UpdatesFirstNameCorrectly_WhenGivenStringNewName() {
+		//Arrange
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		//Act
+		patientService.updateFirstName(patient, "new name");
+		//Assert
+		Assertions.assertEquals(patient.getFirstName(), "new name");
+	}
 }

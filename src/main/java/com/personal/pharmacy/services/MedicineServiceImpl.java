@@ -47,4 +47,10 @@ public class MedicineServiceImpl implements MedicineService{
 		return medicineRepository.findByName(name);
 	}
 
+	@Override
+	public Medicine updateName(Medicine medicine, String name) {
+		medicine.setName(name);
+		return medicine;
+	}
+
 }
