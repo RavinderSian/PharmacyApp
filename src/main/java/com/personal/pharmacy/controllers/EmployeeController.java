@@ -15,27 +15,30 @@ import com.personal.pharmacy.services.EmployeeService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-@RequestMapping("employee/")
 @RestController
-public class EmployeeController {
+@RequestMapping("employee/")
+public class EmployeeController implements CrudController<Employee, Long>{
 
 	private final EmployeeService employeeService;
 
+	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getEmployeeById(@PathVariable Long id){
+	public ResponseEntity<?> getById(@PathVariable Long id){
 		Employee employee = employeeService.findById(id);
 		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
 	}
 	
+	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteEmployeeById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Employee employee = employeeService.findById(id);
 		employeeService.delete(employee);
 		return new ResponseEntity<String>("Employee deleted", HttpStatus.ACCEPTED);
 	}
-	 
+	
+	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> addEmployee(@RequestBody Employee employee){
+	public ResponseEntity<?> add(@RequestBody Employee employee){
 		Employee savedEmployee = employeeService.save(employee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
 	}

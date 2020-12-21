@@ -15,27 +15,30 @@ import com.personal.pharmacy.services.MedicineService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-@RequestMapping("medicine/")
 @RestController
-public class MedicineController {
+@RequestMapping("medicine/")
+public class MedicineController implements CrudController<Medicine, Long>{
 	
 	private final MedicineService medicineService;
 
+	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getMedicineById(@PathVariable Long id){
+	public ResponseEntity<?> getById(@PathVariable Long id){
 		Medicine medicine = medicineService.findById(id);
 		return new ResponseEntity<Medicine>(medicine, HttpStatus.ACCEPTED);
 	}
 	
+	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteMedicineById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Medicine medicine = medicineService.findById(id);
 		medicineService.delete(medicine);
 		return new ResponseEntity<String>("Medicine deleted", HttpStatus.ACCEPTED);
 	}
 	 
+	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> addMedicine(@RequestBody Medicine medicine){
+	public ResponseEntity<?> add(@RequestBody Medicine medicine){
 		Medicine savedMedicine = medicineService.save(medicine);
 		return new ResponseEntity<Medicine>(savedMedicine, HttpStatus.OK);
 	}

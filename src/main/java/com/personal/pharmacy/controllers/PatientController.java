@@ -17,24 +17,27 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RestController
 @RequestMapping("patient/")
-public class PatientController {
+public class PatientController implements CrudController<Patient, Long> {
 
 	private final PatientService patientService;
 	
+	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getPatientById(@PathVariable Long id){
+	public ResponseEntity<?> getById(@PathVariable Long id){
 		Patient patient = patientService.findById(id);
 		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
 	}
 	
+	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> addPatient(@RequestBody Patient patient){
+	public ResponseEntity<?> add(@RequestBody Patient patient){
 		Patient savedPatient = patientService.save(patient);
 		return new ResponseEntity<Patient>(savedPatient, HttpStatus.ACCEPTED);
 	}
 	
+	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deletePatientById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Patient patient = patientService.findById(id);
 		patientService.delete(patient);
 		return new ResponseEntity<String>("Patient deleted", HttpStatus.ACCEPTED);
