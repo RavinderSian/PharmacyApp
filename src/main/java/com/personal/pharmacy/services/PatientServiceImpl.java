@@ -44,7 +44,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Patient updateFirstName(Patient patient, String firstName) {
 		patient.setFirstName(firstName);
-		return patient;
+		return patientRepository.save(patient);
 	}
 
 }

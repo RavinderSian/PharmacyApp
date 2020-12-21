@@ -47,8 +47,7 @@ public class PatientController implements CrudController<Patient, Long> {
 	public ResponseEntity<?> updateFirstNameById(@PathVariable Long id, @RequestBody String firstName){
 		Patient patient = patientService.findById(id);
 		patientService.updateFirstName(patient, firstName);
-		Patient updatedPatient = patientService.save(patient);
-		return new ResponseEntity<Patient>(updatedPatient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
 	}
 	
 }

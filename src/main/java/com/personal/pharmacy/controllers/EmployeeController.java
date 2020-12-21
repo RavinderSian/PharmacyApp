@@ -47,7 +47,6 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
 		Employee employee = employeeService.findById(id);
 		employeeService.updateFirstName(employee, firstName);
-		employeeService.save(employee);
 		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
 	}
 	

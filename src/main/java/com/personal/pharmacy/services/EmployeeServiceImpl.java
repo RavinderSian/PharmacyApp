@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Employee updateFirstName(Employee employee, String firstName) {
 		employee.setFirstName(firstName);
-		return employee;
+		return employeeRepository.save(employee);
 	}
 
 }

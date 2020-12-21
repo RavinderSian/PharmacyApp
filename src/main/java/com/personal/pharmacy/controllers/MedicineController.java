@@ -47,7 +47,6 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	public ResponseEntity<?> updateMedicineName(@PathVariable Long id, @RequestBody String name){
 		Medicine medicine = medicineService.findById(id);
 		medicineService.updateName(medicine, name);
-		medicineService.save(medicine);
 		return new ResponseEntity<Medicine>(medicine, HttpStatus.ACCEPTED);
 	}
 	

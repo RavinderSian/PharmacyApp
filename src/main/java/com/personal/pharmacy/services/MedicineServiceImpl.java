@@ -50,7 +50,7 @@ public class MedicineServiceImpl implements MedicineService{
 	@Override
 	public Medicine updateName(Medicine medicine, String name) {
 		medicine.setName(name);
-		return medicine;
+		return medicineRepository.save(medicine);
 	}
 
 }
