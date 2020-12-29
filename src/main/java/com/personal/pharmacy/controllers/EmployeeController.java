@@ -24,6 +24,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
+
 		Employee employee = employeeService.findById(id);
 		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
 	}

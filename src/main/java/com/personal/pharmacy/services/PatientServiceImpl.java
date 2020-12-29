@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.personal.pharmacy.exceptions.NoDataForIdException;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.repository.PatientRepository;
 
@@ -36,7 +37,7 @@ public class PatientServiceImpl implements PatientService {
 		
 		Optional<Patient> patientOptional = patientRepository.findById(id);
 		if (!patientOptional.isPresent()) {
-			throw new RuntimeException("No medicine with given id");
+			throw new NoDataForIdException("No patient with id " + id);
 		}
 		return patientOptional.get();
 	}
