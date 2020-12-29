@@ -1,5 +1,8 @@
 package com.personal.pharmacy.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,5 +40,14 @@ public class Medicine {
 	@JoinColumn(name = "fk_prescription_id")
 	private Prescription prescription;
 	
+	@OneToMany
+	private Set<Ingredient> ingredients = new HashSet<>();
 	
+	public void addIngredient(Ingredient ingredient) {
+		this.ingredients.add(ingredient);
+	}
+	
+	public void removeIngredient(Ingredient ingredient) {
+		this.ingredients.remove(ingredient);
+	}
 }
