@@ -1,51 +1,49 @@
 package com.personal.pharmacy.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
-import com.personal.pharmacy.model.Employee;
-import com.personal.pharmacy.services.EmployeeService;
-
-class EmployeeControllerTest {
+@AutoConfigureMockMvc
+@SpringBootTest
+public class EmployeeControllerTest {
 	
-	@Mock
-	EmployeeService employeeService;
+	@Autowired
+	private MockMvc mockMvc;
 	
-	@Mock
-	Model model; 
-	
+	@Autowired
 	EmployeeController controller;
-
-	@BeforeEach
-	void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		controller = new EmployeeController(employeeService);
-	}
+	
+	MockBean bean;
 	
 	@Test
-	public void test_Get_FindById_ReturnsCorrectStatus() throws Exception{
-		//mock setup
-		Employee employee = new Employee();
-		employee.setEmployeeId(1L);
-		employee.setFirstName("rav");
-		when(employeeService.findById(1L));
+	public void contextLoads() throws Exception {
+		assertThat(controller).isNotNull();
+	}
+
+	@Test
+	public void test_GetById_ReturnsCorrectStatusAndEmployee() throws Exception {
 		
-		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		mockMvc.perform(get("/employee/{id}", 1L))
+		this.mockMvc.perform(get("/employee/1")).andDo(print())
 		.andExpect(status().isAccepted())
-		.andExpect(content().json("{'employeeId': 1, 'firstName': new name, 'lastName': null, 'prescription': null}"));
+		.andExpect(content().json("{'employeeId': 1, 'firstName': 'new name', 'lastName': null, 'prescription': null}"));
 	}
 	
+//	@Test
+//	public void test_Save_ReturnsCorrectStatusAndEmployee() throws Exception {
+//		
+//		this.mockMvc.perform(get("/employee/1")).andDo(print())
+//		.andExpect(status().isAccepted())
+//		.andExpect(content().json("{'employeeId': 1, 'firstName': 'new name', 'lastName': null, 'prescription': null}"));
+//	}
 	
-
 }

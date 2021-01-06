@@ -14,11 +14,12 @@ import com.personal.pharmacy.services.EmployeeService;
 
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @RestController
+@AllArgsConstructor
 @RequestMapping("employee/")
 public class EmployeeController implements CrudController<Employee, Long>{
 
+	
 	private final EmployeeService employeeService;
 
 	@Override
