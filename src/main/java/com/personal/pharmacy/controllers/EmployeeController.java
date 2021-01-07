@@ -15,9 +15,11 @@ import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.services.EmployeeService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 @RequestMapping("employee/")
 public class EmployeeController implements CrudController<Employee, Long>{
 
@@ -29,6 +31,10 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	public ResponseEntity<?> getById(@PathVariable Long id){
 
 		Optional<Employee> employeeOptional = employeeService.findById(id);
+		if (employeeOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		return new ResponseEntity<Employee>(employeeOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
@@ -36,6 +42,10 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
+		if (employeeOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		employeeService.delete(employeeOptional.get());
 		return new ResponseEntity<String>("Employee deleted", HttpStatus.ACCEPTED);
 	}
@@ -50,6 +60,10 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	@PostMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
+		if (employeeOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		Employee employee = employeeOptional.get();
 		employeeService.updateFirstName(employee, firstName);
 		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);

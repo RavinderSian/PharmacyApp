@@ -14,8 +14,10 @@ import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.services.IngredientService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("ingredient/")
 public class IngredientController implements CrudController<Ingredient, Long> {
@@ -25,12 +27,20 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	@Override
 	public ResponseEntity<?> getById(Long id) {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		if (ingredientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		return new ResponseEntity<Ingredient>(ingredientOptional.get(), HttpStatus.ACCEPTED);
 	}
 
 	@Override
 	public ResponseEntity<?> deleteById(Long id) {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		if (ingredientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		ingredientServices.delete(ingredientOptional.get());
 		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.ACCEPTED);
 
@@ -42,9 +52,13 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("{id}/updateName")
+	@PostMapping("{id}/updatename")
 	public ResponseEntity<?> updateName(@PathVariable Long id, @RequestBody String name){
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		if (ingredientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		Ingredient ingredient = ingredientOptional.get();
 		Ingredient updatedIngredient = ingredientServices.updateIngredientName(ingredient, name);
 		return new ResponseEntity<Ingredient>(updatedIngredient, HttpStatus.ACCEPTED);

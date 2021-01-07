@@ -15,9 +15,11 @@ import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.PrescriptionService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("prescription/")
 public class PrescriptionController implements CrudController<Prescription, Long> {
 
@@ -27,6 +29,10 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
+		if (prescriptionOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		return new ResponseEntity<Prescription>(prescriptionOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
@@ -41,6 +47,10 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
+		if (prescriptionOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		prescriptionService.delete(prescriptionOptional.get());
 		return new ResponseEntity<String>("Prescription deleted", HttpStatus.ACCEPTED);
 	}

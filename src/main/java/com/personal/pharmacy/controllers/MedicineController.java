@@ -15,9 +15,11 @@ import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.services.MedicineService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("medicine/")
 public class MedicineController implements CrudController<Medicine, Long>{
 	
@@ -27,6 +29,10 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		if (medicineOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		return new ResponseEntity<Medicine>(medicineOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
@@ -34,6 +40,10 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		if (medicineOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		medicineService.delete(medicineOptional.get());
 		return new ResponseEntity<String>("Medicine deleted", HttpStatus.ACCEPTED);
 	}
@@ -48,6 +58,10 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	@PostMapping("{id}/updatename")
 	public ResponseEntity<?> updateMedicineName(@PathVariable Long id, @RequestBody String name){
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		if (medicineOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		Medicine medicine = medicineOptional.get();
 		medicineService.updateName(medicine, name);
 		return new ResponseEntity<Medicine>(medicine, HttpStatus.ACCEPTED);

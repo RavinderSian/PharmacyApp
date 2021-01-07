@@ -15,9 +15,11 @@ import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.services.PatientService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("patient/")
 public class PatientController implements CrudController<Patient, Long> {
 
@@ -27,6 +29,10 @@ public class PatientController implements CrudController<Patient, Long> {
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
 		Optional<Patient> patientOptional = patientService.findById(id);
+		if (patientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		return new ResponseEntity<Patient>(patientOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
@@ -41,6 +47,10 @@ public class PatientController implements CrudController<Patient, Long> {
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
 		Optional<Patient> patientOptional = patientService.findById(id);
+		if (patientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		patientService.delete(patientOptional.get());
 		return new ResponseEntity<String>("Patient deleted", HttpStatus.ACCEPTED);
 	}
@@ -48,6 +58,10 @@ public class PatientController implements CrudController<Patient, Long> {
 	@PostMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateFirstNameById(@PathVariable Long id, @RequestBody String firstName){
 		Optional<Patient> patientOptional = patientService.findById(id);
+		if (patientOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+		}
 		Patient patient = patientOptional.get();
 		patientService.updateFirstName(patient, firstName);
 		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
