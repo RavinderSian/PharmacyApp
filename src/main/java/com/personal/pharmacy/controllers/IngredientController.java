@@ -1,5 +1,7 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +24,14 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 
 	@Override
 	public ResponseEntity<?> getById(Long id) {
-		Ingredient ingredient = ingredientServices.findById(id);
-		return new ResponseEntity<Ingredient>(ingredient, HttpStatus.ACCEPTED);
+		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		return new ResponseEntity<Ingredient>(ingredientOptional.get(), HttpStatus.ACCEPTED);
 	}
 
 	@Override
 	public ResponseEntity<?> deleteById(Long id) {
-		Ingredient ingredient = ingredientServices.findById(id);
-		ingredientServices.delete(ingredient);
+		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		ingredientServices.delete(ingredientOptional.get());
 		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.ACCEPTED);
 
 	}
@@ -42,7 +44,8 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	
 	@PostMapping("{id}/updateName")
 	public ResponseEntity<?> updateName(@PathVariable Long id, @RequestBody String name){
-		Ingredient ingredient = ingredientServices.findById(id);
+		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		Ingredient ingredient = ingredientOptional.get();
 		Ingredient updatedIngredient = ingredientServices.updateIngredientName(ingredient, name);
 		return new ResponseEntity<Ingredient>(updatedIngredient, HttpStatus.ACCEPTED);
 	}

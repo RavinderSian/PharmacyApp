@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.personal.pharmacy.exceptions.NoDataForIdException;
 import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.repository.IngredientRepository;
 
@@ -34,12 +33,12 @@ public class IngredientServiceImpl implements IngredientService {
 	}
 
 	@Override
-	public Ingredient findById(Long id) {
+	public Optional<Ingredient> findById(Long id) {
 		Optional<Ingredient> ingredientOptional = ingredientRepository.findById(id);
 		if (!ingredientOptional.isPresent()) {
-			throw new NoDataForIdException("No ingredient with id " + id);
+			return Optional.empty();
 		}
-		return ingredientOptional.get();
+		return ingredientOptional;
 	}
 	
 	public Ingredient updateIngredientName(Ingredient ingredient, String name) {

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.personal.pharmacy.exceptions.NoDataForIdException;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PrescriptionRepository;
 
@@ -33,13 +32,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 	}
 
 	@Override
-	public Prescription findById(Long id) {
+	public Optional<Prescription> findById(Long id) {
 		
 		Optional<Prescription> prescriptionOptional = prescriptionRepository.findById(id);
 		if (!prescriptionOptional.isPresent()) {
-			throw new NoDataForIdException("No prescription with id " + id);
+			return Optional.empty();
 		}
-		return prescriptionOptional.get();
+		return prescriptionOptional;
 	}
 
 }

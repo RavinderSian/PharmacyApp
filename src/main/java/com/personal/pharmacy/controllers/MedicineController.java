@@ -1,5 +1,7 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +26,15 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
-		Medicine medicine = medicineService.findById(id);
-		return new ResponseEntity<Medicine>(medicine, HttpStatus.ACCEPTED);
+		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		return new ResponseEntity<Medicine>(medicineOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
-		Medicine medicine = medicineService.findById(id);
-		medicineService.delete(medicine);
+		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		medicineService.delete(medicineOptional.get());
 		return new ResponseEntity<String>("Medicine deleted", HttpStatus.ACCEPTED);
 	}
 	 
@@ -45,7 +47,8 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	
 	@PostMapping("{id}/updatename")
 	public ResponseEntity<?> updateMedicineName(@PathVariable Long id, @RequestBody String name){
-		Medicine medicine = medicineService.findById(id);
+		Optional<Medicine> medicineOptional = medicineService.findById(id);
+		Medicine medicine = medicineOptional.get();
 		medicineService.updateName(medicine, name);
 		return new ResponseEntity<Medicine>(medicine, HttpStatus.ACCEPTED);
 	}

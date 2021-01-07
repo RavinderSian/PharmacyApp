@@ -1,5 +1,7 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,15 +28,15 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
 
-		Employee employee = employeeService.findById(id);
-		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
+		Optional<Employee> employeeOptional = employeeService.findById(id);
+		return new ResponseEntity<Employee>(employeeOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
-		Employee employee = employeeService.findById(id);
-		employeeService.delete(employee);
+		Optional<Employee> employeeOptional = employeeService.findById(id);
+		employeeService.delete(employeeOptional.get());
 		return new ResponseEntity<String>("Employee deleted", HttpStatus.ACCEPTED);
 	}
 	
@@ -42,12 +44,13 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	@PostMapping("save")
 	public ResponseEntity<?> add(@RequestBody Employee employee){
 		Employee savedEmployee = employeeService.save(employee);
-		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
+		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
-		Employee employee = employeeService.findById(id);
+		Optional<Employee> employeeOptional = employeeService.findById(id);
+		Employee employee = employeeOptional.get();
 		employeeService.updateFirstName(employee, firstName);
 		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
 	}

@@ -1,5 +1,7 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +26,8 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
-		Prescription prescription = prescriptionService.findById(id);
-		return new ResponseEntity<Prescription>(prescription, HttpStatus.ACCEPTED);
+		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
+		return new ResponseEntity<Prescription>(prescriptionOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override
@@ -38,8 +40,8 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	@Override
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
-		Prescription prescription = prescriptionService.findById(id);
-		prescriptionService.delete(prescription);
+		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
+		prescriptionService.delete(prescriptionOptional.get());
 		return new ResponseEntity<String>("Prescription deleted", HttpStatus.ACCEPTED);
 	}
 	

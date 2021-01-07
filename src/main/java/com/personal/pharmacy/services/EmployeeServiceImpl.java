@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.personal.pharmacy.exceptions.NoDataForIdException;
 import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.repository.EmployeeRepository;
 
@@ -36,12 +35,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	
 	@Override
-	public Employee findById(Long id) {
+	public Optional<Employee> findById(Long id) {
 		Optional<Employee> employeeOptional = employeeRepository.findById(id);
 		if (!employeeOptional.isPresent()) {
-			throw new NoDataForIdException("No employee with id " + id);
+			return Optional.empty();
 		}
-		return employeeOptional.get();
+		return employeeOptional;
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.personal.pharmacy.exceptions.NoDataForIdException;
 import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.repository.EmployeeRepository;
 
@@ -108,15 +107,9 @@ class EmployeeServiceImplTest {
 		//Arrange
 		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employeeMock));
 		//Act
-		Employee employee = employeeService.findById(1L);
+		Optional<Employee> employeeOptional = employeeService.findById(1L);
 		//Assert
-		Assertions.assertEquals(employeeMock, employee);
-	}
-	
-	@Test
-	public void test_FindById_ReturnsNoDataForIdException_WhenCalledWithId1() {
-
-		Assertions.assertThrows(NoDataForIdException.class, () -> employeeService.findById(1L));
+		Assertions.assertEquals(employeeMock, employeeOptional.get());
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +26,8 @@ public class PatientController implements CrudController<Patient, Long> {
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id){
-		Patient patient = patientService.findById(id);
-		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
+		Optional<Patient> patientOptional = patientService.findById(id);
+		return new ResponseEntity<Patient>(patientOptional.get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override
@@ -38,14 +40,15 @@ public class PatientController implements CrudController<Patient, Long> {
 	@Override
 	@GetMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id){
-		Patient patient = patientService.findById(id);
-		patientService.delete(patient);
+		Optional<Patient> patientOptional = patientService.findById(id);
+		patientService.delete(patientOptional.get());
 		return new ResponseEntity<String>("Patient deleted", HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateFirstNameById(@PathVariable Long id, @RequestBody String firstName){
-		Patient patient = patientService.findById(id);
+		Optional<Patient> patientOptional = patientService.findById(id);
+		Patient patient = patientOptional.get();
 		patientService.updateFirstName(patient, firstName);
 		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
 	}
