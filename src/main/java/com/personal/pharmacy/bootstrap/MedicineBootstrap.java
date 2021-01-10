@@ -20,6 +20,10 @@ public class MedicineBootstrap implements CommandLineRunner {
 		Medicine medicine = new Medicine();
 		medicine.setName("Paracetamol");
 		medicineRepository.save(medicine);
+		
+		Medicine medicine2 = new Medicine();
+		medicine2.setName("test");
+		medicineRepository.save(medicine2);
 	}
 
 }

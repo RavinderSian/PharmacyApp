@@ -52,7 +52,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	@PostMapping("save")
 	public ResponseEntity<?> add(@RequestBody Medicine medicine){
 		Medicine savedMedicine = medicineService.save(medicine);
-		return new ResponseEntity<Medicine>(savedMedicine, HttpStatus.OK);
+		return new ResponseEntity<Medicine>(savedMedicine, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("{id}/updatename")
