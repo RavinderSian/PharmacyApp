@@ -68,7 +68,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_Save_ReturnsCorrectStatusAndMedicine_WhenGivenMedicine() throws Exception {
+	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");

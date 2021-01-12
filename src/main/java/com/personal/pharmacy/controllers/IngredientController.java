@@ -49,7 +49,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	@Override
 	public ResponseEntity<?> add(Ingredient ingredient) {
 		Ingredient savedIngredient = ingredientServices.save(ingredient);
-		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.CREATED);
 	}
 	
 	@PostMapping("{id}/updatename")
@@ -57,7 +57,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
 		if (ingredientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		Ingredient ingredient = ingredientOptional.get();
 		Ingredient updatedIngredient = ingredientServices.updateIngredientName(ingredient, name);

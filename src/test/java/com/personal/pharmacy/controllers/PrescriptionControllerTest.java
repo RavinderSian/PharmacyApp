@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PrescriptionRepository;
 

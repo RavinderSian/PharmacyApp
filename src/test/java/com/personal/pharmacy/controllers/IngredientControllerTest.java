@@ -22,90 +22,89 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.personal.pharmacy.model.Employee;
-import com.personal.pharmacy.repository.EmployeeRepository;
+import com.personal.pharmacy.model.Ingredient;
+import com.personal.pharmacy.repository.IngredientRepository;
 
-@AutoConfigureMockMvc
 @SpringBootTest
-public class EmployeeControllerTest {
+@AutoConfigureMockMvc
+public class IngredientControllerTest {
+
+	@Autowired
+	IngredientController controller;
 	
 	@Autowired
-	private MockMvc mockMvc;
-	
-	@Autowired
-	EmployeeController controller;
+	MockMvc mockMvc;
 	
 	@MockBean
-	EmployeeRepository employeeRepository; //needed to stub behaviour
-
+	IngredientRepository ingredientRepository;
+	
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
-
 	
 	@Test
 	public void contextLoads() throws Exception {
 		assertThat(controller).isNotNull();
 	}
-
+	
 	@Test
-	public void test_GetById_ReturnsCorrectStatusAndEmployee_WhenGivenId1() throws Exception {
+	public void test_GetById_ReturnsCorrectStatusAndIngredient_WhenGivenId1() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setEmployeeId(1L);
-		employee.setFirstName("Rav");
+		Ingredient ingredient = new Ingredient();
+		ingredient.setName("paracetamol");
+		ingredient.setIngredientId(1L);
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
 		
-		this.mockMvc.perform(get("/employee/1")).andDo(print())
+		this.mockMvc.perform(get("/ingredient/1")).andDo(print())
 		.andExpect(status().isAccepted())
-		.andExpect(content().json("{'employeeId': 1, 'firstName': 'Rav'}")); 
+		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}")); 
 	}
 	
 	@Test
-	public void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
+	public void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
 		
-		this.mockMvc.perform(get("/employee/5")).andDo(print())
+		this.mockMvc.perform(get("/ingredient/5")).andDo(print())
 		.andExpect(status().isAccepted())
-		.andExpect(content().string("No data found for id 5"));
+		.andExpect(content().string("No data found for id 5")); 
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenEmployee() throws Exception {
+	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenMedicine() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setEmployeeId(2L);
-		employee.setFirstName("test");
+		Ingredient ingredient = new Ingredient();
+		ingredient.setName("paracetamol");
+		ingredient.setIngredientId(1L);
 		
-		when(employeeRepository.save(employee)).thenReturn(employee);
+		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(employee);
+	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/ingredient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
 		.andExpect(status().isCreated())
-		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
+		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
 	}
 	
 	@Test
-	public void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
+	public void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameSalicylicAcidAndId1() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setEmployeeId(1L);
-		employee.setFirstName("test");
+		Ingredient ingredient = new Ingredient();
+		ingredient.setName("paracetamol");
+		ingredient.setIngredientId(1L);
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
 		
-		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
+		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(APPLICATION_JSON_UTF8).content("Salicyclic Acid"))
 		.andExpect(status().isAccepted())
-		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
+		.andExpect(content().json("{'ingredientId': 1, 'name': 'Salicyclic Acid'}"));
 	}
 	
 	@Test
 	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/employee/5/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
-		.andExpect(status().isAccepted())
+		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(APPLICATION_JSON_UTF8).content("Salicyclic Acid"))
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
 	
