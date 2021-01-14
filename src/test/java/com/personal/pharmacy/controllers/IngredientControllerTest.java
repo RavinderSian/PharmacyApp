@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
-import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.repository.IngredientRepository;
 import com.personal.pharmacy.repository.MedicineRepository;
 
