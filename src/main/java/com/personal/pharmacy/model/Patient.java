@@ -1,5 +1,6 @@
 package com.personal.pharmacy.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,4 +35,10 @@ public class Patient {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient")
 	private List<Prescription> prescriptions = new ArrayList<>();
+	
+	@CreationTimestamp
+	private Timestamp createdTime;
+	
+	@UpdateTimestamp
+	private Timestamp updatedTime;
 }

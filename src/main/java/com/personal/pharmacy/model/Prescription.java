@@ -1,5 +1,6 @@
 package com.personal.pharmacy.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,4 +38,10 @@ public class Prescription {
 	
 	@OneToOne
 	private Employee employee;
+	
+	@CreationTimestamp
+	private Timestamp createdTime;
+	
+	@UpdateTimestamp
+	private Timestamp updatedTime;
 }
