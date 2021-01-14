@@ -108,5 +108,12 @@ class PrescriptionServiceImplTest {
 		Assertions.assertEquals(prescriptionOptional.get(), prescriptionMock);
 	}
 	
+	@Test
+	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
+		//Act
+		Optional<Prescription> prescriptionOptional = prescriptionService.findById(5L);
+		//Assert
+		Assertions.assertTrue(prescriptionOptional.isEmpty());
+	}
 	
 }

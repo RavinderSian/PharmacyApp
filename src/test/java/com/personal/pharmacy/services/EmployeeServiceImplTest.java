@@ -113,6 +113,14 @@ class EmployeeServiceImplTest {
 	}
 	
 	@Test
+	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
+		//Act
+		Optional<Employee> employeeOptional = employeeService.findById(5L);
+		//Assert
+		Assertions.assertTrue(employeeOptional.isEmpty());
+	}
+	
+	@Test
 	public void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
 		//Arrange
 		Employee employee = new Employee();

@@ -110,6 +110,14 @@ class PatientServiceImplTest {
 	}
 	
 	@Test
+	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
+		//Act
+		Optional<Patient> patientOptional = patientService.findById(5L);
+		//Assert
+		Assertions.assertTrue(patientOptional.isEmpty());
+	}
+	
+	@Test
 	public void test_UpdateFirstName_UpdatesFirstNameCorrectly_WhenGivenStringNewName() {
 		//Arrange
 		Patient patient = new Patient();

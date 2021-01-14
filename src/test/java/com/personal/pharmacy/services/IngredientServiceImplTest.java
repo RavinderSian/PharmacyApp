@@ -113,6 +113,14 @@ class IngredientServiceImplTest {
 	}
 	
 	@Test
+	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
+		//Act
+		Optional<Ingredient> ingredientOptional = ingredientService.findById(5L);
+		//Assert
+		Assertions.assertTrue(ingredientOptional.isEmpty());
+	}
+	
+	@Test
 	public void test_UpdateIngredientName_ReturnsIngredientWithCorrectName_WhenGivenStringNewName() {
 		//Arrange
 		Ingredient ingredient = new Ingredient();
