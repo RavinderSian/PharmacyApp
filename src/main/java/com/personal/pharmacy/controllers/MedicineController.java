@@ -31,7 +31,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Medicine>(medicineOptional.get(), HttpStatus.ACCEPTED);
 	}
@@ -42,7 +42,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		medicineService.delete(medicineOptional.get());
 		return new ResponseEntity<String>("Medicine deleted", HttpStatus.ACCEPTED);
@@ -60,7 +60,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		Medicine medicine = medicineOptional.get();
 		medicineService.updateName(medicine, name);

@@ -31,7 +31,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Prescription>(prescriptionOptional.get(), HttpStatus.ACCEPTED);
 	}
@@ -49,7 +49,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		prescriptionService.delete(prescriptionOptional.get());
 		return new ResponseEntity<String>("Prescription deleted", HttpStatus.ACCEPTED);

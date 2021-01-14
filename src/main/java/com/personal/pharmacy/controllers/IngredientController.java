@@ -29,7 +29,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
 		if (ingredientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Ingredient>(ingredientOptional.get(), HttpStatus.ACCEPTED);
 	}
@@ -39,7 +39,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
 		if (ingredientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		ingredientServices.delete(ingredientOptional.get());
 		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.ACCEPTED);

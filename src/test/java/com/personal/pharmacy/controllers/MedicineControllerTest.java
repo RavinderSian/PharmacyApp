@@ -63,7 +63,7 @@ public class MedicineControllerTest {
 	public void test_GetById_ReturnsNoDataForId5_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/medicine/5")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5")); 
 	}
 	
@@ -105,7 +105,7 @@ public class MedicineControllerTest {
 	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
 				
 		this.mockMvc.perform(post("/medicine/5/updatename").contentType(APPLICATION_JSON_UTF8).content("test"))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
 	

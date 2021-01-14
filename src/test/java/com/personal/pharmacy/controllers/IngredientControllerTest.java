@@ -68,7 +68,7 @@ public class IngredientControllerTest {
 	public void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/ingredient/5")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5")); 
 	}
 	

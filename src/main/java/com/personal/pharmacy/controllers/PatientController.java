@@ -31,7 +31,7 @@ public class PatientController implements CrudController<Patient, Long> {
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Patient>(patientOptional.get(), HttpStatus.ACCEPTED);
 	}
@@ -49,7 +49,7 @@ public class PatientController implements CrudController<Patient, Long> {
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		patientService.delete(patientOptional.get());
 		return new ResponseEntity<String>("Patient deleted", HttpStatus.ACCEPTED);
@@ -60,7 +60,7 @@ public class PatientController implements CrudController<Patient, Long> {
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		Patient patient = patientOptional.get();
 		patientService.updateFirstName(patient, firstName);

@@ -64,7 +64,7 @@ public class PatientControllerTest {
 	public void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
 		
 		this.mockMvc.perform(get("/patient/5")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
 	
@@ -105,7 +105,7 @@ public class PatientControllerTest {
 	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
 		this.mockMvc.perform(post("/patient/5/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
 	

@@ -33,7 +33,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Employee>(employeeOptional.get(), HttpStatus.ACCEPTED);
 	}
@@ -44,7 +44,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		employeeService.delete(employeeOptional.get());
 		return new ResponseEntity<String>("Employee deleted", HttpStatus.ACCEPTED);
@@ -62,7 +62,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		Employee employee = employeeOptional.get();
 		employeeService.updateFirstName(employee, firstName);
