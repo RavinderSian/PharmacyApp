@@ -23,10 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
+import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.repository.IngredientRepository;
+import com.personal.pharmacy.repository.MedicineRepository;
 
-@SpringBootTest
 @AutoConfigureMockMvc
+@SpringBootTest
 public class IngredientControllerTest {
 
 	@Autowired
@@ -37,6 +39,10 @@ public class IngredientControllerTest {
 	
 	@MockBean
 	IngredientRepository ingredientRepository;
+
+	@MockBean
+	MedicineRepository medicineRepository;
+
 	
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 	
@@ -95,15 +101,15 @@ public class IngredientControllerTest {
 		
 		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
 		
-		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(APPLICATION_JSON_UTF8).content("Salicyclic Acid"))
+		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
 		.andExpect(status().isAccepted())
-		.andExpect(content().json("{'ingredientId': 1, 'name': 'Salicyclic Acid'}"));
+		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));
 	}
 	
 	@Test
 	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(APPLICATION_JSON_UTF8).content("Salicyclic Acid"))
+		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}

@@ -16,7 +16,7 @@ public class Ingredient {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ingredientId;
 	
-	@Column(name = "ingredient_name")
+	@Column(name = "name")
 	private String name;
 	
 }

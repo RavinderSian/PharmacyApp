@@ -60,7 +60,8 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		Ingredient ingredient = ingredientOptional.get();
-		Ingredient updatedIngredient = ingredientServices.updateIngredientName(ingredient, name);
-		return new ResponseEntity<Ingredient>(updatedIngredient, HttpStatus.ACCEPTED);
+		ingredientServices.updateIngredientName(ingredient, name);
+		return new ResponseEntity<Ingredient>(ingredient, HttpStatus.ACCEPTED);
 	}
+	
 }
