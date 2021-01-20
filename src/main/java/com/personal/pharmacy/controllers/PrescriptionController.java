@@ -1,13 +1,14 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	
 	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id){
+	public ResponseEntity<?> getById(Long id){
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
 			log.info("Id not present in database");
@@ -38,14 +39,22 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	
 	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> add (@RequestBody Prescription prescription){
+	public ResponseEntity<?> add (Prescription prescription, BindingResult bindingResult){
+		if (bindingResult.hasFieldErrors()) {
+			List<String> errorStrings = new ArrayList<>();
+			bindingResult.getFieldErrors().forEach(objectError -> {
+				errorStrings.add(objectError.getDefaultMessage());
+				
+			});
+			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+		}
 		Prescription savedPrescription = prescriptionService.save(prescription);
 		return new ResponseEntity<Prescription>(savedPrescription, HttpStatus.ACCEPTED);
 	}
 	
 	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(Long id){
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
 			log.info("Id not present in database");

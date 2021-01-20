@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,9 +23,11 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeId;
 	
+	@NotEmpty(message = "Please enter a valid first name")
 	@Column(name = "first_name")
 	private String firstName;
 	
+	@NotEmpty(message = "Please enter a valid last name")
 	@Column(name = "last_name")
 	private String lastName;
 	

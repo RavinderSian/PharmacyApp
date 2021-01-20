@@ -68,7 +68,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenMedicine() throws Exception {
+	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
@@ -82,8 +82,27 @@ public class MedicineControllerTest {
 	    String requestJson = ow.writeValueAsString(medicine);
 		
 		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
-		.andExpect(status().isCreated())
-		.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
+			.andExpect(status().isCreated())
+			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
+	}
+	
+	
+	@Test
+	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
+		
+		Medicine medicine = new Medicine();
+		medicine.setMedicineId(1L);
+		
+		when(medicineRepository.save(medicine)).thenReturn(medicine);
+		
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson = ow.writeValueAsString(medicine);
+		
+		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().string("[Please enter a valid name]"));
 	}
 	
 	

@@ -1,9 +1,12 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +30,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 
 	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id){
+	public ResponseEntity<?> getById(Long id){
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
@@ -38,7 +41,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	
 	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(Long id){
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
@@ -50,7 +53,15 @@ public class MedicineController implements CrudController<Medicine, Long>{
 	 
 	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> add(@RequestBody Medicine medicine){
+	public ResponseEntity<?> add(Medicine medicine, BindingResult bindingResult){
+		if (bindingResult.hasFieldErrors()) {
+			List<String> errorStrings = new ArrayList<>();
+			bindingResult.getFieldErrors().forEach(objectError -> {
+				errorStrings.add(objectError.getDefaultMessage());
+				
+			});
+			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+		}
 		Medicine savedMedicine = medicineService.save(medicine);
 		return new ResponseEntity<Medicine>(savedMedicine, HttpStatus.CREATED);
 	}

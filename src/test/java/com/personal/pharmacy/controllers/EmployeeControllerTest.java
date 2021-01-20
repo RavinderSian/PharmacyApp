@@ -69,11 +69,13 @@ public class EmployeeControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenEmployee() throws Exception {
+	public void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenValidEmployee() throws Exception {
 		
 		Employee employee = new Employee();
 		employee.setEmployeeId(2L);
 		employee.setFirstName("test");
+		employee.setLastName("testing");
+
 		
 		when(employeeRepository.save(employee)).thenReturn(employee);
 		
@@ -85,6 +87,25 @@ public class EmployeeControllerTest {
 		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
 		.andExpect(status().isCreated())
 		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
+	}
+	
+	@Test
+	public void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenInValidEmployee() throws Exception {
+		
+		Employee employee = new Employee();
+		employee.setLastName("testing");
+		employee.setEmployeeId(2L);
+
+		when(employeeRepository.save(employee)).thenReturn(employee);
+		
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson = ow.writeValueAsString(employee);
+		
+		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().string("[Please enter a valid first name]"));
 	}
 	
 	@Test

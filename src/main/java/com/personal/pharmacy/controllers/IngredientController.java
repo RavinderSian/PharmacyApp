@@ -1,9 +1,12 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +50,17 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	}
 
 	@Override
-	public ResponseEntity<?> add(Ingredient ingredient) {
+	public ResponseEntity<?> add(Ingredient ingredient, BindingResult bindingResult) {
+		
+		if (bindingResult.hasFieldErrors()) {
+			List<String> errorStrings = new ArrayList<>();
+			bindingResult.getFieldErrors().forEach(objectError -> {
+				errorStrings.add(objectError.getDefaultMessage());
+			});
+			
+			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+		}
+		
 		Ingredient savedIngredient = ingredientServices.save(ingredient);
 		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.CREATED);
 	}

@@ -73,7 +73,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenMedicine() throws Exception {
+	public void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenIngredient() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
@@ -92,6 +92,24 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
+	public void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenInValidIngredient() throws Exception {
+		
+		Ingredient ingredient = new Ingredient();
+		ingredient.setIngredientId(1L);
+		
+		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
+		
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson = ow.writeValueAsString(ingredient);
+		
+		this.mockMvc.perform(post("/ingredient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().string("[Please enter a valid name]"));
+	}
+	
+	@Test
 	public void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameSalicylicAcidAndId1() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
@@ -106,7 +124,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
 		
 		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
 		.andExpect(status().isNotFound())

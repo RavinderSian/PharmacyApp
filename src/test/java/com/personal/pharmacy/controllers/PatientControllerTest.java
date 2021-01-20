@@ -69,11 +69,12 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenPatient() throws Exception {
+	public void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenValidPatient() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
+		patient.setLastName("sian");
 		
 		when(patientRepository.save(patient)).thenReturn(patient);
 		
@@ -84,7 +85,26 @@ public class PatientControllerTest {
 		
 		this.mockMvc.perform(post("/patient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
 		.andExpect(status().isAccepted())
-		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav'}"));
+		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav', 'lastName':'sian'}"));
+	}
+	
+	@Test
+	public void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenInValidPatient() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setLastName("testing");
+		
+		when(patientRepository.save(patient)).thenReturn(patient);
+		
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+	    String requestJson = ow.writeValueAsString(patient);
+		
+		this.mockMvc.perform(post("/patient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().string("[Please enter a valid first name]"));
 	}
 	
 	@Test

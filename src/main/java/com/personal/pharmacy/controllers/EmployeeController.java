@@ -1,9 +1,12 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +31,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 
 	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id){
+	public ResponseEntity<?> getById(Long id){
 
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
@@ -40,7 +43,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	
 	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(Long id){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
 			log.info("Id not present in database");
@@ -51,8 +54,18 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	}
 	
 	@Override
-	@PostMapping("save")
-	public ResponseEntity<?> add(@RequestBody Employee employee){
+	public ResponseEntity<?> add(Employee employee, BindingResult bindingResult){
+		
+		if (bindingResult.hasFieldErrors()) {
+			
+			List<String> errorStrings = new ArrayList<>();
+			bindingResult.getFieldErrors().forEach(objectError -> {
+				errorStrings.add(objectError.getDefaultMessage());
+				
+			});
+			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+		}
+		
 		Employee savedEmployee = employeeService.save(employee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
 	}

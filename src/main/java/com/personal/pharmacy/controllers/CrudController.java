@@ -1,6 +1,9 @@
 package com.personal.pharmacy.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,5 +18,5 @@ public interface CrudController<T, ID> {
 	ResponseEntity<?> deleteById(@PathVariable ID id);
 	
 	@PostMapping("save")
-	ResponseEntity<?> add(@RequestBody T t);
+	ResponseEntity<?> add(@RequestBody @Valid T t, BindingResult bindingResult); //@Valid is needed to process error messages
 }

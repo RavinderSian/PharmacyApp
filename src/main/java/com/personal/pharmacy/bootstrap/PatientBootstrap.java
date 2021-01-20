@@ -19,6 +19,7 @@ public class PatientBootstrap implements CommandLineRunner {
 
 		Patient patient = new Patient();
 		patient.setFirstName("test name");
+		patient.setLastName("testing");
 		patientRepository.save(patient);
 		
 	}

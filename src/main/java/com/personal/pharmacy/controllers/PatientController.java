@@ -1,9 +1,12 @@
 package com.personal.pharmacy.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +30,7 @@ public class PatientController implements CrudController<Patient, Long> {
 	
 	@Override
 	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id){
+	public ResponseEntity<?> getById(Long id){
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
@@ -38,14 +41,24 @@ public class PatientController implements CrudController<Patient, Long> {
 	
 	@Override
 	@PostMapping("save")
-	public ResponseEntity<?> add(@RequestBody Patient patient){
+	public ResponseEntity<?> add(Patient patient, BindingResult bindingResult){
+		
+		if (bindingResult.hasFieldErrors()) {
+			List<String> errorStrings = new ArrayList<>();
+			bindingResult.getFieldErrors().forEach(objectError -> {
+				errorStrings.add(objectError.getDefaultMessage());
+				
+			});
+			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+		}
+		
 		Patient savedPatient = patientService.save(patient);
 		return new ResponseEntity<Patient>(savedPatient, HttpStatus.ACCEPTED);
 	}
 	
 	@Override
 	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id){
+	public ResponseEntity<?> deleteById(Long id){
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");

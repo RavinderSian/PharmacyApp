@@ -18,6 +18,7 @@ public class EmployeeBootstrap implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		 Employee employee = new Employee();
 		 employee.setFirstName("new name");
+		 employee.setLastName("testing");
 		 employeeRepository.save(employee);
 	}
 
