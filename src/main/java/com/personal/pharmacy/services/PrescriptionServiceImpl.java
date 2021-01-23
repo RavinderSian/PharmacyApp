@@ -23,6 +23,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 
 	@Override
 	public void delete(Prescription prescription) {
+		prescription.setEmployee(null);
 		prescriptionRepository.delete(prescription);
 	}
 

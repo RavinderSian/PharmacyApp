@@ -23,6 +23,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public void delete(Patient patient) {
+		patient.getPrescriptions().forEach(prescription -> prescription.setPatient(null));
 		patientRepository.delete(patient);
 	}
 

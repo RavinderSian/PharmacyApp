@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +37,7 @@ public class Patient {
 	@Column(name = "last_name")
 	private String lastName;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
 	private List<Prescription> prescriptions = new ArrayList<>();
 	
 	@CreationTimestamp
@@ -44,4 +45,14 @@ public class Patient {
 	
 	@UpdateTimestamp
 	private Timestamp updatedTime;
+	
+	public void addPrescription(Prescription prescription) {
+		prescription.setPatient(this);
+		this.prescriptions.add(prescription);
+	}
+	
+	public void removePrescription(Prescription prescription) {
+		prescription.setPatient(null);
+		this.prescriptions.remove(prescription);
+	}
 }

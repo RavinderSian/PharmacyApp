@@ -52,6 +52,7 @@ public class EmployeeControllerTest {
 		Employee employee = new Employee();
 		employee.setEmployeeId(1L);
 		employee.setFirstName("Rav");
+		employee.setLastName("testing");
 		
 		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 		
@@ -114,6 +115,7 @@ public class EmployeeControllerTest {
 		Employee employee = new Employee();
 		employee.setEmployeeId(1L);
 		employee.setFirstName("test");
+		employee.setLastName("testing");
 		
 		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 		

@@ -23,6 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void delete(Employee employee) {
+		employee.getPrescriptions().forEach(prescription -> prescription.setEmployee(null));
 		employeeRepository.delete(employee);
 
 	}
