@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -37,8 +36,6 @@ public class MedicineControllerTest {
 	
 	@MockBean
 	MedicineRepository medicineRepository;
-	
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -81,7 +78,7 @@ public class MedicineControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 			.andExpect(status().isCreated())
 			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
 	}
@@ -100,7 +97,7 @@ public class MedicineControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid name]"));
 	}
@@ -115,7 +112,7 @@ public class MedicineControllerTest {
 		
 		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicine));
 		
-		this.mockMvc.perform(post("/medicine/1/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
+		this.mockMvc.perform(post("/medicine/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'medicineId': 1, 'name': 'new'}"));
 	}
@@ -123,7 +120,7 @@ public class MedicineControllerTest {
 	@Test
 	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
 				
-		this.mockMvc.perform(post("/medicine/5/updatename").contentType(APPLICATION_JSON_UTF8).content("test"))
+		this.mockMvc.perform(post("/medicine/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}

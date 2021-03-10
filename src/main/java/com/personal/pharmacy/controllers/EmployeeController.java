@@ -40,17 +40,21 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		}
 		return new ResponseEntity<Employee>(employeeOptional.get(), HttpStatus.ACCEPTED);
 	}
-	
+
 	@Override
-	@GetMapping("delete/{id}")
-	public ResponseEntity<?> deleteById(Long id){
+	public ResponseEntity<?> deleteById(Long aLong) {
+		return null;
+	}
+
+	@GetMapping("deleting/{id}")
+	public String deletingById(@PathVariable Long id){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return "No data found for id " + id;
 		}
 		employeeService.delete(employeeOptional.get());
-		return new ResponseEntity<String>("Employee deleted", HttpStatus.ACCEPTED);
+		return "Employee deleted";
 	}
 	
 	@Override

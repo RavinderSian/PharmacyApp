@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -37,8 +36,6 @@ public class EmployeeControllerTest {
 	
 	@MockBean
 	EmployeeRepository employeeRepository; //needed to stub behaviour
-
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	
 	@Test
@@ -85,7 +82,7 @@ public class EmployeeControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isCreated())
 		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
 	}
@@ -104,7 +101,7 @@ public class EmployeeControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid first name]"));
 	}
@@ -119,7 +116,7 @@ public class EmployeeControllerTest {
 		
 		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 		
-		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
+		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
 	}
@@ -127,7 +124,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/employee/5/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
+		this.mockMvc.perform(post("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
