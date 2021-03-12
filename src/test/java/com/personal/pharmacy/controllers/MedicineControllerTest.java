@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Medicine;
-import com.personal.pharmacy.repository.MedicineRepository;
+import com.personal.pharmacy.services.MedicineService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -35,7 +35,7 @@ public class MedicineControllerTest {
 	MedicineController controller;
 	
 	@MockBean
-	MedicineRepository medicineRepository;
+	MedicineService medicineService;
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -49,7 +49,7 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicine));
+		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
 		
 		this.mockMvc.perform(get("/medicine/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -71,7 +71,7 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.save(medicine)).thenReturn(medicine);
+		when(medicineService.save(medicine)).thenReturn(medicine);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -83,14 +83,13 @@ public class MedicineControllerTest {
 			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
 	}
 	
-	
 	@Test
 	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.save(medicine)).thenReturn(medicine);
+		when(medicineService.save(medicine)).thenReturn(medicine);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -110,8 +109,9 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicine));
-		
+		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
+		medicine.setName("new");
+		when(medicineService.updateName(medicine, "new")).thenReturn(medicine);
 		this.mockMvc.perform(post("/medicine/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'medicineId': 1, 'name': 'new'}"));

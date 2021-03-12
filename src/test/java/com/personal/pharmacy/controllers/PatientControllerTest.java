@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Patient;
-import com.personal.pharmacy.repository.PatientRepository;
+import com.personal.pharmacy.services.PatientService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,7 +35,7 @@ public class PatientControllerTest {
 	MockMvc mockMvc;
 	
 	@MockBean
-	PatientRepository patientRepository;
+	PatientService patientService;
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -49,7 +49,7 @@ public class PatientControllerTest {
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
 		
-		when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
 		
 		this.mockMvc.perform(get("/patient/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -72,7 +72,7 @@ public class PatientControllerTest {
 		patient.setFirstName("rav");
 		patient.setLastName("sian");
 		
-		when(patientRepository.save(patient)).thenReturn(patient);
+		when(patientService.save(patient)).thenReturn(patient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -91,7 +91,7 @@ public class PatientControllerTest {
 		patient.setPatientId(1L);
 		patient.setLastName("testing");
 		
-		when(patientRepository.save(patient)).thenReturn(patient);
+		when(patientService.save(patient)).thenReturn(patient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -110,7 +110,9 @@ public class PatientControllerTest {
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
 		
-		when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		patient.setFirstName("John");
+		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);
 		
 		this.mockMvc.perform(post("/patient/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isAccepted())

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Employee;
-import com.personal.pharmacy.repository.EmployeeRepository;
+import com.personal.pharmacy.services.EmployeeService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -35,7 +35,7 @@ public class EmployeeControllerTest {
 	EmployeeController controller;
 	
 	@MockBean
-	EmployeeRepository employeeRepository; //needed to stub behaviour
+	EmployeeService employeeService; 
 
 	
 	@Test
@@ -51,7 +51,7 @@ public class EmployeeControllerTest {
 		employee.setFirstName("Rav");
 		employee.setLastName("testing");
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
 		
 		this.mockMvc.perform(get("/employee/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -75,7 +75,7 @@ public class EmployeeControllerTest {
 		employee.setLastName("testing");
 
 		
-		when(employeeRepository.save(employee)).thenReturn(employee);
+		when(employeeService.save(employee)).thenReturn(employee);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -94,7 +94,7 @@ public class EmployeeControllerTest {
 		employee.setLastName("testing");
 		employee.setEmployeeId(2L);
 
-		when(employeeRepository.save(employee)).thenReturn(employee);
+		when(employeeService.save(employee)).thenReturn(employee);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -114,8 +114,9 @@ public class EmployeeControllerTest {
 		employee.setFirstName("test");
 		employee.setLastName("testing");
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-		
+		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
+		employee.setFirstName("John");
+		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
 		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));

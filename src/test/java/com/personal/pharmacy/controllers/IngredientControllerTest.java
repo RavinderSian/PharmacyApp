@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
-import com.personal.pharmacy.repository.IngredientRepository;
-import com.personal.pharmacy.repository.MedicineRepository;
+import com.personal.pharmacy.services.IngredientService;
+import com.personal.pharmacy.services.MedicineService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -36,10 +36,10 @@ public class IngredientControllerTest {
 	MockMvc mockMvc;
 	
 	@MockBean
-	IngredientRepository ingredientRepository;
+	IngredientService ingredientService;
 
 	@MockBean
-	MedicineRepository medicineRepository;
+	MedicineService medicineService;
 
 	
 	@Test
@@ -54,7 +54,7 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
+		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
 		
 		this.mockMvc.perform(get("/ingredient/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -76,7 +76,7 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
+		when(ingredientService.save(ingredient)).thenReturn(ingredient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -94,7 +94,7 @@ public class IngredientControllerTest {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
+		when(ingredientService.save(ingredient)).thenReturn(ingredient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
@@ -113,8 +113,9 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
-		
+		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
+		ingredient.setName("new");
+		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
 		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PrescriptionRepository;
+import com.personal.pharmacy.services.PrescriptionService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,7 +36,7 @@ public class PrescriptionControllerTest {
 	PrescriptionController controller;
 	
 	@MockBean
-	PrescriptionRepository prescriptionRepository;
+	PrescriptionService prescriptionService;
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -48,7 +49,7 @@ public class PrescriptionControllerTest {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		
-		when(prescriptionRepository.findById(1L)).thenReturn(Optional.of(prescription));
+		when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
 		
 		this.mockMvc.perform(get("/prescription/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -69,7 +70,7 @@ public class PrescriptionControllerTest {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		
-		when(prescriptionRepository.save(prescription)).thenReturn(prescription);
+		when(prescriptionService.save(prescription)).thenReturn(prescription);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
