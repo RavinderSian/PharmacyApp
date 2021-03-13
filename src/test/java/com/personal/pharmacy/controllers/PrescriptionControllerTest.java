@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PrescriptionRepository;
+import com.personal.pharmacy.services.PrescriptionService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,9 +36,7 @@ public class PrescriptionControllerTest {
 	PrescriptionController controller;
 	
 	@MockBean
-	PrescriptionRepository prescriptionRepository;
-	
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+	PrescriptionService prescriptionService;
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -51,7 +49,7 @@ public class PrescriptionControllerTest {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		
-		when(prescriptionRepository.findById(1L)).thenReturn(Optional.of(prescription));
+		when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
 		
 		this.mockMvc.perform(get("/prescription/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -72,14 +70,14 @@ public class PrescriptionControllerTest {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		
-		when(prescriptionRepository.save(prescription)).thenReturn(prescription);
+		when(prescriptionService.save(prescription)).thenReturn(prescription);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(prescription);
 		
-		this.mockMvc.perform(post("/prescription/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'prescriptionId': 1}")); 
 	}

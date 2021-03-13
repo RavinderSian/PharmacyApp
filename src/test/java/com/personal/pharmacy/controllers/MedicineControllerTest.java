@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Medicine;
-import com.personal.pharmacy.repository.MedicineRepository;
+import com.personal.pharmacy.services.MedicineService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -36,9 +35,7 @@ public class MedicineControllerTest {
 	MedicineController controller;
 	
 	@MockBean
-	MedicineRepository medicineRepository;
-	
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+	MedicineService medicineService;
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -52,7 +49,7 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicine));
+		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
 		
 		this.mockMvc.perform(get("/medicine/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -74,18 +71,17 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.save(medicine)).thenReturn(medicine);
+		when(medicineService.save(medicine)).thenReturn(medicine);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 			.andExpect(status().isCreated())
 			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
 	}
-	
 	
 	@Test
 	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
@@ -93,14 +89,14 @@ public class MedicineControllerTest {
 		Medicine medicine = new Medicine();
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.save(medicine)).thenReturn(medicine);
+		when(medicineService.save(medicine)).thenReturn(medicine);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(post("/medicine/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid name]"));
 	}
@@ -113,9 +109,10 @@ public class MedicineControllerTest {
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
 		
-		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicine));
-		
-		this.mockMvc.perform(post("/medicine/1/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
+		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
+		medicine.setName("new");
+		when(medicineService.updateName(medicine, "new")).thenReturn(medicine);
+		this.mockMvc.perform(post("/medicine/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'medicineId': 1, 'name': 'new'}"));
 	}
@@ -123,7 +120,7 @@ public class MedicineControllerTest {
 	@Test
 	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
 				
-		this.mockMvc.perform(post("/medicine/5/updatename").contentType(APPLICATION_JSON_UTF8).content("test"))
+		this.mockMvc.perform(post("/medicine/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}

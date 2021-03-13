@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
-import com.personal.pharmacy.repository.IngredientRepository;
-import com.personal.pharmacy.repository.MedicineRepository;
+import com.personal.pharmacy.services.IngredientService;
+import com.personal.pharmacy.services.MedicineService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -37,13 +36,11 @@ public class IngredientControllerTest {
 	MockMvc mockMvc;
 	
 	@MockBean
-	IngredientRepository ingredientRepository;
+	IngredientService ingredientService;
 
 	@MockBean
-	MedicineRepository medicineRepository;
+	MedicineService medicineService;
 
-	
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 	
 	@Test
 	public void contextLoads() throws Exception {
@@ -57,7 +54,7 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
+		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
 		
 		this.mockMvc.perform(get("/ingredient/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -79,14 +76,14 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
+		when(ingredientService.save(ingredient)).thenReturn(ingredient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(post("/ingredient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isCreated())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
 	}
@@ -97,14 +94,14 @@ public class IngredientControllerTest {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.save(ingredient)).thenReturn(ingredient);
+		when(ingredientService.save(ingredient)).thenReturn(ingredient);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(post("/ingredient/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid name]"));
 	}
@@ -116,9 +113,10 @@ public class IngredientControllerTest {
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
 		
-		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredient));
-		
-		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
+		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
+		ingredient.setName("new");
+		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
+		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));
 	}
@@ -126,7 +124,7 @@ public class IngredientControllerTest {
 	@Test
 	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(APPLICATION_JSON_UTF8).content("new"))
+		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}

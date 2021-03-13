@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.nio.charset.Charset;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Employee;
-import com.personal.pharmacy.repository.EmployeeRepository;
+import com.personal.pharmacy.services.EmployeeService;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -36,9 +35,7 @@ public class EmployeeControllerTest {
 	EmployeeController controller;
 	
 	@MockBean
-	EmployeeRepository employeeRepository; //needed to stub behaviour
-
-	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+	EmployeeService employeeService; 
 
 	
 	@Test
@@ -54,7 +51,7 @@ public class EmployeeControllerTest {
 		employee.setFirstName("Rav");
 		employee.setLastName("testing");
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
 		
 		this.mockMvc.perform(get("/employee/1")).andDo(print())
 		.andExpect(status().isAccepted())
@@ -78,14 +75,14 @@ public class EmployeeControllerTest {
 		employee.setLastName("testing");
 
 		
-		when(employeeRepository.save(employee)).thenReturn(employee);
+		when(employeeService.save(employee)).thenReturn(employee);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isCreated())
 		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
 	}
@@ -97,14 +94,14 @@ public class EmployeeControllerTest {
 		employee.setLastName("testing");
 		employee.setEmployeeId(2L);
 
-		when(employeeRepository.save(employee)).thenReturn(employee);
+		when(employeeService.save(employee)).thenReturn(employee);
 		
 	    ObjectMapper mapper = new ObjectMapper();
 	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(post("/employee/save").contentType(APPLICATION_JSON_UTF8).content(requestJson))
+		this.mockMvc.perform(post("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid first name]"));
 	}
@@ -117,9 +114,10 @@ public class EmployeeControllerTest {
 		employee.setFirstName("test");
 		employee.setLastName("testing");
 		
-		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-		
-		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
+		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
+		employee.setFirstName("John");
+		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
+		this.mockMvc.perform(post("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
 	}
@@ -127,7 +125,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/employee/5/updatefirstname").contentType(APPLICATION_JSON_UTF8).content("John"))
+		this.mockMvc.perform(post("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
