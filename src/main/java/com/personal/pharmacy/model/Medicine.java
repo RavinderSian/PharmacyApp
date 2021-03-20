@@ -17,6 +17,8 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,9 +43,11 @@ public class Medicine {
 	@Column(name = "duration")
 	private String duration;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL)
 	private Set<Ingredient> ingredients = new HashSet<>();
 	
+	@JsonIgnore
 	@ManyToOne
 	private Prescription prescription;
 	
