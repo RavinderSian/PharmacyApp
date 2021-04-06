@@ -29,12 +29,9 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 
 	@Override
 	public ResponseEntity<?> getById(Long id) {
-		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
-		if (ingredientOptional.isEmpty()) {
-			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Ingredient>(ingredientOptional.get(), HttpStatus.ACCEPTED);
+		return ingredientServices.findById(id).isEmpty()
+		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
+		: new ResponseEntity<Ingredient>(ingredientServices.findById(id).get(), HttpStatus.ACCEPTED);
 	}
 
 	@Override

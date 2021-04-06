@@ -29,12 +29,9 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(Long id){
-		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
-		if (prescriptionOptional.isEmpty()) {
-			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Prescription>(prescriptionOptional.get(), HttpStatus.ACCEPTED);
+		return prescriptionService.findById(id).isEmpty()
+		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
+		: new ResponseEntity<Prescription>(prescriptionService.findById(id).get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override

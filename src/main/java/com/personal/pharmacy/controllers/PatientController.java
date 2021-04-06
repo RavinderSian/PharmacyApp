@@ -31,12 +31,9 @@ public class PatientController implements CrudController<Patient, Long> {
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(Long id){
-		Optional<Patient> patientOptional = patientService.findById(id);
-		if (patientOptional.isEmpty()) {
-			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Patient>(patientOptional.get(), HttpStatus.ACCEPTED);
+		return patientService.findById(id).isEmpty()
+		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
+		: new ResponseEntity<Patient>(patientService.findById(id).get(), HttpStatus.ACCEPTED);
 	}
 	
 	@Override
