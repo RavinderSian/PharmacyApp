@@ -34,11 +34,9 @@ public class IngredientServiceImpl implements IngredientService {
 
 	@Override
 	public Optional<Ingredient> findById(Long id) {
-		Optional<Ingredient> ingredientOptional = ingredientRepository.findById(id);
-		if (!ingredientOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return ingredientOptional;
+		return ingredientRepository.findById(id).isEmpty()
+		? Optional.empty()
+		: ingredientRepository.findById(id);
 	}
 	
 	public Ingredient updateIngredientName(Ingredient ingredient, String name) {

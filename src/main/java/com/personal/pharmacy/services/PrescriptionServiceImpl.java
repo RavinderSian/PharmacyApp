@@ -35,11 +35,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 	@Override
 	public Optional<Prescription> findById(Long id) {
 		
-		Optional<Prescription> prescriptionOptional = prescriptionRepository.findById(id);
-		if (!prescriptionOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return prescriptionOptional;
+		return prescriptionRepository.findById(id).isEmpty()
+		? Optional.empty()
+		: prescriptionRepository.findById(id);
 	}
 
 }
