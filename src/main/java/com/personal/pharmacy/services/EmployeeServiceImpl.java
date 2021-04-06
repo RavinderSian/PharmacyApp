@@ -37,11 +37,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Optional<Employee> findById(Long id) {
-		Optional<Employee> employeeOptional = employeeRepository.findById(id);
-		if (!employeeOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return employeeOptional;
+		
+		Optional<Employee> resultOptional = employeeRepository.findById(id).isEmpty()
+		?  Optional.empty()
+		:  employeeRepository.findById(id);
+		
+		return resultOptional;
+		
+		
 	}
 
 	@Override
