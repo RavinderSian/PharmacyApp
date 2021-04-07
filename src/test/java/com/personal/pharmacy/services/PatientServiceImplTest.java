@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -47,10 +46,8 @@ class PatientServiceImplTest {
 	public void test_Save_ReturnsCorrectPatient_WhenGivenPatientMock(){
 		//Arrange
 		when(patientRepository.save(patientMock)).thenReturn(patientMock);
-		//Act
-		Patient patient = patientService.save(patientMock);
 		//Assert
-		Assertions.assertEquals(patientMock, patient);
+		Assertions.assertEquals(patientMock, patientService.save(patientMock));
 	}
 	
 	@Test
@@ -73,48 +70,38 @@ class PatientServiceImplTest {
 	public void test_FindAll_ReturnsListOfSize0_WhenGivenNothing() {
 		//Arrange
 		when(patientRepository.findAll()).thenReturn(new ArrayList<>());
-		//Act
-		List<Patient> patients = patientService.findAll();
 		//Assert
-		Assertions.assertEquals(0, patients.size());
+		Assertions.assertEquals(0, patientService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize1_WhenGivenPatientMock() {
 		//Arrange
 		when(patientRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(patientMock)));
-		//Act
-		List<Patient> patients = patientService.findAll();
 		//Assert
-		Assertions.assertEquals(1, patients.size());
+		Assertions.assertEquals(1, patientService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize2_WhenGivenDuplicatePatientMocks() {
 		//Arrange
 		when(patientRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(patientMock, patientMock)));
-		//Act
-		List<Patient> patients = patientService.findAll();
 		//Assert
-		Assertions.assertEquals(2, patients.size());
+		Assertions.assertEquals(2, patientService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsPatientMock_WhenCalledWithId1() {
 		//Arrange
 		when(patientRepository.findById(1L)).thenReturn(Optional.of(patientMock));
-		//Act
-		Optional<Patient> patientOptional = patientService.findById(1L);
 		//Assert
-		Assertions.assertEquals(patientOptional.get(), patientMock);
+		Assertions.assertEquals(patientService.findById(1L).get(), patientMock);
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Act
-		Optional<Patient> patientOptional = patientService.findById(5L);
 		//Assert
-		Assertions.assertTrue(patientOptional.isEmpty());
+		Assertions.assertTrue(patientService.findById(5L).isEmpty());
 	}
 	
 	@Test

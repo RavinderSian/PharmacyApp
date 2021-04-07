@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -47,20 +46,16 @@ class IngredientServiceImplTest {
 	public void test_Save_ReturnsCorrectIngredient_WhenGivenIngredientMock() {
 		//Assert
 		when(ingredientRepository.save(ingredientMock)).thenReturn(ingredientMock);
-		//Act
-		Ingredient ingredient = ingredientService.save(ingredientMock);
 		//Assert
-		Assertions.assertEquals(ingredientMock, ingredient);
+		Assertions.assertEquals(ingredientMock, ingredientService.save(ingredientMock));
 	}
 	
 	@Test
 	public void test_Delete_Calls_RepositoryDelete_WhenCalled() {
-		//Assert
-		when(ingredientRepository.save(ingredientMock)).thenReturn(ingredientMock);
 		//Act
-		ingredientService.save(ingredientMock);
+		ingredientService.delete(ingredientMock);
 		//Assert
-		verify(ingredientRepository, times(1)).save(ingredientMock);
+		verify(ingredientRepository, times(1)).delete(ingredientMock);
 	}
 	
 	@Test
@@ -75,10 +70,8 @@ class IngredientServiceImplTest {
 	public void test_FindAll_ReturnsEmptyList_WhenGivenNothing() {
 		//Arrange
 		when(ingredientRepository.findAll()).thenReturn(new ArrayList<>());
-		//Act
-		List<Ingredient> ingredients = ingredientService.findAll();
 		//Assert
-		Assertions.assertEquals(0, ingredients.size());
+		Assertions.assertEquals(0, ingredientService.findAll().size());
 	}
 	
 	
@@ -86,38 +79,30 @@ class IngredientServiceImplTest {
 	public void test_FindAll_ReturnsListOfSize1_WhenGivenIngredientMock() {
 		//Arrange
 		when(ingredientRepository.findAll()).thenReturn(new ArrayList<Ingredient>(Arrays.asList(ingredientMock)));
-		//Act
-		List<Ingredient> ingredients = ingredientService.findAll();
 		//Assert
-		Assertions.assertEquals(1, ingredients.size());
+		Assertions.assertEquals(1, ingredientService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize2_WhenGivenDuplicateIngredientMocks() {
 		//Arrange
 		when(ingredientRepository.findAll()).thenReturn(new ArrayList<Ingredient>(Arrays.asList(ingredientMock, ingredientMock)));
-		//Act
-		List<Ingredient> ingredients = ingredientService.findAll();
 		//Assert
-		Assertions.assertEquals(2, ingredients.size());
+		Assertions.assertEquals(2, ingredientService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsIngredientMock_WhenCalledWithId1() {
 		//Arrange
 		when(ingredientRepository.findById(1L)).thenReturn(Optional.of(ingredientMock));
-		//Act
-		Optional<Ingredient> ingredientOptional = ingredientService.findById(1L);
 		//Assert
-		Assertions.assertEquals(ingredientMock, ingredientOptional.get());
+		Assertions.assertEquals(ingredientMock, ingredientService.findById(1L).get());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Act
-		Optional<Ingredient> ingredientOptional = ingredientService.findById(5L);
 		//Assert
-		Assertions.assertTrue(ingredientOptional.isEmpty());
+		Assertions.assertTrue(ingredientService.findById(5L).isEmpty());
 	}
 	
 	@Test

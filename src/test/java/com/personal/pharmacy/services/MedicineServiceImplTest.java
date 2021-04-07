@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -40,17 +39,14 @@ class MedicineServiceImplTest {
 		medicineService.save(medicineMock);
 		//Assert
 		verify(medicineRepository, times(1)).save(medicineMock);
-		
 	}
 	
 	@Test
 	public void test_Save_ReturnsCorrectMedicine_WhenGivenMedicineMock() {
 		//Arrange
 		when(medicineRepository.save(medicineMock)).thenReturn(medicineMock);
-		//Act
-		Medicine medicine = medicineService.save(medicineMock);
 		//Assert
-		Assertions.assertEquals(medicineMock, medicine);
+		Assertions.assertEquals(medicineMock, medicineService.save(medicineMock));
 	}
 	
 	@Test
@@ -73,48 +69,38 @@ class MedicineServiceImplTest {
 	public void test_FindAll_ReturnsEmptyList_WhenGivenNothing() {
 		//Arrange
 		when(medicineRepository.findAll()).thenReturn(new ArrayList<>());
-		//Act
-		List<Medicine> medicines = medicineService.findAll();
 		//Assert
-		Assertions.assertEquals(0, medicines.size());
+		Assertions.assertEquals(0, medicineService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize1_WhenGivenMedicineMock() {
 		//Arrange
 		when(medicineRepository.findAll()).thenReturn(new ArrayList<Medicine>(Arrays.asList(medicineMock)));
-		//Act
-		List<Medicine> medicines = medicineService.findAll();
 		//Assert
-		Assertions.assertEquals(1, medicines.size());
+		Assertions.assertEquals(1, medicineService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize2_WhenGivenDuplicateMedicineMock() {
 		//Arrange
 		when(medicineRepository.findAll()).thenReturn(new ArrayList<Medicine>(Arrays.asList(medicineMock, medicineMock)));
-		//Act
-		List<Medicine> medicines = medicineService.findAll();
 		//Assert
-		Assertions.assertEquals(2, medicines.size());
+		Assertions.assertEquals(2, medicineService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsMedicineMock_WhenCalledWithId1() {
 		//Arrange
 		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicineMock));
-		//Act
-		Optional<Medicine> medicineOptional = medicineService.findById(1L);
 		//Assert
-		Assertions.assertEquals(medicineOptional.get(), medicineMock);
+		Assertions.assertEquals(medicineService.findById(1L).get(), medicineMock);
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Act
-		Optional<Medicine> medicineOptional = medicineService.findById(5L);
 		//Assert
-		Assertions.assertTrue(medicineOptional.isEmpty());
+		Assertions.assertTrue(medicineService.findById(5L).isEmpty());
 	}
 	
 	@Test

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -47,20 +46,16 @@ class EmployeeServiceImplTest {
 	public void test_Save_ReturnsCorrectEmployee_WhenGivenEmployeeMock() {
 		//Assert
 		when(employeeRepository.save(employeeMock)).thenReturn(employeeMock);
-		//Act
-		Employee employee = employeeService.save(employeeMock);
 		//Assert
-		Assertions.assertEquals(employeeMock, employee);
+		Assertions.assertEquals(employeeMock, employeeService.save(employeeMock));
 	}
 	
 	@Test
 	public void test_Delete_Calls_RepositoryDelete_WhenCalled() {
-		//Assert
-		when(employeeRepository.save(employeeMock)).thenReturn(employeeMock);
 		//Act
-		employeeService.save(employeeMock);
+		employeeService.delete(employeeMock);
 		//Assert
-		verify(employeeRepository, times(1)).save(employeeMock);
+		verify(employeeRepository, times(1)).delete(employeeMock);
 	}
 	
 	@Test
@@ -75,10 +70,8 @@ class EmployeeServiceImplTest {
 	public void test_FindAll_ReturnsEmptyList_WhenGivenNothing() {
 		//Arrange
 		when(employeeRepository.findAll()).thenReturn(new ArrayList<>());
-		//Act
-		List<Employee> employees = employeeService.findAll();
 		//Assert
-		Assertions.assertEquals(0, employees.size());
+		Assertions.assertEquals(0, employeeService.findAll().size());
 	}
 	
 	
@@ -86,38 +79,30 @@ class EmployeeServiceImplTest {
 	public void test_FindAll_ReturnsListOfSize1_WhenGivenEmployeeMock() {
 		//Arrange
 		when(employeeRepository.findAll()).thenReturn(new ArrayList<Employee>(Arrays.asList(employeeMock)));
-		//Act
-		List<Employee> employees = employeeService.findAll();
 		//Assert
-		Assertions.assertEquals(1, employees.size());
+		Assertions.assertEquals(1, employeeService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize2_WhenGivenDuplicateEmployeeMocks() {
 		//Arrange
 		when(employeeRepository.findAll()).thenReturn(new ArrayList<Employee>(Arrays.asList(employeeMock, employeeMock)));
-		//Act
-		List<Employee> employees = employeeService.findAll();
 		//Assert
-		Assertions.assertEquals(2, employees.size());
+		Assertions.assertEquals(2, employeeService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmployeeMock_WhenCalledWithId1() {
 		//Arrange
 		when(employeeRepository.findById(1L)).thenReturn(Optional.of(employeeMock));
-		//Act
-		Optional<Employee> employeeOptional = employeeService.findById(1L);
 		//Assert
-		Assertions.assertEquals(employeeMock, employeeOptional.get());
+		Assertions.assertEquals(employeeMock, employeeService.findById(1L).get());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Act
-		Optional<Employee> employeeOptional = employeeService.findById(5L);
 		//Assert
-		Assertions.assertTrue(employeeOptional.isEmpty());
+		Assertions.assertTrue(employeeService.findById(5L).isEmpty());
 	}
 	
 	@Test

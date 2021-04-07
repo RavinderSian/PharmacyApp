@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -46,10 +45,8 @@ class PrescriptionServiceImplTest {
 	public void test_Save_ReturnsCorrectPrescription_WhenGivenPrescriptionMock() {
 		//Arrange
 		when(prescriptionRepository.save(prescriptionMock)).thenReturn(prescriptionMock);
-		//Act
-		Prescription prescription = prescriptionService.save(prescriptionMock);
 		//Assert
-		Assertions.assertEquals(prescriptionMock, prescription);
+		Assertions.assertEquals(prescriptionMock, prescriptionService.save(prescriptionMock));
 	}
 	
 	@Test
@@ -72,48 +69,38 @@ class PrescriptionServiceImplTest {
 	public void test_FindAll_ReturnsListOfSize0_WhenGivenMockPrescription() {
 		//Arrange
 		when(prescriptionRepository.findAll()).thenReturn(new ArrayList<>());
-		//Act
-		List<Prescription> prescriptions = prescriptionService.findAll();
 		//Assert
-		Assertions.assertEquals(0, prescriptions.size());
+		Assertions.assertEquals(0, prescriptionService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize1_WhenGivenMockPrescription() {
 		//Arrange
 		when(prescriptionRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(prescriptionMock)));
-		//Act
-		List<Prescription> prescriptions = prescriptionService.findAll();
 		//Assert
-		Assertions.assertEquals(1, prescriptions.size());
+		Assertions.assertEquals(1, prescriptionService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindAll_ReturnsListOfSize2_WhenGivenMockPrescription() {
 		//Arrange
 		when(prescriptionRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(prescriptionMock, prescriptionMock)));
-		//Act
-		List<Prescription> prescriptions = prescriptionService.findAll();
 		//Assert
-		Assertions.assertEquals(2, prescriptions.size());
+		Assertions.assertEquals(2, prescriptionService.findAll().size());
 	}
 	
 	@Test
 	public void test_FindById_ReturnsPrescriptionMock_WhenCalledWithId1() {
 		//Arrange
 		when(prescriptionRepository.findById(1L)).thenReturn(Optional.of(prescriptionMock));
-		//Act
-		Optional<Prescription> prescriptionOptional = prescriptionService.findById(1L);
 		//Assert
-		Assertions.assertEquals(prescriptionOptional.get(), prescriptionMock);
+		Assertions.assertEquals(prescriptionService.findById(1L).get(), prescriptionMock);
 	}
 	
 	@Test
 	public void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Act
-		Optional<Prescription> prescriptionOptional = prescriptionService.findById(5L);
 		//Assert
-		Assertions.assertTrue(prescriptionOptional.isEmpty());
+		Assertions.assertTrue(prescriptionService.findById(5L).isEmpty());
 	}
 	
 }
