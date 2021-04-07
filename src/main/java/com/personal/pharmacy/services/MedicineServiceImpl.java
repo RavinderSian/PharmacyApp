@@ -35,11 +35,9 @@ public class MedicineServiceImpl implements MedicineService{
 	@Override
 	public Optional<Medicine> findById(Long id) {
 		
-		Optional<Medicine> medicineOptional = medicineRepository.findById(id);
-		if (!medicineOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return medicineOptional;
+		return medicineRepository.findById(id).isEmpty()
+		? Optional.empty()
+		: medicineRepository.findById(id);
 	}
 
 	@Override

@@ -25,7 +25,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void delete(Employee employee) {
 		employee.getPrescriptions().forEach(prescription -> prescription.setEmployee(null));
 		employeeRepository.delete(employee);
-
 	}
 
 	
@@ -37,11 +36,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Optional<Employee> findById(Long id) {
-		Optional<Employee> employeeOptional = employeeRepository.findById(id);
-		if (!employeeOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return employeeOptional;
+		
+		return employeeRepository.findById(id).isEmpty()
+		?  Optional.empty()
+		:  employeeRepository.findById(id);
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,15 +29,11 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	private final EmployeeService employeeService;
 
 	@Override
-	@GetMapping("{id}")
 	public ResponseEntity<?> getById(Long id){
 
-		Optional<Employee> employeeOptional = employeeService.findById(id);
-		if (employeeOptional.isEmpty()) {
-			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Employee>(employeeOptional.get(), HttpStatus.ACCEPTED);
+		return employeeService.findById(id).isEmpty()		
+		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
+		: new ResponseEntity<Employee>(employeeService.findById(id).get(), HttpStatus.ACCEPTED);
 	}
 
 	@Override
@@ -46,7 +41,6 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		return null;
 	}
 
-	@GetMapping("deleting/{id}")
 	public String deletingById(@PathVariable Long id){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {

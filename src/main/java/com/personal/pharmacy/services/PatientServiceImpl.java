@@ -35,11 +35,9 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Optional<Patient> findById(Long id) {
 		
-		Optional<Patient> patientOptional = patientRepository.findById(id);
-		if (!patientOptional.isPresent()) {
-			return Optional.empty();
-		}
-		return patientOptional;
+		return patientRepository.findById(id).isEmpty()
+		? Optional.empty()
+		: patientRepository.findById(id);
 	}
 
 	@Override

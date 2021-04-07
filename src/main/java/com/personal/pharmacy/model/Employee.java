@@ -15,6 +15,8 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -33,6 +35,7 @@ public class Employee {
 	@Column(name = "last_name")
 	private String lastName;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "employee")
 	private List<Prescription> prescriptions = new ArrayList<>();
 	
