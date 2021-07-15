@@ -3,7 +3,8 @@ package com.personal.pharmacy.controllers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -81,7 +82,7 @@ class IngredientControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(post("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isCreated())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
 	}
@@ -99,7 +100,7 @@ class IngredientControllerTest {
 	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(post("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("[Please enter a valid name]"));
 	}
@@ -114,7 +115,7 @@ class IngredientControllerTest {
 		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
 		ingredient.setName("new");
 		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
-		this.mockMvc.perform(post("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
+		this.mockMvc.perform(patch("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isAccepted())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));
 	}
@@ -122,7 +123,7 @@ class IngredientControllerTest {
 	@Test
 	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
 		
-		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
+		this.mockMvc.perform(patch("/ingredient/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isNotFound())
 		.andExpect(content().string("No data found for id 5"));
 	}
