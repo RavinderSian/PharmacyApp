@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,26 +24,29 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.services.MedicineService;
 
-@AutoConfigureMockMvc
-@SpringBootTest
-public class MedicineControllerTest {
+@WebMvcTest(MedicineController.class)
+class MedicineControllerTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 	
-	@Autowired
-	MedicineController controller;
+	private MedicineController controller;
 	
 	@MockBean
-	MedicineService medicineService;
+	private MedicineService medicineService;
+	
+	@BeforeEach
+	void setUp() {
+		controller = new MedicineController(medicineService);
+	}
 	
 	@Test
-	public void contextLoads() throws Exception {
+	void contextLoads() throws Exception {
 		assertThat(controller).isNotNull();
 	}
 	
 	@Test
-	public void test_GetById_ReturnsCorrectStatusAndMedicine_WhenGivenId1() throws Exception {
+	void test_GetById_ReturnsCorrectStatusAndMedicine_WhenGivenId1() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
@@ -57,7 +60,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_GetById_ReturnsNoDataForId5_WhenGivenId5() throws Exception {
+	void test_GetById_ReturnsNoDataForId5_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/medicine/5")).andDo(print())
 		.andExpect(status().isNotFound())
@@ -65,7 +68,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenValidMedicine() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
@@ -84,7 +87,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setMedicineId(1L);
@@ -103,7 +106,7 @@ public class MedicineControllerTest {
 	
 	
 	@Test
-	public void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameNewAndId1() throws Exception {
+	void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameNewAndId1() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
@@ -118,7 +121,7 @@ public class MedicineControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
+	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
 				
 		this.mockMvc.perform(post("/medicine/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isNotFound())

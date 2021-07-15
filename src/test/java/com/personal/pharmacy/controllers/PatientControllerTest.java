@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,26 +24,29 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.services.PatientService;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class PatientControllerTest {
+@WebMvcTest(PatientController.class)
+class PatientControllerTest {
 
 	@Autowired
-	PatientController controller;
+	private MockMvc mockMvc;
 	
-	@Autowired
-	MockMvc mockMvc;
-	
+	private PatientController controller;
+
 	@MockBean
-	PatientService patientService;
+	private PatientService patientService;
+	
+	@BeforeEach
+	void setUp() {
+		controller = new PatientController(patientService);
+	}
 	
 	@Test
-	public void contextLoads() throws Exception {
+	void contextLoads() throws Exception {
 		assertThat(controller).isNotNull();
 	}
 	
 	@Test
-	public void test_GetById_ReturnsCorrectStatusAndPatient_WhenGivenId1() throws Exception {
+	void test_GetById_ReturnsCorrectStatusAndPatient_WhenGivenId1() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
@@ -57,7 +60,7 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
+	void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
 		
 		this.mockMvc.perform(get("/patient/5")).andDo(print())
 		.andExpect(status().isNotFound())
@@ -65,7 +68,7 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenValidPatient() throws Exception {
+	void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenValidPatient() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
@@ -85,7 +88,7 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenInValidPatient() throws Exception {
+	void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenInValidPatient() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
@@ -104,7 +107,7 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
+	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
@@ -120,7 +123,7 @@ public class PatientControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		
 		this.mockMvc.perform(post("/patient/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isNotFound())

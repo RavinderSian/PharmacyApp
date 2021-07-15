@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,26 +24,29 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.PrescriptionService;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class PrescriptionControllerTest {
+@WebMvcTest(PrescriptionController.class)
+class PrescriptionControllerTest {
 
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 	
-	@Autowired
-	PrescriptionController controller;
+	private PrescriptionController controller;
 	
 	@MockBean
-	PrescriptionService prescriptionService;
+	private PrescriptionService prescriptionService;
+	
+	@BeforeEach
+	void setUp() {
+		controller = new PrescriptionController(prescriptionService);
+	}
 	
 	@Test
-	public void contextLoads() throws Exception {
+	void contextLoads() throws Exception {
 		assertThat(controller).isNotNull();
 	}
 	
 	@Test
-	public void test_GetById_ReturnsCorrectStatusAndPrescription_WhenGivenId1() throws Exception {
+	void test_GetById_ReturnsCorrectStatusAndPrescription_WhenGivenId1() throws Exception {
 		
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
@@ -56,7 +59,7 @@ public class PrescriptionControllerTest {
 	}
 	
 	@Test
-	public void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {		
+	void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {		
 		
 		this.mockMvc.perform(get("/prescription/5")).andDo(print())
 		.andExpect(status().isNotFound())
@@ -64,7 +67,7 @@ public class PrescriptionControllerTest {
 	}
 	
 	@Test
-	public void test_Save_ReturnsCorrectStatusAndPrescription_WhenGivenPrescription() throws Exception {
+	void test_Save_ReturnsCorrectStatusAndPrescription_WhenGivenPrescription() throws Exception {
 		
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
