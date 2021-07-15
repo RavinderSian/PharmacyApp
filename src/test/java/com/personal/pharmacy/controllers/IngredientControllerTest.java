@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,32 +23,30 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.services.IngredientService;
-import com.personal.pharmacy.services.MedicineService;
 
-@AutoConfigureMockMvc
-@SpringBootTest
-public class IngredientControllerTest {
-
-	@Autowired
-	IngredientController controller;
+@WebMvcTest(IngredientController.class)
+class IngredientControllerTest {
 	
 	@Autowired
-	MockMvc mockMvc;
+	private MockMvc mockMvc;
 	
-	@MockBean
-	IngredientService ingredientService;
+	private IngredientController controller;
 
 	@MockBean
-	MedicineService medicineService;
+	private IngredientService ingredientService;
 
+	@BeforeEach
+	void setUp() {
+		controller = new IngredientController(ingredientService);
+	}
 	
 	@Test
-	public void contextLoads() throws Exception {
+	void contextLoads() throws Exception {
 		assertThat(controller).isNotNull();
 	}
 	
 	@Test
-	public void test_GetById_ReturnsCorrectStatusAndIngredient_WhenGivenId1() throws Exception {
+	void test_GetById_ReturnsCorrectStatusAndIngredient_WhenGivenId1() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
@@ -62,7 +60,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
+	void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/ingredient/5")).andDo(print())
 		.andExpect(status().isNotFound())
@@ -70,7 +68,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenIngredient() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenIngredient() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
@@ -89,7 +87,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenInValidIngredient() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenInValidIngredient() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setIngredientId(1L);
@@ -107,7 +105,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameSalicylicAcidAndId1() throws Exception {
+	void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameSalicylicAcidAndId1() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
@@ -122,7 +120,7 @@ public class IngredientControllerTest {
 	}
 	
 	@Test
-	public void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
+	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
 		
 		this.mockMvc.perform(post("/ingredient/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isNotFound())
