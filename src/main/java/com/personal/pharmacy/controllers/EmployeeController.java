@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("employee/")
 public class EmployeeController implements CrudController<Employee, Long>{
-
 	
 	private final EmployeeService employeeService;
 
@@ -68,7 +67,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
 	}
 	
-	@PostMapping("{id}/updatefirstname")
+	@PatchMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
 		Optional<Employee> employeeOptional = employeeService.findById(id);
 		if (employeeOptional.isEmpty()) {
