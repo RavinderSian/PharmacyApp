@@ -31,7 +31,7 @@ public class PatientController implements CrudController<Patient, Long> {
 	public ResponseEntity<?> getById(Long id){
 		return patientService.findById(id).isEmpty()
 		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Patient>(patientService.findById(id).get(), HttpStatus.ACCEPTED);
+		: new ResponseEntity<Patient>(patientService.findById(id).get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class PatientController implements CrudController<Patient, Long> {
 		}
 		
 		Patient savedPatient = patientService.save(patient);
-		return new ResponseEntity<Patient>(savedPatient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Patient>(savedPatient, HttpStatus.OK);
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class PatientController implements CrudController<Patient, Long> {
 			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		patientService.delete(patientOptional.get());
-		return new ResponseEntity<String>("Patient deleted", HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>("Patient deleted", HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatefirstname")
@@ -70,7 +70,7 @@ public class PatientController implements CrudController<Patient, Long> {
 		}
 		Patient patient = patientOptional.get();
 		patientService.updateFirstName(patient, firstName);
-		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Patient>(patient, HttpStatus.OK);
 	}
 	
 }
