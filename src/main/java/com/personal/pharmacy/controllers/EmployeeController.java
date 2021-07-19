@@ -32,7 +32,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 
 		return employeeService.findById(id).isEmpty()		
 		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Employee>(employeeService.findById(id).get(), HttpStatus.ACCEPTED);
+		: new ResponseEntity<Employee>(employeeService.findById(id).get(), HttpStatus.OK);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		}
 		
 		Employee savedEmployee = employeeService.save(employee);
-		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
+		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatefirstname")
@@ -76,7 +76,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		}
 		Employee employee = employeeOptional.get();
 		employeeService.updateFirstName(employee, firstName);
-		return new ResponseEntity<Employee>(employee, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 	}
 	
 }

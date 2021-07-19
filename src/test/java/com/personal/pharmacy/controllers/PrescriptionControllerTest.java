@@ -54,7 +54,7 @@ class PrescriptionControllerTest {
 		when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
 		
 		this.mockMvc.perform(get("/prescription/1")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'prescriptionId': 1}")); 
 	}
 	
@@ -80,7 +80,7 @@ class PrescriptionControllerTest {
 	    String requestJson = ow.writeValueAsString(prescription);
 		
 		this.mockMvc.perform(post("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'prescriptionId': 1}")); 
 	}
 	

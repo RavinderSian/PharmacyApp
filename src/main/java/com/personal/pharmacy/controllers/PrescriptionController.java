@@ -32,7 +32,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	public ResponseEntity<?> getById(Long id){
 		return prescriptionService.findById(id).isEmpty()
 		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Prescription>(prescriptionService.findById(id).get(), HttpStatus.ACCEPTED);
+		: new ResponseEntity<Prescription>(prescriptionService.findById(id).get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
 		}
 		Prescription savedPrescription = prescriptionService.save(prescription);
-		return new ResponseEntity<Prescription>(savedPrescription, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Prescription>(savedPrescription, HttpStatus.OK);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		prescriptionService.delete(prescriptionOptional.get());
-		return new ResponseEntity<String>("Prescription deleted", HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>("Prescription deleted", HttpStatus.OK);
 	}
 	
 }

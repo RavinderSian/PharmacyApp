@@ -31,7 +31,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	public ResponseEntity<?> getById(Long id) {
 		return ingredientServices.findById(id).isEmpty()
 		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Ingredient>(ingredientServices.findById(id).get(), HttpStatus.ACCEPTED);
+		: new ResponseEntity<Ingredient>(ingredientServices.findById(id).get(), HttpStatus.OK);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
 		}
 		ingredientServices.delete(ingredientOptional.get());
-		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.OK);
 
 	}
 
@@ -59,7 +59,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		}
 		
 		Ingredient savedIngredient = ingredientServices.save(ingredient);
-		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.CREATED);
+		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatename")
@@ -71,7 +71,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		}
 		Ingredient ingredient = ingredientOptional.get();
 		ingredientServices.updateIngredientName(ingredient, name);
-		return new ResponseEntity<Ingredient>(ingredient, HttpStatus.ACCEPTED);
+		return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
 	}
 	
 }
