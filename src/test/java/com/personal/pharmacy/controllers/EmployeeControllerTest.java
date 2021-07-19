@@ -57,7 +57,7 @@ class EmployeeControllerTest {
 		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
 		
 		this.mockMvc.perform(get("/employee/1")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'Rav'}")); 
 	}
 	
@@ -86,7 +86,7 @@ class EmployeeControllerTest {
 	    String requestJson = ow.writeValueAsString(employee);
 		
 		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
-		.andExpect(status().isCreated())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
 	}
 	
@@ -121,7 +121,7 @@ class EmployeeControllerTest {
 		employee.setFirstName("John");
 		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
 		this.mockMvc.perform(patch("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
 	}
 	

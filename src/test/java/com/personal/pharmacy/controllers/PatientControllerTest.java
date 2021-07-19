@@ -56,7 +56,7 @@ class PatientControllerTest {
 		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
 		
 		this.mockMvc.perform(get("/patient/1")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav'}")); 
 	}
 	
@@ -84,7 +84,7 @@ class PatientControllerTest {
 	    String requestJson = ow.writeValueAsString(patient);
 		
 		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav', 'lastName':'sian'}"));
 	}
 	
@@ -119,7 +119,7 @@ class PatientControllerTest {
 		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);
 		
 		this.mockMvc.perform(patch("/patient/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'patientId': 1, 'firstName': 'John'}"));
 	}
 	

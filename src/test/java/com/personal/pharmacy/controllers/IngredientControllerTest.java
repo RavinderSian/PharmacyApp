@@ -56,7 +56,7 @@ class IngredientControllerTest {
 		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
 		
 		this.mockMvc.perform(get("/ingredient/1")).andDo(print())
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}")); 
 	}
 	
@@ -83,7 +83,7 @@ class IngredientControllerTest {
 	    String requestJson = ow.writeValueAsString(ingredient);
 		
 		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
-		.andExpect(status().isCreated())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
 	}
 	
@@ -116,7 +116,7 @@ class IngredientControllerTest {
 		ingredient.setName("new");
 		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
 		this.mockMvc.perform(patch("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
-		.andExpect(status().isAccepted())
+		.andExpect(status().isOk())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));
 	}
 	
