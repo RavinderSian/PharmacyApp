@@ -1,4 +1,4 @@
-package com.personal.pharmacy.controllers;
+   package com.personal.pharmacy.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
