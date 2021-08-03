@@ -47,7 +47,6 @@ class PrescriptionControllerTest {
 	
 	@Test
 	void test_GetById_ReturnsCorrectStatusAndPrescription_WhenGivenId1() throws Exception {
-		
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		
@@ -60,15 +59,12 @@ class PrescriptionControllerTest {
 	
 	@Test
 	void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {		
-		
 		this.mockMvc.perform(get("/prescription/5")).andDo(print())
-		.andExpect(status().isNotFound())
-		.andExpect(content().string("No data found for id 5")); 
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test
 	void test_Save_ReturnsCorrectStatusAndPrescription_WhenGivenPrescription() throws Exception {
-		
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		

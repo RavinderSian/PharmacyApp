@@ -64,8 +64,7 @@ class IngredientControllerTest {
 	void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/ingredient/5")).andDo(print())
-		.andExpect(status().isNotFound())
-		.andExpect(content().string("No data found for id 5")); 
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -124,8 +123,7 @@ class IngredientControllerTest {
 	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameNewAndId5() throws Exception {
 		
 		this.mockMvc.perform(patch("/ingredient/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
-		.andExpect(status().isNotFound())
-		.andExpect(content().string("No data found for id 5"));
+		.andExpect(status().isNotFound());
 	}
 	
 }

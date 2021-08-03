@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.services.IngredientService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("ingredient/")
@@ -27,11 +25,15 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 
 	private final IngredientService ingredientServices;
 
+	public IngredientController(IngredientService ingredientServices) {
+		this.ingredientServices = ingredientServices;
+	}
+
 	@Override
 	public ResponseEntity<?> getById(Long id) {
 		return ingredientServices.findById(id).isEmpty()
-		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Ingredient>(ingredientServices.findById(id).get(), HttpStatus.OK);
+		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+		: new ResponseEntity<>(ingredientServices.findById(id).get(), HttpStatus.OK);
 	}
 
 	@Override
@@ -39,27 +41,23 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
 		if (ingredientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		ingredientServices.delete(ingredientOptional.get());
-		return new ResponseEntity<String>("Deleted ingredient with id " + id, HttpStatus.OK);
-
+		return new ResponseEntity<>("Deleted ingredient", HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<?> add(Ingredient ingredient, BindingResult bindingResult) {
-		
 		if (bindingResult.hasFieldErrors()) {
 			List<String> errorStrings = new ArrayList<>();
 			bindingResult.getFieldErrors().forEach(objectError -> {
 				errorStrings.add(objectError.getDefaultMessage());
 			});
-			
-			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
 		}
-		
 		Ingredient savedIngredient = ingredientServices.save(ingredient);
-		return new ResponseEntity<Ingredient>(savedIngredient, HttpStatus.OK);
+		return new ResponseEntity<>(savedIngredient, HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatename")
@@ -67,11 +65,11 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
 		if (ingredientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Ingredient ingredient = ingredientOptional.get();
 		ingredientServices.updateIngredientName(ingredient, name);
-		return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
+		return new ResponseEntity<>(ingredient, HttpStatus.OK);
 	}
 	
 }

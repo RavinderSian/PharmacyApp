@@ -16,22 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.services.PatientService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("patient/")
 public class PatientController implements CrudController<Patient, Long> {
+
+	public PatientController(PatientService patientService) {
+		this.patientService = patientService;
+	}
 
 	private final PatientService patientService;
 	
 	@Override
 	public ResponseEntity<?> getById(Long id){
 		return patientService.findById(id).isEmpty()
-		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Patient>(patientService.findById(id).get(), HttpStatus.OK);
+		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+		: new ResponseEntity<>(patientService.findById(id).get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -41,13 +43,11 @@ public class PatientController implements CrudController<Patient, Long> {
 			List<String> errorStrings = new ArrayList<>();
 			bindingResult.getFieldErrors().forEach(objectError -> {
 				errorStrings.add(objectError.getDefaultMessage());
-				
 			});
-			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
 		}
-		
 		Patient savedPatient = patientService.save(patient);
-		return new ResponseEntity<Patient>(savedPatient, HttpStatus.OK);
+		return new ResponseEntity<>(savedPatient, HttpStatus.OK);
 	}
 	
 	@Override
@@ -55,10 +55,10 @@ public class PatientController implements CrudController<Patient, Long> {
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		patientService.delete(patientOptional.get());
-		return new ResponseEntity<String>("Patient deleted", HttpStatus.OK);
+		return new ResponseEntity<>("Patient deleted", HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatefirstname")
@@ -66,11 +66,11 @@ public class PatientController implements CrudController<Patient, Long> {
 		Optional<Patient> patientOptional = patientService.findById(id);
 		if (patientOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Patient patient = patientOptional.get();
 		patientService.updateFirstName(patient, firstName);
-		return new ResponseEntity<Patient>(patient, HttpStatus.OK);
+		return new ResponseEntity<>(patient, HttpStatus.OK);
 	}
 	
 }

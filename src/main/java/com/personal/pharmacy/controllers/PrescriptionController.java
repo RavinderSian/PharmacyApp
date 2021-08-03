@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.PrescriptionService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("prescription/")
@@ -27,12 +25,16 @@ public class PrescriptionController implements CrudController<Prescription, Long
 
 	private final PrescriptionService prescriptionService;
 	
+	public PrescriptionController(PrescriptionService prescriptionService) {
+		this.prescriptionService = prescriptionService;
+	}
+
 	@Override
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(Long id){
 		return prescriptionService.findById(id).isEmpty()
-		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Prescription>(prescriptionService.findById(id).get(), HttpStatus.OK);
+		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+		: new ResponseEntity<>(prescriptionService.findById(id).get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -42,12 +44,11 @@ public class PrescriptionController implements CrudController<Prescription, Long
 			List<String> errorStrings = new ArrayList<>();
 			bindingResult.getFieldErrors().forEach(objectError -> {
 				errorStrings.add(objectError.getDefaultMessage());
-				
 			});
-			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
 		}
 		Prescription savedPrescription = prescriptionService.save(prescription);
-		return new ResponseEntity<Prescription>(savedPrescription, HttpStatus.OK);
+		return new ResponseEntity<>(savedPrescription, HttpStatus.OK);
 	}
 	
 	@Override
@@ -56,10 +57,10 @@ public class PrescriptionController implements CrudController<Prescription, Long
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		prescriptionService.delete(prescriptionOptional.get());
-		return new ResponseEntity<String>("Prescription deleted", HttpStatus.OK);
+		return new ResponseEntity<>("Prescription deleted", HttpStatus.OK);
 	}
 	
 }

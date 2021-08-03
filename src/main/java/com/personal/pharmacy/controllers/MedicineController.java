@@ -16,22 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.services.MedicineService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("medicine/")
 public class MedicineController implements CrudController<Medicine, Long>{
 	
 	private final MedicineService medicineService;
+	
+	public MedicineController(MedicineService medicineService) {
+		this.medicineService = medicineService;
+	}
 
 	@Override
 	public ResponseEntity<?> getById(Long id){
 		return medicineService.findById(id).isEmpty()
-		? new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND)
-		: new ResponseEntity<Medicine>(medicineService.findById(id).get(), HttpStatus.OK);
+		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
+		: new ResponseEntity<>(medicineService.findById(id).get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -39,10 +41,10 @@ public class MedicineController implements CrudController<Medicine, Long>{
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		medicineService.delete(medicineOptional.get());
-		return new ResponseEntity<String>("Medicine deleted", HttpStatus.OK);
+		return new ResponseEntity<>("Medicine deleted", HttpStatus.OK);
 	}
 	 
 	@Override
@@ -53,10 +55,10 @@ public class MedicineController implements CrudController<Medicine, Long>{
 				errorStrings.add(objectError.getDefaultMessage());
 				
 			});
-			return new ResponseEntity<String>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(errorStrings.toString(), HttpStatus.BAD_REQUEST);
 		}
 		Medicine savedMedicine = medicineService.save(medicine);
-		return new ResponseEntity<Medicine>(savedMedicine, HttpStatus.OK);
+		return new ResponseEntity<>(savedMedicine, HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatename")
@@ -64,11 +66,11 @@ public class MedicineController implements CrudController<Medicine, Long>{
 		Optional<Medicine> medicineOptional = medicineService.findById(id);
 		if (medicineOptional.isEmpty()) {
 			log.info("Id not present in database");
-			return new ResponseEntity<String>("No data found for id " + id, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		Medicine medicine = medicineOptional.get();
 		medicineService.updateName(medicine, name);
-		return new ResponseEntity<Medicine>(medicine, HttpStatus.OK);
+		return new ResponseEntity<>(medicine, HttpStatus.OK);
 	}
 	
 }

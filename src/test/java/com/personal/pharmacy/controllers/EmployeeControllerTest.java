@@ -65,8 +65,7 @@ class EmployeeControllerTest {
 	void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
 		
 		this.mockMvc.perform(get("/employee/5")).andDo(print())
-		.andExpect(status().isNotFound())
-		.andExpect(content().string("No data found for id 5"));
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -128,8 +127,7 @@ class EmployeeControllerTest {
 	@Test
 	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		this.mockMvc.perform(patch("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isNotFound())
-		.andExpect(content().string("No data found for id 5"));
+		.andExpect(status().isNotFound());
 	}
 	
 }
