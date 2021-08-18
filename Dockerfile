@@ -1,6 +1,6 @@
-FROM arm32v7/adoptopenjdk:11-jre-hotspot
+FROM adoptopenjdk/openjdk11:ubi
 COPY . /src
 WORKDIR /src/main/java/com/personal/pharmacy/
 RUN apt-get install openjdk-11-jdk
-RUN javac PharmacyApplication.java
+RUN java PharmacyApplication.java
 CMD ["java", "PharmacyApplication"]
