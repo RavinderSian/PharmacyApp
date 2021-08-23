@@ -1,5 +1,5 @@
-FROM eclipse-temurin:8-jdk-focal
+FROM eclipse-temurin:11-jdk-focal
 RUN apt-get update && apt-get install maven -y
 COPY . /src
-WORKDIR src/main/java/com/personal/pharmacy/
-CMD mvn spring-boot:run
+WORKDIR /src
+CMD mvn org.springframework.boot:spring-boot-maven-plugin:run
