@@ -1,5 +1,5 @@
-FROM eclipse-temurin:11-jdk-focal
-RUN apt-get update && apt-get install maven -y
+FROM alpine:3.14
+RUN apk update && apk add maven
 COPY . /src
 WORKDIR /src
 CMD mvn org.springframework.boot:spring-boot-maven-plugin:run
