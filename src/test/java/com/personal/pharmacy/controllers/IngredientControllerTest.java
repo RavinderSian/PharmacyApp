@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.services.IngredientService;
 
@@ -73,15 +71,10 @@ class IngredientControllerTest {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
-		
 		when(ingredientService.save(ingredient)).thenReturn(ingredient);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(ingredient);
 		
-		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(ingredient)))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
 	}
@@ -91,15 +84,10 @@ class IngredientControllerTest {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setIngredientId(1L);
-		
 		when(ingredientService.save(ingredient)).thenReturn(ingredient);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(ingredient);
-		
-		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+	    
+		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(ingredient)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"name\":\"Please enter a valid name\"}"));
 	}
@@ -110,10 +98,10 @@ class IngredientControllerTest {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
 		ingredient.setIngredientId(1L);
-		
 		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
 		ingredient.setName("new");
 		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
+		
 		this.mockMvc.perform(patch("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));

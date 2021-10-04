@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.services.PatientService;
 
@@ -74,15 +72,10 @@ class PatientControllerTest {
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
 		patient.setLastName("sian");
-		
 		when(patientService.save(patient)).thenReturn(patient);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(patient);
 		
-		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav', 'lastName':'sian'}"));
 	}
@@ -93,15 +86,10 @@ class PatientControllerTest {
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
 		patient.setLastName("testing");
-		
 		when(patientService.save(patient)).thenReturn(patient);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(patient);
 		
-		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
 	}
@@ -112,7 +100,6 @@ class PatientControllerTest {
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
-		
 		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
 		patient.setFirstName("John");
 		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);

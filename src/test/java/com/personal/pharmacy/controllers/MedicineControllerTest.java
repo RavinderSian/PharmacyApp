@@ -20,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.services.MedicineService;
 
@@ -52,7 +50,6 @@ class MedicineControllerTest {
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
-		
 		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
 		
 		this.mockMvc.perform(get("/medicine/1")).andDo(print())
@@ -72,15 +69,10 @@ class MedicineControllerTest {
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
-		
 		when(medicineService.save(medicine)).thenReturn(medicine);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(put("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(medicine)))
 			.andExpect(status().isOk())
 			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
 	}
@@ -90,18 +82,12 @@ class MedicineControllerTest {
 		
 		Medicine medicine = new Medicine();
 		medicine.setMedicineId(1L);
-		
 		when(medicineService.save(medicine)).thenReturn(medicine);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(medicine);
 		
-		this.mockMvc.perform(put("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(medicine)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"name\":\"Please enter a valid name\"}"));
-
 	}
 	
 	
@@ -111,10 +97,10 @@ class MedicineControllerTest {
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
 		medicine.setMedicineId(1L);
-		
 		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
 		medicine.setName("new");
 		when(medicineService.updateName(medicine, "new")).thenReturn(medicine);
+		
 		this.mockMvc.perform(patch("/medicine/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'medicineId': 1, 'name': 'new'}"));
@@ -122,7 +108,6 @@ class MedicineControllerTest {
 	
 	@Test
 	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
-				
 		this.mockMvc.perform(patch("/medicine/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isNotFound());
 	}
