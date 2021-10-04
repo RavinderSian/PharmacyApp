@@ -19,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.PrescriptionService;
 
@@ -49,7 +47,6 @@ class PrescriptionControllerTest {
 	void test_GetById_ReturnsCorrectStatusAndPrescription_WhenGivenId1() throws Exception {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
-		
 		when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
 		
 		this.mockMvc.perform(get("/prescription/1")).andDo(print())
@@ -67,15 +64,10 @@ class PrescriptionControllerTest {
 	void test_Save_ReturnsCorrectStatusAndPrescription_WhenGivenPrescription() throws Exception {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
-		
 		when(prescriptionService.save(prescription)).thenReturn(prescription);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(prescription);
 		
-		this.mockMvc.perform(post("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(post("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'prescriptionId': 1}")); 
 	}

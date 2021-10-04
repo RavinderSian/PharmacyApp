@@ -1,6 +1,7 @@
 package com.personal.pharmacy.controllers;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -20,8 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.services.EmployeeService;
 
@@ -42,8 +41,8 @@ class EmployeeControllerTest {
 	}
 	
 	@Test
-	void contextLoads() throws Exception {
-		assertThat(controller).isNotNull();
+	void test_Controller_IsNotNull() throws Exception {
+		assertThat(controller, notNullValue());
 	}
 
 	@Test
@@ -75,16 +74,10 @@ class EmployeeControllerTest {
 		employee.setEmployeeId(2L);
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-
-		
 		when(employeeService.save(employee)).thenReturn(employee);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(employee)))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
 	}
@@ -95,15 +88,10 @@ class EmployeeControllerTest {
 		Employee employee = new Employee();
 		employee.setLastName("testing");
 		employee.setEmployeeId(2L);
-
 		when(employeeService.save(employee)).thenReturn(employee);
-		
 	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-	    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-	    String requestJson = ow.writeValueAsString(employee);
 		
-		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(employee)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
 	}
@@ -115,10 +103,10 @@ class EmployeeControllerTest {
 		employee.setEmployeeId(1L);
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		
 		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
 		employee.setFirstName("John");
 		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
+		
 		this.mockMvc.perform(patch("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isOk())
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
