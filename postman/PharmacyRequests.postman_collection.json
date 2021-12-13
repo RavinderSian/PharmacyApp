@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1bea8a9f-d5bc-46e7-a6b7-5b6e20d05f71",
+		"_postman_id": "6be5018f-ec52-4153-b194-d83954e60f1c",
 		"name": "PharmacyRequests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -30,7 +30,7 @@
 				{
 					"name": "addMedicine",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -58,7 +58,7 @@
 				{
 					"name": "updateName",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -87,7 +87,7 @@
 				{
 					"name": "deleteMedicine",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/medicine/delete/1",
@@ -131,7 +131,7 @@
 				{
 					"name": "addIngredient",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -159,7 +159,7 @@
 				{
 					"name": "updateName",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -171,14 +171,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/ingredient/1/updatename",
+							"raw": "localhost:8080/ingredient/2/updatename",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"ingredient",
-								"1",
+								"2",
 								"updatename"
 							]
 						}
@@ -188,7 +188,7 @@
 				{
 					"name": "deleteIngredient",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/ingredient/delete/1",
@@ -232,7 +232,7 @@
 				{
 					"name": "addPatient",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -260,7 +260,7 @@
 				{
 					"name": "updateName",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -289,7 +289,7 @@
 				{
 					"name": "deletePatient",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/patient/delete/1",
@@ -333,7 +333,7 @@
 				{
 					"name": "addEmployee",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -361,7 +361,7 @@
 				{
 					"name": "updateFirstName",
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -390,7 +390,7 @@
 				{
 					"name": "deleteEmployee",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/employee/delete/1",
@@ -434,7 +434,7 @@
 				{
 					"name": "addPrescription",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -462,7 +462,7 @@
 				{
 					"name": "deletePrescription",
 					"request": {
-						"method": "GET",
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "localhost:8080/prescription/delete/1",

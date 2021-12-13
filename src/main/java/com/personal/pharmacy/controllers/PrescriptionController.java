@@ -7,9 +7,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +36,6 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	}
 	
 	@Override
-	@PostMapping("save")
 	public ResponseEntity<?> add (Prescription prescription, BindingResult bindingResult){
 		if (bindingResult.hasFieldErrors()) {
 			Map<String, String> errors = new HashMap<>();
@@ -50,7 +47,6 @@ public class PrescriptionController implements CrudController<Prescription, Long
 	}
 	
 	@Override
-	@DeleteMapping("delete/{id}")
 	public ResponseEntity<?> deleteById(Long id){
 		Optional<Prescription> prescriptionOptional = prescriptionService.findById(id);
 		if (prescriptionOptional.isEmpty()) {
