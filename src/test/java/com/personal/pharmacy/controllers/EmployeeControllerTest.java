@@ -3,6 +3,7 @@ package com.personal.pharmacy.controllers;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -61,14 +62,14 @@ class EmployeeControllerTest {
 	}
 	
 	@Test
-	void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
+	void test_GetById_ReturnsCorrectStatus_WhenGivenIdWithNoData() throws Exception {
 		
 		this.mockMvc.perform(get("/employee/5")).andDo(print())
 		.andExpect(status().isNotFound());
 	}
 	
 	@Test
-	void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenValidEmployee() throws Exception {
+	void test_Add_ReturnsCorrectStatus_WhenGivenValidEmployee() throws Exception {
 		
 		Employee employee = new Employee();
 		employee.setEmployeeId(2L);
@@ -78,12 +79,11 @@ class EmployeeControllerTest {
 	    ObjectMapper mapper = new ObjectMapper();
 		
 		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(employee)))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'employeeId': 2, 'firstName': 'test'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test
-	void test_Add_ReturnsCorrectStatusAndEmployee_WhenGivenInValidEmployee() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndResponse_WhenGivenInValidEmployee() throws Exception {
 		
 		Employee employee = new Employee();
 		employee.setLastName("testing");
@@ -94,6 +94,24 @@ class EmployeeControllerTest {
 		this.mockMvc.perform(put("/employee/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(employee)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenEmployeePresent() throws Exception {
+		
+		Employee employee = new Employee();
+		employee.setLastName("testing");
+		employee.setEmployeeId(1L);
+		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
+		
+		this.mockMvc.perform(delete("/employee/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
+		this.mockMvc.perform(delete("/employee/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test

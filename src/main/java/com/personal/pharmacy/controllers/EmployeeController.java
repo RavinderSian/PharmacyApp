@@ -43,9 +43,8 @@ public class EmployeeController implements CrudController<Employee, Long>{
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Employee employee = employeeOptional.get();
-		employeeService.delete(employee);
-		return new ResponseEntity<>("Employee Deleted", HttpStatus.OK);
+		employeeService.delete(employeeOptional.get());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Override
@@ -55,8 +54,8 @@ public class EmployeeController implements CrudController<Employee, Long>{
 			bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 			return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 		}
-		Employee savedEmployee = employeeService.save(employee);
-		return new ResponseEntity<>(savedEmployee, HttpStatus.OK);
+		employeeService.save(employee);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatefirstname")

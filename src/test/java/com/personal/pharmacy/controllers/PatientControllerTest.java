@@ -2,6 +2,7 @@ package com.personal.pharmacy.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -50,7 +51,6 @@ class PatientControllerTest {
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
 		patient.setFirstName("rav");
-		
 		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
 		
 		this.mockMvc.perform(get("/patient/1")).andDo(print())
@@ -66,7 +66,7 @@ class PatientControllerTest {
 	}
 	
 	@Test
-	void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenValidPatient() throws Exception {
+	void test_Save_ReturnsCorrectStatus_WhenGivenValidPatient() throws Exception {
 		
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
@@ -76,8 +76,7 @@ class PatientControllerTest {
 	    ObjectMapper mapper = new ObjectMapper();
 		
 		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav', 'lastName':'sian'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test
@@ -92,6 +91,24 @@ class PatientControllerTest {
 		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenPatientPresent() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setLastName("testing");
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		
+		this.mockMvc.perform(delete("/patient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
+		this.mockMvc.perform(delete("/patient/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test

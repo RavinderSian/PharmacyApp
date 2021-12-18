@@ -44,7 +44,7 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		ingredientServices.delete(ingredientOptional.get());
-		return new ResponseEntity<>("Deleted ingredient", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 			bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 			return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 		}
-		Ingredient savedIngredient = ingredientServices.save(ingredient);
-		return new ResponseEntity<>(savedIngredient, HttpStatus.OK);
+		ingredientServices.save(ingredient);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatename")

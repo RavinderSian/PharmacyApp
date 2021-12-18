@@ -2,8 +2,9 @@ package com.personal.pharmacy.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,9 +68,25 @@ class PrescriptionControllerTest {
 		when(prescriptionService.save(prescription)).thenReturn(prescription);
 	    ObjectMapper mapper = new ObjectMapper();
 		
-		this.mockMvc.perform(post("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'prescriptionId': 1}")); 
+		this.mockMvc.perform(put("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenPrescriptionPresent() throws Exception {
+		
+		Prescription prescription = new Prescription();
+		prescription.setPrescriptionId(1L);
+		when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
+		
+		this.mockMvc.perform(delete("/prescription/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
+		this.mockMvc.perform(delete("/prescription/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
 	}
 	
 }

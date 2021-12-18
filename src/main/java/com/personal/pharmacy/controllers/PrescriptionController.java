@@ -42,8 +42,8 @@ public class PrescriptionController implements CrudController<Prescription, Long
 			bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 			return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 		}
-		Prescription savedPrescription = prescriptionService.save(prescription);
-		return new ResponseEntity<>(savedPrescription, HttpStatus.OK);
+		prescriptionService.save(prescription);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class PrescriptionController implements CrudController<Prescription, Long
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		prescriptionService.delete(prescriptionOptional.get());
-		return new ResponseEntity<>("Prescription deleted", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }
