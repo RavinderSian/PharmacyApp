@@ -37,14 +37,14 @@ The scenario of the object not existing is also handled, returning a 404 respons
 ![](https://github.com/RavinderSian/PharmacyApp/blob/main/screenshots/Get%20Patient%20No%20Id.JPG)
 This is handled for all requests where an id is passed in the URL
 
-Objects can also be saved using a POST request:
+Entities can also be saved using a PUT request:
 ![](https://github.com/RavinderSian/PharmacyApp/blob/main/screenshots/Patient%20Saved.JPG)
 
 There is field validation for these requests:
 ![](https://github.com/RavinderSian/PharmacyApp/blob/main/screenshots/Patient%20No%20Fields.JPG)
 
-Objects can be deleted with a GET request:
+Entities can be deleted with a DELETE request:
 ![](https://github.com/RavinderSian/PharmacyApp/blob/main/screenshots/Delete%20Patient.JPG)
 
-Certain objects are updated using a POST request where the input is passed as raw text:
+Certain entities are updated using a PATCH request where the input is passed as raw text:
 ![](https://github.com/RavinderSian/PharmacyApp/blob/main/screenshots/Update%20Patient%20Name.JPG)
