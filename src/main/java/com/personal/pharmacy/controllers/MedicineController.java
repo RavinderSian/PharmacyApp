@@ -44,7 +44,7 @@ public class MedicineController implements CrudController<Medicine, Long>{
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		medicineService.delete(medicineOptional.get());
-		return new ResponseEntity<>("Medicine deleted", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	 
 	@Override
@@ -54,8 +54,8 @@ public class MedicineController implements CrudController<Medicine, Long>{
 			bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 			return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 		}
-		Medicine savedMedicine = medicineService.save(medicine);
-		return new ResponseEntity<>(savedMedicine, HttpStatus.OK);
+		medicineService.save(medicine);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatename")

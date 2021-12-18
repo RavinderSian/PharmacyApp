@@ -2,6 +2,7 @@
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -59,14 +60,14 @@ class IngredientControllerTest {
 	}
 	
 	@Test
-	void test_GetById_ReturnsNoDataFoundForId5_WhenGivenId5() throws Exception {
+	void test_GetById_ReturnsCorrectStatus_WhenGivenId5() throws Exception {
 		
 		this.mockMvc.perform(get("/ingredient/5")).andDo(print())
 		.andExpect(status().isNotFound());
 	}
 	
 	@Test
-	void test_Add_ReturnsCorrectStatusAndIngredient_WhenGivenIngredient() throws Exception {
+	void test_Add_ReturnsCorrectStatus_WhenGivenValidIngredient() throws Exception {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("paracetamol");
@@ -75,8 +76,7 @@ class IngredientControllerTest {
 	    ObjectMapper mapper = new ObjectMapper();
 		
 		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(ingredient)))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'ingredientId': 1, 'name': 'paracetamol'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test
@@ -90,6 +90,23 @@ class IngredientControllerTest {
 		this.mockMvc.perform(put("/ingredient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(ingredient)))
 		.andExpect(status().isBadRequest())
 		.andExpect(content().string("{\"name\":\"Please enter a valid name\"}"));
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenIngredientPresent() throws Exception {
+		
+		Ingredient ingredient = new Ingredient();
+		ingredient.setIngredientId(1L);
+		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
+		
+		this.mockMvc.perform(delete("/ingredient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
+		this.mockMvc.perform(delete("/ingredient/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
 	}
 	
 	@Test

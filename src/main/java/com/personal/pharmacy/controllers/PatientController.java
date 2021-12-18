@@ -44,8 +44,8 @@ public class PatientController implements CrudController<Patient, Long> {
 			bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 			return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 		}
-		Patient savedPatient = patientService.save(patient);
-		return new ResponseEntity<>(savedPatient, HttpStatus.OK);
+		patientService.save(patient);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class PatientController implements CrudController<Patient, Long> {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		patientService.delete(patientOptional.get());
-		return new ResponseEntity<>("Patient deleted", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PatchMapping("{id}/updatefirstname")

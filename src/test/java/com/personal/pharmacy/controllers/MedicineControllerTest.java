@@ -2,6 +2,7 @@ package com.personal.pharmacy.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -64,7 +65,7 @@ class MedicineControllerTest {
 	}
 	
 	@Test
-	void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenValidMedicine() throws Exception {
+	void test_Add_ReturnsCorrectStatus_WhenGivenValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("paracetamol");
@@ -73,12 +74,11 @@ class MedicineControllerTest {
 	    ObjectMapper mapper = new ObjectMapper();
 		
 		this.mockMvc.perform(put("/medicine/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(medicine)))
-			.andExpect(status().isOk())
-			.andExpect(content().json("{'medicineId': 1, 'name': 'paracetamol'}"));
+			.andExpect(status().isOk());
 	}
 	
 	@Test
-	void test_Add_ReturnsCorrectStatusAndMedicine_WhenGivenInValidMedicine() throws Exception {
+	void test_Add_ReturnsCorrectStatusAndResponse_WhenGivenInValidMedicine() throws Exception {
 		
 		Medicine medicine = new Medicine();
 		medicine.setMedicineId(1L);
@@ -107,8 +107,26 @@ class MedicineControllerTest {
 	}
 	
 	@Test
-	void test_UpdateName_ReturnsNoDataForId5_WhenGivenNameTestAndId5() throws Exception {
+	void test_UpdateName_ReturnsNoData_WhenGivenNameTestAndId5() throws Exception {
 		this.mockMvc.perform(patch("/medicine/5/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenMedicinePresent() throws Exception {
+		
+		Medicine medicine = new Medicine();
+		medicine.setName("paracetamol");
+		medicine.setMedicineId(1L);
+		when(medicineService.findById(1L)).thenReturn(Optional.of(medicine));
+		
+		this.mockMvc.perform(delete("/medicine/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenMedicineNotPresent() throws Exception {
+		this.mockMvc.perform(delete("/medicine/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isNotFound());
 	}
 	
