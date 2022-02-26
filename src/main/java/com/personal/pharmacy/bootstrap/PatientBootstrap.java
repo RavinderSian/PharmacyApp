@@ -10,20 +10,18 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Component
-public class PatientBootstrap implements CommandLineRunner {
+public class PatientBootstrap {
 
-	private final PatientRepository patientRepository;
-
-	@Override
-	public void run(String... args) throws Exception {
-
-		Patient patient = new Patient();
-		patient.setFirstName("test name");
-		patient.setLastName("testing");
-		patientRepository.save(patient);
-		
-	}
-	
-	
+//	private final PatientRepository patientRepository;
+//
+//	@Override
+//	public void run(String... args) throws Exception {
+//
+//		Patient patient = new Patient();
+//		patient.setFirstName("test name");
+//		patient.setLastName("testing");
+//		patientRepository.save(patient);
+//		
+//	}
 	
 }

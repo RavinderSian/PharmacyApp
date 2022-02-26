@@ -24,33 +24,33 @@ class MedicineServiceImplTest {
 	@Mock
 	Medicine medicineMock;
 	
-	@BeforeEach
-	void setUp() throws Exception {
-		medicineService = new MedicineServiceImpl(medicineRepository);
-	}
-
-	@Test
-	void test_FindById_ReturnsMedicineMock_WhenCalledWithId1() {
-		//Arrange
-		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicineMock));
-		//Assert
-		Assertions.assertEquals(medicineService.findById(1L).get(), medicineMock);
-	}
-	
-	@Test
-	void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
-		//Assert
-		Assertions.assertTrue(medicineService.findById(5L).isEmpty());
-	}
-	
-	@Test
-	void test_UpdateName_ReturnsMedicineWithCorrectName_WhenGivenStringName() {
-		//Arrange
-		Medicine medicine = new Medicine();
-		medicine.setName("mock");
-		//Act
-		medicineService.updateName(medicine, "name");
-		//Assert
-		Assertions.assertEquals("name", medicine.getName());
-	}
+//	@BeforeEach
+//	void setUp() throws Exception {
+//		medicineService = new MedicineServiceImpl(medicineRepository);
+//	}
+//
+//	@Test
+//	void test_FindById_ReturnsMedicineMock_WhenCalledWithId1() {
+//		//Arrange
+//		when(medicineRepository.findById(1L)).thenReturn(Optional.of(medicineMock));
+//		//Assert
+//		Assertions.assertEquals(medicineService.findById(1L).get(), medicineMock);
+//	}
+//	
+//	@Test
+//	void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
+//		//Assert
+//		Assertions.assertTrue(medicineService.findById(5L).isEmpty());
+//	}
+//	
+//	@Test
+//	void test_UpdateName_ReturnsMedicineWithCorrectName_WhenGivenStringName() {
+//		//Arrange
+//		Medicine medicine = new Medicine();
+//		medicine.setName("mock");
+//		//Act
+//		medicineService.updateName(medicine, "name");
+//		//Assert
+//		Assertions.assertEquals("name", medicine.getName());
+//	}
 }

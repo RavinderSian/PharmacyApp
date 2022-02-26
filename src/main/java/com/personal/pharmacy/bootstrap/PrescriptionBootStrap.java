@@ -10,16 +10,16 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class PrescriptionBootStrap implements CommandLineRunner {
+public class PrescriptionBootStrap{
 	
-	private final PrescriptionRepository prescriptionRepository;
-
-	@Override
-	public void run(String... args) throws Exception {
-		
-		Prescription prescription = new Prescription();
-		prescriptionRepository.save(prescription);
-		
-	}
+//	private final PrescriptionRepository prescriptionRepository;
+//
+//	@Override
+//	public void run(String... args) throws Exception {
+//		
+//		Prescription prescription = new Prescription();
+//		prescriptionRepository.save(prescription);
+//		
+//	}
 
 }
