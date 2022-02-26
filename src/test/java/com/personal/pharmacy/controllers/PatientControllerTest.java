@@ -35,10 +35,10 @@ class PatientControllerTest {
 	@MockBean
 	private PatientService patientService;
 	
-	@BeforeEach
-	void setUp() {
-		controller = new PatientController(patientService);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		controller = new PatientController(patientService);
+//	}
 	
 	@Test
 	void contextLoads() throws Exception {

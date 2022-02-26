@@ -34,10 +34,10 @@ class PrescriptionControllerTest {
 	@MockBean
 	private PrescriptionService prescriptionService;
 	
-	@BeforeEach
-	void setUp() {
-		controller = new PrescriptionController(prescriptionService);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		controller = new PrescriptionController(prescriptionService);
+//	}
 	
 	@Test
 	void contextLoads() throws Exception {

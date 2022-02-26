@@ -1,5 +1,19 @@
 package com.personal.pharmacy.repository;
 
-public class EmployeeRepositoryImpl {
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.personal.pharmacy.model.Employee;
+
+public class EmployeeRepositoryImpl implements EmployeeRepository {
+	
+	private JdbcTemplate jdbcTemplate;
+
+	@Override
+	public Employee save(Employee employee) {
+		
+		
+		
+		return null;
+	}
 
 }

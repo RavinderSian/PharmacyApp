@@ -36,10 +36,10 @@ class EmployeeControllerTest {
 	@MockBean
 	private EmployeeService employeeService;
 	
-	@BeforeEach
-	void setUp() {
-		controller = new EmployeeController(employeeService);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		controller = new EmployeeController(employeeService);
+//	}
 	
 	@Test
 	void test_Controller_IsNotNull() throws Exception {

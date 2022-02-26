@@ -35,10 +35,10 @@ class IngredientControllerTest {
 	@MockBean
 	private IngredientService ingredientService;
 
-	@BeforeEach
-	void setUp() {
-		controller = new IngredientController(ingredientService);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		controller = new IngredientController(ingredientService);
+//	}
 	
 	@Test
 	void contextLoads() throws Exception {
