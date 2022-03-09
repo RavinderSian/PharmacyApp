@@ -4,5 +4,6 @@ import com.personal.pharmacy.model.Employee;
 
 public interface EmployeeRepository {
 
-	Employee save(Employee employee);
+	void save(Employee employee);
+	void deleteById(Long id);
 }
