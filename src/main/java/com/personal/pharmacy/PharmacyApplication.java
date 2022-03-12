@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import junit.framework.Test;
+import com.personal.pharmacy.repository.EmployeeRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PharmacyApplication implements CommandLineRunner{
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private EmployeeRepository repository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(PharmacyApplication.class, args);
@@ -22,9 +22,7 @@ public class PharmacyApplication implements CommandLineRunner{
 	}
 	
 	public void test() {
-		jdbcTemplate.update(
-			      "INSERT INTO employees (first_name) VALUES (?)", "Bill");
-		log.info("------------------");
+		log.info(repository.findById(10L).toString());
 	}
 
 	@Override
