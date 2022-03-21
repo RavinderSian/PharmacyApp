@@ -6,7 +6,7 @@ import com.personal.pharmacy.model.Employee;
 
 public interface EmployeeRepository {
 
-	void save(Employee employee);
+	Employee save(Employee employee);
 	void deleteById(Long id);
 	Optional<Employee> findById(Long id);
 }

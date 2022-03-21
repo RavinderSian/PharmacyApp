@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface CrudService<T, ID> {
 
-	void save(T t);
+	T save(T t);
 	void delete(ID id);
 	List<T> findAll();
 	Optional<T> findById(ID id);

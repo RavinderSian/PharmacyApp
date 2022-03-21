@@ -17,8 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final EmployeeRepository employeeRepository;
 	
 	@Override
-	public void save(Employee employee) {
-		employeeRepository.save(employee);
+	public Employee save(Employee employee) {
+		return employeeRepository.save(employee);
 	}
 
 	@Override
@@ -37,11 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Optional<Employee> findById(Long id) {
-		
-//		return employeeRepository.findById(id).isEmpty()
-//		?  Optional.empty()
-//		:  employeeRepository.findById(id);
-		return null;
+		return employeeRepository.findById(id).isEmpty()
+		?  Optional.empty()
+		:  employeeRepository.findById(id);
 	}
 
 	@Override

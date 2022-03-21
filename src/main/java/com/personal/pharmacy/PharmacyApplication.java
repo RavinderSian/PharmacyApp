@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.repository.EmployeeRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,12 @@ public class PharmacyApplication implements CommandLineRunner{
 	
 	public void test() {
 		log.info(repository.findById(10L).toString());
+		Employee employee = new Employee();
+		employee.setFirstName("test3");
+		employee.setLastName("testingdd");
+		
+		 
+		log.info(repository.save(employee).getEmployeeId().toString());
 	}
 
 	@Override
