@@ -23,13 +23,13 @@ public class PharmacyApplication implements CommandLineRunner{
 	}
 	
 	public void test() {
-//		log.info(repository.findById(10L).toString());
-//		Employee employee = new Employee();
-//		employee.setFirstName("test3");
-//		employee.setLastName("testingdd");
-//		
-//		 
-//		log.info(repository.save(employee).getEmployeeId().toString());
+		log.info(repository.findById(10L).toString());
+		Employee employee = new Employee();
+		employee.setFirstName("test3");
+		employee.setLastName("testingdd");
+		
+		 
+		log.info(repository.save(employee).getEmployeeId().toString());
 	}
 
 	@Override

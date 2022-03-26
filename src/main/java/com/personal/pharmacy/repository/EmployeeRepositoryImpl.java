@@ -1,12 +1,17 @@
 package com.personal.pharmacy.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.personal.pharmacy.mappers.EmployeeRowMapper;
@@ -17,24 +22,28 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
-	@Autowired
-    private SimpleJdbcInsert simpleJdbcInsert;
 
 	@Override
 	public Employee save(Employee employee) {
 		
-		simpleJdbcInsert.withTableName("employees").usingGeneratedKeyColumns("id");
+		KeyHolder holder = new GeneratedKeyHolder();
+
 		
-		MapSqlParameterSource params = new MapSqlParameterSource();
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO EMPLOYEES (first_name, last_name) values(?,?)",
+						Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, employee.getFirstName());
+				ps.setString(2, employee.getLastName());
+				return ps;
+			}
+		}, holder);
 		
-		params.addValue("first_name", employee.getFirstName());
-		params.addValue("last_name", employee.getLastName());
+		Number newUserId = (Integer) holder.getKeys().get("id");
 		
-		long savedId = simpleJdbcInsert.executeAndReturnKey(params).longValue();
-		
-		return findById(savedId).get();
-		
+		employee.setEmployeeId(newUserId.longValue());
+		return employee;
 	}
 
 	@Override
