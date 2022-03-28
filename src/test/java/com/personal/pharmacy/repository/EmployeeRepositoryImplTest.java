@@ -4,16 +4,18 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.personal.pharmacy.model.Employee;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@AutoConfigureTestDatabase
 class EmployeeRepositoryImplTest {
 	
 	@Autowired
@@ -21,7 +23,18 @@ class EmployeeRepositoryImplTest {
 	
     @Autowired
 	EmployeeRepository repository;
-
+    
+    @BeforeEach
+    void createTable() {
+    	jdbcTemplate.execute("CREATE TABLE EMPLOYEES ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "FIRST_NAME varchar(255), LAST_NAME varchar(255), ADDRESS varchar(255));");
+    }
+    
+    @AfterEach
+    void deleteTable() {
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS EMPLOYEES");
+    }
+ 
 	@Test
 	void test_notNull() throws Exception {
 		assertThat(jdbcTemplate, not(equalTo(null)));
