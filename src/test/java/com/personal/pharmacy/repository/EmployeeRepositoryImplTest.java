@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,7 @@ class EmployeeRepositoryImplTest {
     @BeforeEach
     void createTable() {
     	jdbcTemplate.execute("CREATE TABLE EMPLOYEES ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    			+ "FIRST_NAME varchar(255), LAST_NAME varchar(255), ADDRESS varchar(255));");
+    			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL);");
     }
     
     @AfterEach
@@ -52,16 +54,27 @@ class EmployeeRepositoryImplTest {
 		
 		assertThat(employee.getFirstName(), equalTo(savedEmployee.getFirstName()));
 		assertThat(employee.getLastName(), equalTo(savedEmployee.getLastName()));
-		assertThat(savedEmployee.getEmployeeId(), not(equalTo(null)));
-		assertThat(savedEmployee.getEmployeeId(), not(equalTo(0L)));
+		assertThat(repository.findById(1L).get().getEmployeeId(), equalTo(1L));
 		
 	}
 	
-//	@Test
-//	void test_Delete_WorksCorrectly_WhenGivenId() {
-//		
-//        ReflectionTestUtils.setField(repository, "jdbcTemplate", jdbcTemplate);
-//		Mockito.when(jdbcTemplate.update("DELETE FROM employees WHERE id=1", Integer.class)).thenReturn(1);
-//		repository.deleteById(1L);
-//	}
-}
+	@Test
+	void test_Delete_DeletesEntity_WhenGivenId() {
+		
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		employee.setLastName("testing");
+		
+		repository.save(employee);
+		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
+		
+		repository.deleteById(1L);
+		assertThat(repository.findById(1L), equalTo(Optional.empty()));
+	}
+	
+	@Test
+	void test_FindById_ReturnsEmptyOptional_WhenIdNotPresentInDatabase() {
+		assertThat(repository.findById(1L), equalTo(Optional.empty()));
+	}
+	
+ }
