@@ -29,7 +29,9 @@ class EmployeeRepositoryImplTest {
     @BeforeEach
     void createTable() {
     	jdbcTemplate.execute("CREATE TABLE EMPLOYEES ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL);");
+    			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
+    			+ "CREATION_TIMESTAMP DATETIME, "
+    			+ "UPDATED_TIMESTAMP DATETIME);");
     }
     
     @AfterEach
