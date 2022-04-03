@@ -130,10 +130,10 @@ class EmployeeControllerTest {
 		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
 	}
 	
-	@Test
-	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
-		this.mockMvc.perform(patch("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isNotFound());
-	}
+//	@Test
+//	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+//		this.mockMvc.perform(patch("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
+//		.andExpect(status().isNotFound());
+//	}
 	
 }

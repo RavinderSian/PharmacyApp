@@ -49,6 +49,8 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
+		employee.setCreatedTime();
+		employee.setUpdatedTime();
 		
 		Employee savedEmployee = repository.save(employee);
 		
@@ -64,7 +66,8 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		
+		employee.setCreatedTime();
+		employee.setUpdatedTime();
 		repository.save(employee);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
