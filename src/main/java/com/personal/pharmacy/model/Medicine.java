@@ -17,8 +17,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(exclude = "ingredients")
 public class Medicine {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long medicineId;
 	
 	@NotEmpty(message = "Please enter a valid name")

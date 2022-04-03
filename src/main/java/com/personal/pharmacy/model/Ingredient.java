@@ -1,18 +1,17 @@
 package com.personal.pharmacy.model;
 
+import javax.validation.constraints.NotEmpty;
+
 import lombok.Data;
 
 @Data
 public class Ingredient {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long ingredientId;
-//	
-//	@NotEmpty(message = "Please enter a valid name")
-//	@Column(name = "name")
-//	private String name;
-//	
+	private Long ingredientId;
+	
+	@NotEmpty(message = "Please enter a valid name")
+	private String name;
+	
 //	@CreationTimestamp
 //	private Timestamp createdTime;
 //	

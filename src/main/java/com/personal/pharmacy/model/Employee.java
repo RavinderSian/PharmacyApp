@@ -1,5 +1,8 @@
 package com.personal.pharmacy.model;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -22,11 +25,9 @@ public class Employee {
 ////	@OneToMany(mappedBy = "employee")
 //	private List<Prescription> prescriptions = new ArrayList<>();
 //	
-////	@CreationTimestamp
-//	private Timestamp createdTime;
-//	
-////	@UpdateTimestamp
-//	private Timestamp updatedTime;
+	private Timestamp createdTime;
+	
+	private Timestamp updatedTime;
 //	
 //	public void addPrescription(Prescription prescription) {
 //		prescription.setEmployee(this);
@@ -37,5 +38,13 @@ public class Employee {
 //		prescription.setEmployee(null);
 //		this.prescriptions.remove(prescription);
 //	}
+	
+	public void setCreatedTime() {
+		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
+	public void setUpdatedTime() {
+		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
+	}
 	
 }

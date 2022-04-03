@@ -1,6 +1,7 @@
 package com.personal.pharmacy.repository;
 
-public interface IngredientRepository {
+import com.personal.pharmacy.model.Ingredient;
 
+public interface IngredientRepository extends CrudRepository<Ingredient, Long> {
 	
 }

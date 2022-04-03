@@ -32,10 +32,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO EMPLOYEES (first_name, last_name) values(?,?)",
+				employee.setCreatedTime();
+				employee.setUpdatedTime();
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO EMPLOYEES (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, employee.getFirstName());
 				ps.setString(2, employee.getLastName());
+				ps.setTimestamp(3, employee.getCreatedTime());
+				ps.setTimestamp(4, employee.getUpdatedTime());
 				return ps;
 			}
 		}, holder);

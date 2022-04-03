@@ -1,6 +1,7 @@
 package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Patient {
 
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long patientId;
 	
 	@NotEmpty(message = "Please enter a valid first name")
@@ -29,10 +28,8 @@ public class Patient {
 	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
 	private List<Prescription> prescriptions = new ArrayList<>();
 	
-	//@CreationTimestamp
 	private Timestamp createdTime;
 	
-	//@UpdateTimestamp
 	private Timestamp updatedTime;
 	
 	public void addPrescription(Prescription prescription) {
@@ -43,5 +40,13 @@ public class Patient {
 	public void removePrescription(Prescription prescription) {
 		prescription.setPatient(null);
 		this.prescriptions.remove(prescription);
+	}
+	
+	public void setCreatedTime() {
+		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
+	public void setUpdatedTime() {
+		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
 	}
 }

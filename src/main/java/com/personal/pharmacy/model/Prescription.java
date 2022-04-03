@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Prescription {
 
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long prescriptionId;
 	
 	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "prescription", cascade = CascadeType.ALL)
