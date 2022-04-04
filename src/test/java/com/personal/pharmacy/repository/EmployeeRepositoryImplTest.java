@@ -1,7 +1,9 @@
 package com.personal.pharmacy.repository;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Optional;
@@ -80,6 +82,26 @@ class EmployeeRepositoryImplTest {
 	@Test
 	void test_FindById_ReturnsEmptyOptional_WhenIdNotPresentInDatabase() {
 		assertThat(repository.findById(1L), equalTo(Optional.empty()));
+	}
+	
+	@Test
+	void test_FindById_ReturnsCorrectEmployee_WhenIdPresentInDatabase() {
+		
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		employee.setLastName("testing");
+		employee.setCreatedTime();
+		employee.setUpdatedTime();
+		repository.save(employee);
+		
+		Optional<Employee> employeeInDb = repository.findById(1L);
+		
+		assertThat(employeeInDb.get().getEmployeeId(), equalTo(1L));
+		assertThat(employeeInDb.get().getFirstName(), equalTo("test"));
+		assertThat(employeeInDb.get().getLastName(), equalTo("testing"));
+		assertThat(employeeInDb.get().getCreatedTime(), is(notNullValue()));
+		assertThat(employeeInDb.get().getUpdatedTime(), is(notNullValue()));
+		
 	}
 	
  }

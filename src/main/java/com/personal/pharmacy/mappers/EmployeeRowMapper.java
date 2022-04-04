@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.personal.pharmacy.model.Employee;
 
-public class EmployeeRowMapper implements RowMapper<Employee>{
+public class EmployeeRowMapper implements RowMapper<Employee> {
 
 	@Override
 	public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -16,6 +16,8 @@ public class EmployeeRowMapper implements RowMapper<Employee>{
 		employee.setEmployeeId(rs.getLong("ID"));
 		employee.setFirstName(rs.getString("first_name"));
 		employee.setLastName(rs.getString("last_name"));
+		employee.setCreatedTime(rs.getTimestamp("creation_timestamp"));
+		employee.setUpdatedTime(rs.getTimestamp("updated_timestamp"));
 		
 		return employee;
 	}
