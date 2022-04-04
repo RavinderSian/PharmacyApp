@@ -15,6 +15,8 @@ public class PatientRowMapper implements RowMapper<Patient> {
 		patient.setPatientId(rs.getLong("ID"));
 		patient.setFirstName(rs.getString("first_name"));
 		patient.setLastName(rs.getString("last_name"));
+		patient.setCreatedTime(rs.getTimestamp("creation_timestamp"));
+		patient.setUpdatedTime(rs.getTimestamp("updated_timestamp"));
 		
 		return patient;
 	}
