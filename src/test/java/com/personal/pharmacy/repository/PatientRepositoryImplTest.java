@@ -16,21 +16,21 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.personal.pharmacy.model.Employee;
+import com.personal.pharmacy.model.Patient;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-class EmployeeRepositoryImplTest {
+class PatientRepositoryImplTest {
 	
 	@Autowired
     JdbcTemplate jdbcTemplate;
 	
     @Autowired
-	EmployeeRepository repository;
+	PatientRepository repository;
     
     @BeforeEach
     void createTable() {
-    	jdbcTemplate.execute("CREATE TABLE EMPLOYEES ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    	jdbcTemplate.execute("CREATE TABLE patient ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME);");
@@ -38,9 +38,9 @@ class EmployeeRepositoryImplTest {
     
     @AfterEach
     void deleteTable() {
-    	jdbcTemplate.execute("DROP TABLE IF EXISTS EMPLOYEES");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS patient");
     }
- 
+
 	@Test
 	void test_notNull() throws Exception {
 		assertThat(jdbcTemplate, not(equalTo(null)));
@@ -48,31 +48,31 @@ class EmployeeRepositoryImplTest {
 	}
 
 	@Test
-	void test_Save_ReturnsCorrectEmployee_WhenGivenMockEmployee() {
+	void test_Save_ReturnsCorrectPatient_WhenGivenMockPatient() {
 		
-		Employee employee = new Employee();
-		employee.setFirstName("test");
-		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		patient.setLastName("testing");
+		patient.setCreatedTime();
+		patient.setUpdatedTime();
 		
-		Employee savedEmployee = repository.save(employee);
+		Patient savedPatient = repository.save(patient);
 		
-		assertThat(employee.getFirstName(), equalTo(savedEmployee.getFirstName()));
-		assertThat(employee.getLastName(), equalTo(savedEmployee.getLastName()));
-		assertThat(repository.findById(1L).get().getEmployeeId(), equalTo(1L));
+		assertThat(patient.getFirstName(), equalTo(savedPatient.getFirstName()));
+		assertThat(patient.getLastName(), equalTo(savedPatient.getLastName()));
+		assertThat(repository.findById(1L).get().getPatientId(), equalTo(1L));
 		
 	}
 	
 	@Test
 	void test_Delete_DeletesEntity_WhenGivenId() {
 		
-		Employee employee = new Employee();
-		employee.setFirstName("test");
-		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
-		repository.save(employee);
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		patient.setLastName("testing");
+		patient.setCreatedTime();
+		patient.setUpdatedTime();
+		repository.save(patient);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
 		repository.deleteById(1L);
@@ -87,24 +87,21 @@ class EmployeeRepositoryImplTest {
 	@Test
 	void test_FindById_ReturnsCorrectEmployee_WhenIdPresentInDatabase() {
 		
-		Employee employee = new Employee();
-		employee.setFirstName("test");
-		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
-		repository.save(employee);
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		patient.setLastName("testing");
+		patient.setCreatedTime();
+		patient.setUpdatedTime();
+		repository.save(patient);
 		
-		Optional<Employee> employeeInDb = repository.findById(1L);
+		Optional<Patient> patientInDb = repository.findById(1L);
 		
-		assertThat(employeeInDb.get().getEmployeeId(), equalTo(1L));
-		assertThat(employeeInDb.get().getFirstName(), equalTo("test"));
-		assertThat(employeeInDb.get().getLastName(), equalTo("testing"));
-		assertThat(employeeInDb.get().getCreatedTime(), is(notNullValue()));
-		assertThat(employeeInDb.get().getUpdatedTime(), is(notNullValue()));
+		assertThat(patientInDb.get().getPatientId(), equalTo(1L));
+		assertThat(patientInDb.get().getFirstName(), equalTo("test"));
+		assertThat(patientInDb.get().getLastName(), equalTo("testing"));
+		assertThat(patientInDb.get().getCreatedTime(), is(notNullValue()));
+		assertThat(patientInDb.get().getUpdatedTime(), is(notNullValue()));
 		
 	}
-	
-//	@Test
-//	void test_UpdateFirstName
-	
- }
+
+}

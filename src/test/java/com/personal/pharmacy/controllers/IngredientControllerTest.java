@@ -39,12 +39,12 @@ class IngredientControllerTest {
 //	void setUp() {
 //		controller = new IngredientController(ingredientService);
 //	}
-	
-	@Test
-	void contextLoads() throws Exception {
-		assertThat(controller).isNotNull();
-	}
-	
+//	
+//	@Test
+//	void contextLoads() throws Exception {
+//		assertThat(controller).isNotNull();
+//	}
+//	
 //	@Test
 //	void test_GetById_ReturnsCorrectStatusAndIngredient_WhenGivenId1() throws Exception {
 //		

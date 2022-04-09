@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,17 +57,17 @@ public class EmployeeController implements CrudController<Employee, Long>{
 		employeeService.save(employee);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-//	
-//	@PatchMapping("{id}/updatefirstname")
-//	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
-//		Optional<Employee> employeeOptional = employeeService.findById(id);
-//		if (employeeOptional.isEmpty()) {
-//			log.info("Id not present in database");
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		Employee employee = employeeOptional.get();
-//		employeeService.updateFirstName(employee, firstName);
-//		return new ResponseEntity<>(employee, HttpStatus.OK);
-//	}
+	
+	@PatchMapping("{id}/updatefirstname")
+	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
+		Optional<Employee> employeeOptional = employeeService.findById(id);
+		if (employeeOptional.isEmpty()) {
+			log.info("Id not present in database");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		Employee employee = employeeOptional.get();
+		employeeService.updateFirstName(employee, firstName);
+		return new ResponseEntity<>(employee, HttpStatus.OK);
+	}
 	
 }

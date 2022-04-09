@@ -44,15 +44,17 @@ class EmployeeServiceImplTest {
 		Assertions.assertTrue(employeeService.findById(5L).isEmpty());
 	}
 	
-//	@Test
-//	void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
-//		//Arrange
-//		Employee employee = new Employee();
-//		employee.setFirstName("test");
-//		//Act
-//		employeeService.updateFirstName(employee, "new name");
-//		//Assert
-//		Assertions.assertEquals("new name", employee.getFirstName());
-//	}
+	@Test
+	void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
+		//Arrange
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		System.out.println(employee.getUpdatedTime());
+		//Act
+		employeeService.updateFirstName(employee, "new name");
+		System.out.println(employee.getUpdatedTime());
+		//Assert
+		Assertions.assertEquals("new name", employee.getFirstName());
+	}
 	
 }

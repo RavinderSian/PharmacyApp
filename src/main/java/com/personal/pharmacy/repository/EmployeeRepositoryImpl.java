@@ -32,7 +32,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				employee.setCreatedTime();
+				
+				if (employee.getCreatedTime() == null) {
+					employee.setCreatedTime();
+				}
 				employee.setUpdatedTime();
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO EMPLOYEES (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);
@@ -62,6 +65,37 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 		}catch(EmptyResultDataAccessException exception) {
 			return Optional.empty();
 		}
+	}
+	
+	
+	@Override
+	public Employee updateFirstName(Employee employee, String firstName) {
+		
+		KeyHolder holder = new GeneratedKeyHolder();
+		
+		
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				
+				if (employee.getCreatedTime() == null) {
+					employee.setCreatedTime();
+				}
+				employee.setUpdatedTime();
+				PreparedStatement ps = connection.prepareStatement("UPDATE employees SET first_name=?"
+						+ "WHERE id = ?;",
+						Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, firstName);
+				ps.setInt(2, Math.toIntExact(employee.getEmployeeId()));
+				return ps;
+			}
+		}, holder);
+		
+		Number newUserId = (Integer) holder.getKeys().get("id");
+		
+		employee.setEmployeeId(newUserId.longValue());
+		return employee;
+		
 	}
 	
 }

@@ -1,6 +1,5 @@
 package com.personal.pharmacy.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -23,17 +22,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void delete(Long id) {
-		//employee.getPrescriptions().forEach(prescription -> prescription.setEmployee(null));
 		employeeRepository.deleteById(id);
 	}
 
-	
-	@Override
-	public List<Employee> findAll() {
-		//return (List<Employee>) employeeRepository.findAll();
-		return null;
-	}
-	
 	@Override
 	public Optional<Employee> findById(Long id) {
 		return employeeRepository.findById(id).isEmpty()
@@ -43,9 +34,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee updateFirstName(Employee employee, String firstName) {
-//		employee.setFirstName(firstName);
-//		return employeeRepository.save(employee);
-		return null;
+		employee.setFirstName(firstName);
+		return employeeRepository.save(employee);
 	}
 
 }
