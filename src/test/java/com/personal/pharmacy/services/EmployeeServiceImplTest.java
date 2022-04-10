@@ -1,5 +1,7 @@
 package com.personal.pharmacy.services;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -45,16 +47,18 @@ class EmployeeServiceImplTest {
 	}
 	
 	@Test
-	void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
+	void test_UpdateFirstName_Returns1_WhenGivenStringNewNameAndIdExists() {
 		//Arrange
-		Employee employee = new Employee();
-		employee.setFirstName("test");
-		System.out.println(employee.getUpdatedTime());
-		//Act
-		employeeService.updateFirstName(employee, "new name");
-		System.out.println(employee.getUpdatedTime());
+		when(employeeRepository.updateFirstName(1L, "new name")).thenReturn(1);
 		//Assert
-		Assertions.assertEquals("new name", employee.getFirstName());
+		assertThat(employeeService.updateFirstName(1L, "new name"), equalTo(1));
+
+	}
+	
+	@Test
+	void test_UpdateFirstName_Returns0_WhenGivenStringNewNameAndIdDoesNotExists() {
+		//Assert
+		assertThat(employeeService.updateFirstName(1L, "new name"), equalTo(0));
 	}
 	
 }

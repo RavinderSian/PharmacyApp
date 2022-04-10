@@ -117,21 +117,14 @@ class EmployeeControllerTest {
 	@Test
 	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setEmployeeId(1L);
-		employee.setFirstName("test");
-		employee.setLastName("testing");
-		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
-		employee.setFirstName("John");
-		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
+		when(employeeService.updateFirstName(1L, "John")).thenReturn(1);
 		
 		this.mockMvc.perform(patch("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test
-	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+	void test_UpdateFirstName_ReturnsNotFound_WhenGivenFirstNameJohnAndIdDoesNotExist() throws Exception {
 		this.mockMvc.perform(patch("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
 		.andExpect(status().isNotFound());
 	}

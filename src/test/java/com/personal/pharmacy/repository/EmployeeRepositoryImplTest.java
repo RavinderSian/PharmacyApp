@@ -104,7 +104,25 @@ class EmployeeRepositoryImplTest {
 		
 	}
 	
-//	@Test
-//	void test_UpdateFirstName
+	@Test
+	void test_UpdateFirstName_UpdatesNameCorrectly_WhenGivenEmployee() {
+		
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		employee.setLastName("testing");
+		employee.setCreatedTime();
+		employee.setUpdatedTime();
+		repository.save(employee);
+		
+		assertThat(repository.updateFirstName(1L, "updated"), equalTo(1));
+		assertThat(repository.findById(1L).get().getFirstName(), equalTo("updated"));
+		
+	}
+	
+	@Test
+	void test_UpdateFirstName_ThrowsNoException_WhenEmployeeIdDoesNotExist() {
+		assertThat(repository.updateFirstName(1L, "updated"), equalTo(0));
+		
+	}
 	
  }

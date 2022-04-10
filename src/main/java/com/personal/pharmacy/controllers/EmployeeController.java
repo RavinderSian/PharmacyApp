@@ -60,14 +60,13 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	
 	@PatchMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
-		Optional<Employee> employeeOptional = employeeService.findById(id);
-		if (employeeOptional.isEmpty()) {
+		if (employeeService.updateFirstName(id, firstName) == 0) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Employee employee = employeeOptional.get();
-		employeeService.updateFirstName(employee, firstName);
-		return new ResponseEntity<>(employee, HttpStatus.OK);
+		
+		employeeService.updateFirstName(id, firstName);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }
