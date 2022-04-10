@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,14 @@ public class PatientRepositoryImpl implements PatientRepository {
 		}catch(EmptyResultDataAccessException exception) {
 			return Optional.empty();
 		}
+	}
+	
+	@Override
+	public Integer updateFirstName(Long id, String firstName) {
+		
+		return jdbcTemplate.update("UPDATE patient SET first_name='" + firstName
+				+ "', updated_timestamp='" + Timestamp.valueOf(LocalDateTime.now())
+				+ "' WHERE id =" + id);
 	}
 
 }

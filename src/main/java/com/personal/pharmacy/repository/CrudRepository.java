@@ -5,6 +5,6 @@ import java.util.Optional;
 public interface CrudRepository<T, ID> {
 
 	T save(T t);
-	void deleteById(ID id);
+	Integer deleteById(ID id);
 	Optional<T> findById(ID id);
 }

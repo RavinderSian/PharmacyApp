@@ -2,7 +2,6 @@ package com.personal.pharmacy.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +37,11 @@ public class EmployeeController implements CrudController<Employee, Long>{
 
 	@Override
 	public ResponseEntity<?> deleteById(Long id) {
-		Optional<Employee> employeeOptional = employeeService.findById(id);
-		if (employeeOptional.isEmpty()) {
+		
+		if (employeeService.delete(id) != 1) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		employeeService.delete(employeeOptional.get().getEmployeeId());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -60,7 +58,7 @@ public class EmployeeController implements CrudController<Employee, Long>{
 	
 	@PatchMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateEmployeeFirstName(@PathVariable Long id, @RequestBody String firstName){
-		if (employeeService.updateFirstName(id, firstName) == 0) {
+		if (employeeService.updateFirstName(id, firstName) != 1) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

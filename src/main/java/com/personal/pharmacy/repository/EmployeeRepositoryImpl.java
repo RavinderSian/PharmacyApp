@@ -56,8 +56,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		jdbcTemplate.update("DELETE FROM employees WHERE id=?", id);
+	public Integer deleteById(Long id) {
+		return jdbcTemplate.update("DELETE FROM employees WHERE id=?", id);
 	}
 
 	@Override

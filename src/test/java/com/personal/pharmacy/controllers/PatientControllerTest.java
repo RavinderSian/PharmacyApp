@@ -35,101 +35,101 @@ class PatientControllerTest {
 	@MockBean
 	private PatientService patientService;
 	
-//	@BeforeEach
-//	void setUp() {
-//		controller = new PatientController(patientService);
-//	}
+	@BeforeEach
+	void setUp() {
+		controller = new PatientController(patientService);
+	}
 	
-//	@Test
-//	void contextLoads() throws Exception {
-//		assertThat(controller).isNotNull();
-//	}
-//	
-//	@Test
-//	void test_GetById_ReturnsCorrectStatusAndPatient_WhenGivenId1() throws Exception {
-//		
-//		Patient patient = new Patient();
-//		patient.setPatientId(1L);
-//		patient.setFirstName("rav");
-//		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
-//		
-//		this.mockMvc.perform(get("/patient/1")).andDo(print())
-//		.andExpect(status().isOk())
-//		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav'}")); 
-//	}
-//	
-//	@Test
-//	void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
-//		
-//		this.mockMvc.perform(get("/patient/5"))
-//		.andExpect(status().isNotFound());
-//	}
-//	
-//	@Test
-//	void test_Save_ReturnsCorrectStatus_WhenGivenValidPatient() throws Exception {
-//		
-//		Patient patient = new Patient();
-//		patient.setPatientId(1L);
-//		patient.setFirstName("rav");
-//		patient.setLastName("sian");
-//		when(patientService.save(patient)).thenReturn(patient);
-//	    ObjectMapper mapper = new ObjectMapper();
-//		
-//		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
-//		.andExpect(status().isOk());
-//	}
-//	
-//	@Test
-//	void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenInValidPatient() throws Exception {
-//		
-//		Patient patient = new Patient();
-//		patient.setPatientId(1L);
-//		patient.setLastName("testing");
-//		when(patientService.save(patient)).thenReturn(patient);
-//	    ObjectMapper mapper = new ObjectMapper();
-//		
-//		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
-//		.andExpect(status().isBadRequest())
-//		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
-//	}
-//	
-//	@Test
-//	void test_Delete_ReturnsCorrectStatus_WhenPatientPresent() throws Exception {
-//		
-//		Patient patient = new Patient();
-//		patient.setPatientId(1L);
-//		patient.setLastName("testing");
-//		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
-//		
-//		this.mockMvc.perform(delete("/patient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
-//		.andExpect(status().isOk());
-//	}
-//	
-//	@Test
-//	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
-//		this.mockMvc.perform(delete("/patient/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
-//		.andExpect(status().isNotFound());
-//	}
-//	
-//	@Test
-//	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
-//		
-//		Patient patient = new Patient();
-//		patient.setPatientId(1L);
-//		patient.setFirstName("rav");
-//		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
-//		patient.setFirstName("John");
-//		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);
-//		
-//		this.mockMvc.perform(patch("/patient/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-//		.andExpect(status().isOk())
-//		.andExpect(content().json("{'patientId': 1, 'firstName': 'John'}"));
-//	}
-//	
-//	@Test
-//	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
-//		this.mockMvc.perform(patch("/patient/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-//		.andExpect(status().isNotFound());
-//	}
+	@Test
+	void contextLoads() throws Exception {
+		assertThat(controller).isNotNull();
+	}
+	
+	@Test
+	void test_GetById_ReturnsCorrectStatusAndPatient_WhenGivenId1() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setFirstName("rav");
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		
+		this.mockMvc.perform(get("/patient/1")).andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(content().json("{'patientId': 1, 'firstName': 'rav'}")); 
+	}
+	
+	@Test
+	void test_GetById_ReturnsStringNoDataFoundForId5_WhenGivenIdWithNoData() throws Exception {
+		
+		this.mockMvc.perform(get("/patient/5"))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void test_Save_ReturnsCorrectStatus_WhenGivenValidPatient() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setFirstName("rav");
+		patient.setLastName("sian");
+		when(patientService.save(patient)).thenReturn(patient);
+	    ObjectMapper mapper = new ObjectMapper();
+		
+		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Save_ReturnsCorrectStatusAndPatient_WhenGivenInValidPatient() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setLastName("testing");
+		when(patientService.save(patient)).thenReturn(patient);
+	    ObjectMapper mapper = new ObjectMapper();
+		
+		this.mockMvc.perform(put("/patient/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(patient)))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().string("{\"firstName\":\"Please enter a valid first name\"}"));
+	}
+	
+	@Test
+	void test_Delete_ReturnsCorrectStatus_WhenPatientPresent() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setLastName("testing");
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		
+		this.mockMvc.perform(delete("/patient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
+		this.mockMvc.perform(delete("/patient/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
+		
+		Patient patient = new Patient();
+		patient.setPatientId(1L);
+		patient.setFirstName("rav");
+		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		patient.setFirstName("John");
+		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);
+		
+		this.mockMvc.perform(patch("/patient/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
+		.andExpect(status().isOk())
+		.andExpect(content().json("{'patientId': 1, 'firstName': 'John'}"));
+	}
+	
+	@Test
+	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+		this.mockMvc.perform(patch("/patient/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
+		.andExpect(status().isNotFound());
+	}
 	
 }
