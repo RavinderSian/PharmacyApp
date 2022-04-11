@@ -1,5 +1,8 @@
 package com.personal.pharmacy.model;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -12,12 +15,19 @@ public class Ingredient {
 	@NotEmpty(message = "Please enter a valid name")
 	private String name;
 	
-//	@CreationTimestamp
-//	private Timestamp createdTime;
-//	
-//	@UpdateTimestamp
-//	private Timestamp updatedTime;
-//	
+	private Timestamp createdTime;
+	
+	private Timestamp updatedTime;
+	
 //	@ManyToOne
 //	private Medicine medicine;
+	
+	public void setCreatedTime() {
+		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
+	public void setUpdatedTime() {
+		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
 }

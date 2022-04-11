@@ -44,9 +44,7 @@ public class Medicine {
 		//ingredient.setMedicine(null);
 	}
     
-	//@CreationTimestamp
 	private Timestamp createdTime;
 	
-	//@UpdateTimestamp
 	private Timestamp updatedTime;
 }

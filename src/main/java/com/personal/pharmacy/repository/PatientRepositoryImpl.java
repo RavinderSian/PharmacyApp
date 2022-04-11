@@ -52,8 +52,8 @@ public class PatientRepositoryImpl implements PatientRepository {
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		jdbcTemplate.update("DELETE FROM patient WHERE id=?", id);
+	public Integer deleteById(Long id) {
+		return jdbcTemplate.update("DELETE FROM patient WHERE id=?", id);
 	}
 
 	@Override

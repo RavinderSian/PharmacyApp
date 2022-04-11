@@ -31,9 +31,13 @@ public class PatientController implements CrudController<Patient, Long>{
 	
 	@Override
 	public ResponseEntity<?> getById(Long id){
-		return patientService.findById(id).isEmpty()
+		
+		//more efficient to only call service once as this means the DB is only called once
+		Optional<Patient> patientOptional = patientService.findById(id);
+		
+		return patientOptional.isEmpty()
 		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-		: new ResponseEntity<>(patientService.findById(id).get(), HttpStatus.OK);
+		: new ResponseEntity<>(patientOptional.get(), HttpStatus.OK);
 	}
 	
 	@Override
@@ -61,14 +65,12 @@ public class PatientController implements CrudController<Patient, Long>{
 	
 	@PatchMapping("{id}/updatefirstname")
 	public ResponseEntity<?> updateFirstNameById(@PathVariable Long id, @RequestBody String firstName){
-		Optional<Patient> patientOptional = patientService.findById(id);
-		if (patientOptional.isEmpty()) {
+		
+		if (patientService.updateFirstName(id, firstName) == 0) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Patient patient = patientOptional.get();
-		patientService.updateFirstName(patient, firstName);
-		return new ResponseEntity<>(patient, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

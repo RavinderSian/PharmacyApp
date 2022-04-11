@@ -1,5 +1,7 @@
 package com.personal.pharmacy.repository;
 
-public interface PrescriptionRepository {
+import com.personal.pharmacy.model.Prescription;
+
+public interface PrescriptionRepository extends CrudRepository<Prescription, Long> {
 
 }

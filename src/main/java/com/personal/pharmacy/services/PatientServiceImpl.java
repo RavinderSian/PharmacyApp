@@ -21,8 +21,8 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void delete(Long id) {
-		repository.deleteById(id);
+	public Integer delete(Long id) {
+		return repository.deleteById(id);
 	}
 
 	@Override
@@ -34,9 +34,8 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public Patient updateFirstName(Patient patient, String firstName) {
-		patient.setFirstName(firstName);
-		return repository.save(patient);
+	public Integer updateFirstName(Long id, String firstName) {
+		return repository.updateFirstName(id, firstName);
 	}
 
 }

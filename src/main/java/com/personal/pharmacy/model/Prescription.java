@@ -1,6 +1,7 @@
 package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +27,8 @@ public class Prescription {
 	//@ManyToOne(cascade = CascadeType.ALL)
 	private Employee employee;
 	
-	//@CreationTimestamp
 	private Timestamp createdTime;
 	
-	//@UpdateTimestamp
 	private Timestamp updatedTime;
 	
 	public void addMedicine(Medicine medicine) {
@@ -40,5 +39,13 @@ public class Prescription {
 	public void removeMedicine(Medicine medicine) {
 		this.medicines.remove(medicine);
 		medicine.setPrescription(null);
+	}
+	
+	public void setCreatedTime() {
+		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
+	public void setUpdatedTime() {
+		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
 	}
 }

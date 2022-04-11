@@ -114,16 +114,10 @@ class PatientControllerTest {
 	@Test
 	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
 		
-		Patient patient = new Patient();
-		patient.setPatientId(1L);
-		patient.setFirstName("rav");
-		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
-		patient.setFirstName("John");
-		when(patientService.updateFirstName(patient, "John")).thenReturn(patient);
+		when(patientService.updateFirstName(1L, "John")).thenReturn(1);
 		
 		this.mockMvc.perform(patch("/patient/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'patientId': 1, 'firstName': 'John'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test

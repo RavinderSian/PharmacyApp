@@ -99,18 +99,15 @@ class EmployeeControllerTest {
 	@Test
 	void test_Delete_ReturnsCorrectStatus_WhenEmployeePresent() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setLastName("testing");
-		employee.setEmployeeId(1L);
-		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
+		when(employeeService.delete(1L)).thenReturn(1);
 		
-		this.mockMvc.perform(delete("/employee/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		this.mockMvc.perform(delete("/employee/delete/1"))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
 	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
-		this.mockMvc.perform(delete("/employee/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		this.mockMvc.perform(delete("/employee/delete/5"))
 		.andExpect(status().isNotFound());
 	}
 	
