@@ -12,31 +12,31 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class PrescriptionServiceImpl implements PrescriptionService {
+public class PrescriptionServiceImpl {
 
-	private final PrescriptionRepository prescriptionRepository;
-	
-	@Override
-	public Prescription save(Prescription prescription) {
-		return prescriptionRepository.save(prescription);
-	}
-
-	@Override
-	public Integer delete(Long id) {
-		prescriptionRepository.delete(id);
-	}
-
-	@Override
-	public List<Prescription> findAll() {
-		return (List<Prescription>) prescriptionRepository.findAll();
-	}
-
-	@Override
-	public Optional<Prescription> findById(Long id) {
-		
-		return prescriptionRepository.findById(id).isEmpty()
-		? Optional.empty()
-		: prescriptionRepository.findById(id);
-	}
+//	private final PrescriptionRepository prescriptionRepository;
+//	
+//	@Override
+//	public Prescription save(Prescription prescription) {
+//		return prescriptionRepository.save(prescription);
+//	}
+//
+//	@Override
+//	public Integer delete(Long id) {
+//		return prescriptionRepository.deleteById(id);
+//	}
+//
+////	@Override
+////	public List<Prescription> findAll() {
+////		return (List<Prescription>) prescriptionRepository.findAll();
+////	}
+//
+//	@Override
+//	public Optional<Prescription> findById(Long id) {
+//		
+//		return prescriptionRepository.findById(id).isEmpty()
+//		? Optional.empty()
+//		: prescriptionRepository.findById(id);
+//	}
 
 }

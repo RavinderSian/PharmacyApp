@@ -33,7 +33,7 @@ class EmployeeRepositoryImplTest {
     	jdbcTemplate.execute("CREATE TABLE EMPLOYEES ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
-    			+ "UPDATED_TIMESTAMP DATETIME);");
+    			+ "UPDATED_TIMESTAMP DATETIME)");
     }
     
     @AfterEach
@@ -56,10 +56,8 @@ class EmployeeRepositoryImplTest {
 		employee.setCreatedTime();
 		employee.setUpdatedTime();
 		
-		Employee savedEmployee = repository.save(employee);
-		
-		assertThat(employee.getFirstName(), equalTo(savedEmployee.getFirstName()));
-		assertThat(employee.getLastName(), equalTo(savedEmployee.getLastName()));
+		assertThat(employee.getFirstName(), equalTo(repository.findById(1L).get().getFirstName()));
+		assertThat(employee.getLastName(), equalTo(repository.findById(1L).get().getLastName()));
 		assertThat(repository.findById(1L).get().getEmployeeId(), equalTo(1L));
 		
 	}
@@ -105,7 +103,7 @@ class EmployeeRepositoryImplTest {
 	}
 	
 	@Test
-	void test_UpdateFirstName_UpdatesNameCorrectly_WhenGivenEmployee() {
+	void test_UpdateFirstName_UpdatesNameCorrectly_WhenGivenId() {
 		
 		Employee employee = new Employee();
 		employee.setFirstName("test");
@@ -120,7 +118,7 @@ class EmployeeRepositoryImplTest {
 	}
 	
 	@Test
-	void test_UpdateFirstName_ThrowsNoException_WhenEmployeeIdDoesNotExist() {
+	void test_UpdateFirstName_ThrowsNoException_WhenIdDoesNotExist() {
 		assertThat(repository.updateFirstName(1L, "updated"), equalTo(0));
 		
 	}
