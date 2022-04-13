@@ -33,7 +33,11 @@ public class PatientRepositoryImpl implements PatientRepository {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				patient.setCreatedTime();
+				
+				if (patient.getCreatedTime() == null) {
+					patient.setCreatedTime();
+				}
+				
 				patient.setUpdatedTime();
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO patient (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);

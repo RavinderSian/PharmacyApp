@@ -11,8 +11,14 @@ public class MedicineRowMapper implements RowMapper<Medicine> {
 
 	@Override
 	public Medicine mapRow(ResultSet rs, int rowNum) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Medicine medicine = new Medicine();
+		medicine.setMedicineId(rs.getLong("id"));
+		medicine.setName(rs.getString("name"));
+		medicine.setDosage(rs.getInt("dosage"));
+		medicine.setDuration(rs.getString("duration"));
+		medicine.setCreatedTime(rs.getTimestamp("creation_timestamp"));
+		medicine.setUpdatedTime(rs.getTimestamp("updated_timestamp"));
+		return medicine;
 	}
 
 }

@@ -33,7 +33,9 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				ingredient.setCreatedTime();
+				if (ingredient.getCreatedTime() == null) {
+					ingredient.setCreatedTime();
+				}				
 				ingredient.setUpdatedTime();
 				PreparedStatement ps = connection.prepareStatement("INSERT INTO ingredient (name, creation_timestamp, updated_timestamp) values(?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);

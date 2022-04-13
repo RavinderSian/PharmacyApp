@@ -43,15 +43,4 @@ class MedicineServiceImplTest {
 		Assertions.assertTrue(medicineService.findById(5L).isEmpty());
 	}
 	
-	@Test
-	void test_UpdateName_ReturnsMedicineWithCorrectName_WhenGivenStringName() {
-		//Arrange
-		Medicine medicine = new Medicine();
-		medicine.setName("mock");
-		//Act
-		medicineService.updateName(medicine, "name");
-		//Assert
-		Assertions.assertEquals("name", medicine.getName());
-	}
-	
 }

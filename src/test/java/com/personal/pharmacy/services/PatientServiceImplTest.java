@@ -1,9 +1,5 @@
 package com.personal.pharmacy.services;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
-
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -38,16 +34,4 @@ class PatientServiceImplTest {
 		Assertions.assertTrue(patientOptional.isEmpty());
 	}
 	
-	@Test
-	void test_UpdateFirstName_UpdatesFirstNameCorrectly_WhenGivenStringNewName() {
-		when(patientRepository.updateFirstName(1L, "new name")).thenReturn(1);
-		//Assert
-		assertThat(patientService.updateFirstName(1L, "new name"), equalTo(1));
-	}
-	
-	@Test
-	void test_UpdateFirstName_Returns0_WhenIdNotInDb() {
-		//Assert
-		assertThat(patientService.updateFirstName(1L, "new name"), equalTo(0));
-	}
 }
