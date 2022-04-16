@@ -49,7 +49,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 			}
 		}, holder);
 		
-		Number newUserId = (Integer) holder.getKeys().get("id");
+		Number newUserId = (Long) holder.getKeys().get("id");
 		
 		employee.setEmployeeId(newUserId.longValue());
 		return employee;
