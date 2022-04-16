@@ -30,7 +30,7 @@ class IngredientRepositoryImplTest {
     
     @BeforeEach
     void createTable() {
-    	jdbcTemplate.execute("CREATE TABLE ingredient ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    	jdbcTemplate.execute("CREATE TABLE ingredient ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME)");

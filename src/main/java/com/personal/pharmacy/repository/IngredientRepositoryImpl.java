@@ -46,7 +46,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 			}
 		}, holder);
 		
-		Number newUserId = (Integer) holder.getKeys().get("id");
+		Number newUserId = (Long) holder.getKeys().get("id");
 		
 		ingredient.setIngredientId(newUserId.longValue());
 		return ingredient;

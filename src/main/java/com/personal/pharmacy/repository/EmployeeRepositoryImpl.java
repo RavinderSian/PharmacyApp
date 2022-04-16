@@ -39,7 +39,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 					employee.setCreatedTime();
 				}
 				employee.setUpdatedTime();
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO EMPLOYEES (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO employees (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, employee.getFirstName());
 				ps.setString(2, employee.getLastName());

@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,10 +17,7 @@ public class Prescription {
 	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "prescription", cascade = CascadeType.ALL)
 	private List<Medicine> medicines = new ArrayList<>();
 	
-	@JsonIgnore
-	//@ManyToOne
-	//@JoinColumn(name = "fk_patient_id")
-	private Patient patient;
+	private Long patientId;
 	
 	//@ManyToOne(cascade = CascadeType.ALL)
 	private Employee employee;

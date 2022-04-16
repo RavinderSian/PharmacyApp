@@ -32,15 +32,15 @@ public class Patient {
 	
 	private Timestamp updatedTime;
 	
-	public void addPrescription(Prescription prescription) {
-		prescription.setPatient(this);
-		this.prescriptions.add(prescription);
-	}
-	
-	public void removePrescription(Prescription prescription) {
-		prescription.setPatient(null);
-		this.prescriptions.remove(prescription);
-	}
+//	public void addPrescription(Prescription prescription) {
+//		prescription.setPatient(this);
+//		this.prescriptions.add(prescription);
+//	}
+//	
+//	public void removePrescription(Prescription prescription) {
+//		prescription.setPatient(null);
+//		this.prescriptions.remove(prescription);
+//	}
 	
 	public void setCreatedTime() {
 		this.createdTime = Timestamp.valueOf(LocalDateTime.now());

@@ -53,7 +53,7 @@ public class MedicineRepositoryImpl implements MedicineRepository {
 			}
 		}, holder);
 		
-		Number newUserId = (Integer) holder.getKeys().get("id");
+		Number newUserId = (Long) holder.getKeys().get("id");
 		
 		medicine.setMedicineId(newUserId.longValue());
 		return medicine;

@@ -30,14 +30,23 @@ class PrescriptionRepositoryImplTest {
     
     @BeforeEach
     void createTable() {
-    	jdbcTemplate.execute("CREATE TABLE prescription ( ID int NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    	//create patient table before hand as it is referenced later
+    	jdbcTemplate.execute("CREATE TABLE patient ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
-    			+ "UPDATED_TIMESTAMP DATETIME)");
+    			+ "UPDATED_TIMESTAMP DATETIME);");
+    	
+    	jdbcTemplate.execute("CREATE TABLE prescription ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "CREATION_TIMESTAMP DATETIME, "
+    			+ "UPDATED_TIMESTAMP DATETIME, "
+    			+ "fk_patient_id bigint REFERENCES patient(id));");
     }
     
     @AfterEach
     void deleteTable() {
     	jdbcTemplate.execute("DROP TABLE IF EXISTS prescription");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS patient");
+
     }
  
 	@Test

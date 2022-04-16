@@ -49,7 +49,7 @@ public class PatientRepositoryImpl implements PatientRepository {
 			}
 		}, holder);
 		
-		Number newUserId = (Integer) holder.getKeys().get("id");
+		Number newUserId = (Long) holder.getKeys().get("id");
 		
 		patient.setPatientId(newUserId.longValue());
 		return patient;

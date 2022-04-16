@@ -41,7 +41,7 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 			}
 		}, holder);
 		
-		Number newUserId = (Integer) holder.getKeys().get("id");
+		Number newUserId = (Long) holder.getKeys().get("id");
 		
 		prescription.setPrescriptionId(newUserId.longValue());
 		return prescription;
