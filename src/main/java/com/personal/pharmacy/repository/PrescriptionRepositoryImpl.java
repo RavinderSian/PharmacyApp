@@ -36,7 +36,7 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 				prescription.setCreatedTime();
 				prescription.setUpdatedTime();
 				
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (patient_id, creation_timestamp, updated_timestamp) values(?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (patient_id, employee_id, creation_timestamp, updated_timestamp) values(?,?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);
 				
 				if (prescription.getPatientId() == null) {
@@ -45,8 +45,14 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 					ps.setFloat(1, prescription.getPatientId());
 				}
 				
-				ps.setTimestamp(2, prescription.getCreatedTime());
-				ps.setTimestamp(3, prescription.getUpdatedTime());
+				if (prescription.getEmployeeId() == null) {
+					ps.setNull(2, Types.BIGINT);
+				}else {
+					ps.setFloat(2, prescription.getEmployeeId());
+				}
+				
+				ps.setTimestamp(3, prescription.getCreatedTime());
+				ps.setTimestamp(4, prescription.getUpdatedTime());
 				return ps;
 			}
 		}, holder);
@@ -76,6 +82,13 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 		
 		return jdbcTemplate.query("SELECT * FROM prescription WHERE patient_id = " + id, new PrescriptionRowMapper());
 		
+	}
+
+	@Override
+	public List<Prescription> findPrescriptionsForEmployee(Long id) {
+		
+		return jdbcTemplate.query("SELECT * FROM prescription WHERE employee_id = " + id, new PrescriptionRowMapper());
+
 	}
 
 }

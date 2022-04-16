@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.model.Prescription;
 
@@ -32,9 +33,18 @@ class PrescriptionRepositoryImplTest {
     @Autowired
     PatientRepository patientRepository;
     
+    @Autowired
+    EmployeeRepository employeeRepository;
+    
     @BeforeEach
     void createTable() {
     	//create patient table before hand as it is referenced later
+    	
+    	jdbcTemplate.execute("CREATE TABLE employees ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
+    			+ "CREATION_TIMESTAMP DATETIME, "
+    			+ "UPDATED_TIMESTAMP DATETIME)");
+    	
     	jdbcTemplate.execute("CREATE TABLE patient ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
@@ -43,13 +53,15 @@ class PrescriptionRepositoryImplTest {
     	jdbcTemplate.execute("CREATE TABLE prescription ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME, "
-    			+ "patient_id bigint REFERENCES patient(id));");
+    			+ "patient_id bigint REFERENCES patient(id), "
+    			+ "employee_id bigint REFERENCES employees(id));");
     }
     
     @AfterEach
     void deleteTable() {
     	jdbcTemplate.execute("DROP TABLE IF EXISTS prescription");
     	jdbcTemplate.execute("DROP TABLE IF EXISTS patient");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS employees");
 
     }
  
@@ -122,7 +134,41 @@ class PrescriptionRepositoryImplTest {
 		prescription.setPatientId(1L);
 		repository.save(prescription);
 		
-		assertThat(repository.findPrescriptionsForPatient(1L).size(), equalTo(1));
+		Prescription secondPrescription = new Prescription();
+		secondPrescription.setCreatedTime();
+		secondPrescription.setUpdatedTime();
+		secondPrescription.setPatientId(1L);
+		repository.save(prescription);
+		
+		assertThat(repository.findPrescriptionsForPatient(1L).size(), equalTo(2));
+		
+	}
+	
+	
+	@Test
+	void test_FindPrescriptionsForEmployee_ReturnsListOfPrescriptions_WhenPrescriptionsExistForEmployee() {
+		 
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		employee.setLastName("testing");
+		employee.setCreatedTime();
+		employee.setUpdatedTime();
+		
+		employeeRepository.save(employee);
+		
+		Prescription prescription = new Prescription();
+		prescription.setCreatedTime();
+		prescription.setUpdatedTime();
+		prescription.setEmployeeId(1L);
+		repository.save(prescription);
+		
+		Prescription secondPrescription = new Prescription();
+		secondPrescription.setCreatedTime();
+		secondPrescription.setUpdatedTime();
+		secondPrescription.setEmployeeId(1L);
+		repository.save(prescription);
+		
+		assertThat(repository.findPrescriptionsForEmployee(1L).size(), equalTo(2));
 		
 	}
 

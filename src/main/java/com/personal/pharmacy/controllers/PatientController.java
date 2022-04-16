@@ -57,12 +57,10 @@ public class PatientController implements CrudController<Patient, Long>{
 	
 	@Override
 	public ResponseEntity<?> deleteById(Long id){
-		Optional<Patient> patientOptional = patientService.findById(id);
-		if (patientOptional.isEmpty()) {
+		if (patientService.delete(id) == 0) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		patientService.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -85,7 +83,7 @@ public class PatientController implements CrudController<Patient, Long>{
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(patientService.findPrescriptionsForPatient(id), HttpStatus.OK);
+		return new ResponseEntity<>(prescriptions, HttpStatus.OK);
 	}
 	
 }

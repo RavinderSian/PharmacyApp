@@ -103,7 +103,7 @@ class PatientControllerTest {
 		Patient patient = new Patient();
 		patient.setPatientId(1L);
 		patient.setLastName("testing");
-		when(patientService.findById(1L)).thenReturn(Optional.of(patient));
+		when(patientService.delete(1L)).thenReturn(1);
 		
 		this.mockMvc.perform(delete("/patient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
 		.andExpect(status().isOk());
