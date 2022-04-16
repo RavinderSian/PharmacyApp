@@ -1,7 +1,6 @@
 package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -24,11 +23,4 @@ public class Patient {
 	
 	private Timestamp updatedTime;
 	
-	public void setCreatedTime() {
-		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
-	}
-	
-	public void setUpdatedTime() {
-		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
-	}
 }

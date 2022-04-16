@@ -52,8 +52,6 @@ class IngredientRepositoryImplTest {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("test");
-		ingredient.setCreatedTime();
-		ingredient.setUpdatedTime();
 		repository.save(ingredient);
 		
 		assertThat(ingredient.getName(), equalTo(repository.findById(1L).get().getName()));
@@ -66,8 +64,6 @@ class IngredientRepositoryImplTest {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("test");
-		ingredient.setCreatedTime();
-		ingredient.setUpdatedTime();
 		repository.save(ingredient);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
@@ -85,8 +81,6 @@ class IngredientRepositoryImplTest {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("test");
-		ingredient.setCreatedTime();
-		ingredient.setUpdatedTime();
 		repository.save(ingredient);
 		
 		Optional<Ingredient> ingredientInDb = repository.findById(1L);
@@ -103,8 +97,6 @@ class IngredientRepositoryImplTest {
 		
 		Ingredient ingredient = new Ingredient();
 		ingredient.setName("test");
-		ingredient.setCreatedTime();
-		ingredient.setUpdatedTime();
 		repository.save(ingredient);
 		
 		assertThat(repository.updateName(1L, "updated"), equalTo(1));

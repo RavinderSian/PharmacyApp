@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +33,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				
-				if (employee.getCreatedTime() == null) {
-					employee.setCreatedTime();
-				}
-				employee.setUpdatedTime();
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO employees (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO employees (first_name, last_name, creation_timestamp, updated_timestamp) values(?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)",
 						Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, employee.getFirstName());
 				ps.setString(2, employee.getLastName());
-				ps.setTimestamp(3, employee.getCreatedTime());
-				ps.setTimestamp(4, employee.getUpdatedTime());
 				return ps;
 			}
 		}, holder);
@@ -73,8 +65,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 	public Integer updateFirstName(Long id, String firstName) {
 		
 		return jdbcTemplate.update("UPDATE employees SET first_name='" + firstName
-				+ "', updated_timestamp='" + Timestamp.valueOf(LocalDateTime.now())
-				+ "' WHERE id =" + id);
+				+ "', updated_timestamp = CURRENT_TIMESTAMP WHERE id =" + id);
 	}
 	
 }

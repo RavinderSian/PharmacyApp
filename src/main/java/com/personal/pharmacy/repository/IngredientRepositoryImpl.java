@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +31,10 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				if (ingredient.getCreatedTime() == null) {
-					ingredient.setCreatedTime();
-				}				
-				ingredient.setUpdatedTime();
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO ingredient (name, creation_timestamp, updated_timestamp) values(?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO ingredient (name, creation_timestamp, updated_timestamp)"
+						+ " values(?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)",
 						Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, ingredient.getName());
-				ps.setTimestamp(2, ingredient.getCreatedTime());
-				ps.setTimestamp(3, ingredient.getUpdatedTime());
 				return ps;
 			}
 		}, holder);
@@ -69,8 +62,7 @@ public class IngredientRepositoryImpl implements IngredientRepository {
 	public Integer updateName(Long id, String name) {
 		
 		return jdbcTemplate.update("UPDATE ingredient SET name='" + name
-				+ "', updated_timestamp='" + Timestamp.valueOf(LocalDateTime.now())
-				+ "' WHERE id =" + id);
+				+ "', updated_timestamp = CURRENT_TIMESTAMP WHERE id =" + id);
 	}
 
 }

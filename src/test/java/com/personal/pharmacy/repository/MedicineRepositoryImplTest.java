@@ -56,8 +56,6 @@ class MedicineRepositoryImplTest {
 		medicine.setName("test");
 		medicine.setDosage(1);
 		medicine.setDuration("1 day");
-		medicine.setCreatedTime();
-		medicine.setUpdatedTime();
 		
 		repository.save(medicine);
 		
@@ -71,8 +69,6 @@ class MedicineRepositoryImplTest {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("test");
-		medicine.setCreatedTime();
-		medicine.setUpdatedTime();
 		medicine.setDosage(1);
 		medicine.setDuration("1 day");
 		repository.save(medicine);
@@ -92,8 +88,6 @@ class MedicineRepositoryImplTest {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("test");
-		medicine.setCreatedTime();
-		medicine.setUpdatedTime();
 		medicine.setDosage(1);
 		medicine.setDuration("1 day");
 		repository.save(medicine);
@@ -112,8 +106,6 @@ class MedicineRepositoryImplTest {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("test");
-		medicine.setCreatedTime();
-		medicine.setUpdatedTime();
 		medicine.setDosage(1);
 		medicine.setDuration("1 day");
 		repository.save(medicine);
@@ -134,8 +126,6 @@ class MedicineRepositoryImplTest {
 		
 		Medicine medicine = new Medicine();
 		medicine.setName("test");
-		medicine.setCreatedTime();
-		medicine.setUpdatedTime();
 		medicine.setDosage(1);
 		medicine.setDuration("1 day");
 		repository.save(medicine);

@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +35,12 @@ public class MedicineRepositoryImpl implements MedicineRepository {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				
-				if (medicine.getCreatedTime() == null) {
-					medicine.setCreatedTime();
-				}
-				
-				medicine.setUpdatedTime();
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO medicine (name, dosage, duration, creation_timestamp, updated_timestamp) values(?,?,?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO medicine (name, dosage, duration, "
+						+ "creation_timestamp, updated_timestamp) values(?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
 						Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, medicine.getName());
 				ps.setInt(2, medicine.getDosage());
 				ps.setString(3, medicine.getDuration());
-				ps.setTimestamp(4, medicine.getCreatedTime());
-				ps.setTimestamp(5, medicine.getUpdatedTime());
 				return ps;
 			}
 		}, holder);
@@ -76,8 +68,7 @@ public class MedicineRepositoryImpl implements MedicineRepository {
 	@Override
 	public Integer updateName(Long id, String name) {
 		return jdbcTemplate.update("UPDATE medicine SET name='" + name
-				+ "', updated_timestamp='" + Timestamp.valueOf(LocalDateTime.now())
-				+ "' WHERE id =" + id);
+				+ "', updated_timestamp = CURRENT_TIMESTAMP WHERE id =" + id);
 	}
 
 	@Override

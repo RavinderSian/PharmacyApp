@@ -33,10 +33,9 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				prescription.setCreatedTime();
-				prescription.setUpdatedTime();
 				
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (patient_id, employee_id, creation_timestamp, updated_timestamp) values(?,?,?,?)",
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (patient_id, employee_id, "
+						+ "creation_timestamp, updated_timestamp) values(?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
 						Statement.RETURN_GENERATED_KEYS);
 				
 				if (prescription.getPatientId() == null) {
@@ -51,8 +50,6 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 					ps.setFloat(2, prescription.getEmployeeId());
 				}
 				
-				ps.setTimestamp(3, prescription.getCreatedTime());
-				ps.setTimestamp(4, prescription.getUpdatedTime());
 				return ps;
 			}
 		}, holder);

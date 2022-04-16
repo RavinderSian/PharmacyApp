@@ -53,8 +53,6 @@ class PatientRepositoryImplTest {
 		Patient patient = new Patient();
 		patient.setFirstName("test");
 		patient.setLastName("testing");
-		patient.setCreatedTime();
-		patient.setUpdatedTime();
 		
 		Patient savedPatient = repository.save(patient);
 		
@@ -70,8 +68,6 @@ class PatientRepositoryImplTest {
 		Patient patient = new Patient();
 		patient.setFirstName("test");
 		patient.setLastName("testing");
-		patient.setCreatedTime();
-		patient.setUpdatedTime();
 		repository.save(patient);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
@@ -90,8 +86,6 @@ class PatientRepositoryImplTest {
 		Patient patient = new Patient();
 		patient.setFirstName("test");
 		patient.setLastName("testing");
-		patient.setCreatedTime();
-		patient.setUpdatedTime();
 		repository.save(patient);
 		
 		Optional<Patient> patientInDb = repository.findById(1L);
@@ -110,8 +104,6 @@ class PatientRepositoryImplTest {
 		Patient patient = new Patient();
 		patient.setFirstName("test");
 		patient.setLastName("testing");
-		patient.setCreatedTime();
-		patient.setUpdatedTime();
 		repository.save(patient);
 		
 		assertThat(repository.updateFirstName(1L, "updated"), equalTo(1));

@@ -75,8 +75,6 @@ class PrescriptionRepositoryImplTest {
 	void test_Save_ReturnsCorrectPrescription_WhenGivenMockPrescription() {
 		
 		Prescription prescription = new Prescription();
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		repository.save(prescription);
 		
 		assertThat(repository.findById(1L).get().getPrescriptionId(), equalTo(1L));
@@ -87,8 +85,6 @@ class PrescriptionRepositoryImplTest {
 	void test_Delete_DeletesEntity_WhenGivenId() {
 		
 		Prescription prescription = new Prescription();
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		repository.save(prescription);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
@@ -100,8 +96,6 @@ class PrescriptionRepositoryImplTest {
 	void test_FindById_ReturnsCorrectPrescription_WhenIdPresentInDatabase() {
 		
 		Prescription prescription = new Prescription();
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		repository.save(prescription);
 		
 		Optional<Prescription> prescriptionInDb = repository.findById(1L);
@@ -123,20 +117,14 @@ class PrescriptionRepositoryImplTest {
 		Patient patient = new Patient();
 		patient.setFirstName("test");
 		patient.setLastName("testing");
-		patient.setCreatedTime();
-		patient.setUpdatedTime();
 		
 		patientRepository.save(patient);
 		
 		Prescription prescription = new Prescription();
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		prescription.setPatientId(1L);
 		repository.save(prescription);
 		
 		Prescription secondPrescription = new Prescription();
-		secondPrescription.setCreatedTime();
-		secondPrescription.setUpdatedTime();
 		secondPrescription.setPatientId(1L);
 		repository.save(prescription);
 		
@@ -151,20 +139,14 @@ class PrescriptionRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
 		
 		employeeRepository.save(employee);
 		
 		Prescription prescription = new Prescription();
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		prescription.setEmployeeId(1L);
 		repository.save(prescription);
 		
 		Prescription secondPrescription = new Prescription();
-		secondPrescription.setCreatedTime();
-		secondPrescription.setUpdatedTime();
 		secondPrescription.setEmployeeId(1L);
 		repository.save(prescription);
 		

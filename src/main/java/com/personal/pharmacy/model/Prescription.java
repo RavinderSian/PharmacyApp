@@ -1,7 +1,6 @@
 package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +19,4 @@ public class Prescription {
 	
 	private Timestamp updatedTime;
 	
-	public void setCreatedTime() {
-		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
-	}
-	
-	public void setUpdatedTime() {
-		this.updatedTime = Timestamp.valueOf(LocalDateTime.now());
-	}
 }

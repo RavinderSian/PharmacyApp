@@ -136,14 +136,10 @@ class PatientControllerTest {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
 		prescription.setPatientId(1L);
-		prescription.setCreatedTime();
-		prescription.setUpdatedTime();
 		
 		Prescription secondPrescription = new Prescription();
 		secondPrescription.setPrescriptionId(2L);
 		secondPrescription.setPatientId(1L);
-		secondPrescription.setCreatedTime();
-		secondPrescription.setUpdatedTime();
 		
 		when(patientService.findPrescriptionsForPatient(1L)).thenReturn(Arrays.asList(prescription, secondPrescription));
 		

@@ -53,8 +53,6 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
 		repository.save(employee);
 		
 		assertThat(employee.getFirstName(), equalTo(repository.findById(1L).get().getFirstName()));
@@ -69,8 +67,6 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
 		repository.save(employee);
 		assertThat(repository.findById(1L), not(equalTo(Optional.empty())));
 		
@@ -89,8 +85,6 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
 		repository.save(employee);
 		
 		Optional<Employee> employeeInDb = repository.findById(1L);
@@ -109,8 +103,6 @@ class EmployeeRepositoryImplTest {
 		Employee employee = new Employee();
 		employee.setFirstName("test");
 		employee.setLastName("testing");
-		employee.setCreatedTime();
-		employee.setUpdatedTime();
 		repository.save(employee);
 		
 		assertThat(repository.updateFirstName(1L, "updated"), equalTo(1));
