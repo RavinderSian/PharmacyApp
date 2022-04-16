@@ -1,6 +1,7 @@
 package com.personal.pharmacy.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,8 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.pharmacy.model.Patient;
+import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.PatientService;
 
 @WebMvcTest(PatientController.class)
@@ -123,6 +127,37 @@ class PatientControllerTest {
 	@Test
 	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
 		this.mockMvc.perform(patch("/patient/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void test_GetPrescriptions_ReturnsListOfPrescrptions_WhenGivenExistingId() throws Exception {
+		
+		Prescription prescription = new Prescription();
+		prescription.setPrescriptionId(1L);
+		prescription.setPatientId(1L);
+		prescription.setCreatedTime();
+		prescription.setUpdatedTime();
+		
+		Prescription secondPrescription = new Prescription();
+		secondPrescription.setPrescriptionId(2L);
+		secondPrescription.setPatientId(1L);
+		secondPrescription.setCreatedTime();
+		secondPrescription.setUpdatedTime();
+		
+		when(patientService.findPrescriptionsForPatient(1L)).thenReturn(Arrays.asList(prescription, secondPrescription));
+		
+		this.mockMvc.perform(get("/patient/1/prescriptions"))
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect((jsonPath("$[0].prescriptionId", is(1))))
+		.andExpect((jsonPath("$[0].patientId", is(1))))
+		.andExpect((jsonPath("$[1].prescriptionId", is(2))))
+		.andExpect((jsonPath("$[1].patientId", is(1))));
+	}
+	
+	@Test
+	void test_GetPrescriptions_ReturnsNotFound_WhenGivenNonExistingId() throws Exception {
+		this.mockMvc.perform(get("/patient/5/prescriptions"))
 		.andExpect(status().isNotFound());
 	}
 	

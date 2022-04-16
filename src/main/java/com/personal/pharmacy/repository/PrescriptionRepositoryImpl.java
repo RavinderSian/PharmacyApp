@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,18 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				prescription.setCreatedTime();
 				prescription.setUpdatedTime();
-				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (creation_timestamp, updated_timestamp) values(?,?)",
+				
+				PreparedStatement ps = connection.prepareStatement("INSERT INTO prescription (patient_id, creation_timestamp, updated_timestamp) values(?,?,?)",
 						Statement.RETURN_GENERATED_KEYS);
-				ps.setTimestamp(1, prescription.getCreatedTime());
-				ps.setTimestamp(2, prescription.getUpdatedTime());
+				
+				if (prescription.getPatientId() == null) {
+					ps.setNull(1, Types.BIGINT);
+				}else {
+					ps.setFloat(1, prescription.getPatientId());
+				}
+				
+				ps.setTimestamp(2, prescription.getCreatedTime());
+				ps.setTimestamp(3, prescription.getUpdatedTime());
 				return ps;
 			}
 		}, holder);
@@ -59,6 +69,13 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 		}catch(EmptyResultDataAccessException exception) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public List<Prescription> findPrescriptionsForPatient(Long id) {
+		
+		return jdbcTemplate.query("SELECT * FROM prescription WHERE patient_id = " + id, new PrescriptionRowMapper());
+		
 	}
 
 }

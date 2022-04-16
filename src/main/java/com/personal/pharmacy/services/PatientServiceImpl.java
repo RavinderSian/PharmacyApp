@@ -1,20 +1,27 @@
 package com.personal.pharmacy.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.personal.pharmacy.model.Patient;
+import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PatientRepository;
-
-import lombok.AllArgsConstructor;
+import com.personal.pharmacy.repository.PrescriptionRepository;
 
 @Service
-@AllArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
 	private final PatientRepository repository;
 	
+	private final PrescriptionRepository prescriptionRepository;
+	
+	public PatientServiceImpl(PatientRepository repository, PrescriptionRepository prescriptionRepository) {
+		this.repository = repository;
+		this.prescriptionRepository = prescriptionRepository;
+	}
+
 	@Override
 	public Patient save(Patient patient) {
 		return repository.save(patient);
@@ -36,6 +43,10 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Integer updateFirstName(Long id, String firstName) {
 		return repository.updateFirstName(id, firstName);
+	}
+	
+	public List<Prescription> findPrescriptionsForPatient(Long id){
+		return prescriptionRepository.findPrescriptionsForPatient(id);
 	}
 
 }

@@ -19,9 +19,8 @@ public class Ingredient {
 	
 	private Timestamp updatedTime;
 	
-//	@ManyToOne
-//	private Medicine medicine;
-	
+	private Long medicineId;
+
 	public void setCreatedTime() {
 		this.createdTime = Timestamp.valueOf(LocalDateTime.now());
 	}

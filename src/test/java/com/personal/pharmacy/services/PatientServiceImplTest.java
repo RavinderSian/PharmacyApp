@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.repository.PatientRepository;
+import com.personal.pharmacy.repository.PrescriptionRepository;
 
 @SpringBootTest
 class PatientServiceImplTest {
@@ -22,9 +23,12 @@ class PatientServiceImplTest {
 	@Mock
 	PatientRepository patientRepository;
 	
+	@Mock
+	PrescriptionRepository prescriptionRepository;
+	
 	@BeforeEach
 	void setUp() throws Exception {
-		patientService = new PatientServiceImpl(patientRepository);
+		patientService = new PatientServiceImpl(patientRepository, prescriptionRepository);
 	}
 
 	@Test

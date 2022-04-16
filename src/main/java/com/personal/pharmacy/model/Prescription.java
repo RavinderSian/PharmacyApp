@@ -2,8 +2,6 @@ package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,27 +12,13 @@ public class Prescription {
 
 	private Long prescriptionId;
 	
-	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "prescription", cascade = CascadeType.ALL)
-	private List<Medicine> medicines = new ArrayList<>();
-	
 	private Long patientId;
 	
-	//@ManyToOne(cascade = CascadeType.ALL)
-	private Employee employee;
+	private Long employeeId;
 	
 	private Timestamp createdTime;
 	
 	private Timestamp updatedTime;
-	
-	public void addMedicine(Medicine medicine) {
-		medicine.setPrescription(this);
-		this.medicines.add(medicine);
-	}
-	
-	public void removeMedicine(Medicine medicine) {
-		this.medicines.remove(medicine);
-		medicine.setPrescription(null);
-	}
 	
 	public void setCreatedTime() {
 		this.createdTime = Timestamp.valueOf(LocalDateTime.now());

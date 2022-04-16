@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.model.Prescription;
 
 @AutoConfigureTestDatabase
@@ -28,6 +29,9 @@ class PrescriptionRepositoryImplTest {
     @Autowired
 	PrescriptionRepository repository;
     
+    @Autowired
+    PatientRepository patientRepository;
+    
     @BeforeEach
     void createTable() {
     	//create patient table before hand as it is referenced later
@@ -39,7 +43,7 @@ class PrescriptionRepositoryImplTest {
     	jdbcTemplate.execute("CREATE TABLE prescription ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME, "
-    			+ "fk_patient_id bigint REFERENCES patient(id));");
+    			+ "patient_id bigint REFERENCES patient(id));");
     }
     
     @AfterEach
@@ -81,11 +85,6 @@ class PrescriptionRepositoryImplTest {
 	}
 	
 	@Test
-	void test_FindById_ReturnsEmptyOptional_WhenIdNotPresentInDatabase() {
-		assertThat(repository.findById(1L), equalTo(Optional.empty()));
-	}
-	
-	@Test
 	void test_FindById_ReturnsCorrectPrescription_WhenIdPresentInDatabase() {
 		
 		Prescription prescription = new Prescription();
@@ -98,6 +97,32 @@ class PrescriptionRepositoryImplTest {
 		assertThat(prescriptionInDb.get().getPrescriptionId(), equalTo(1L));
 		assertThat(prescriptionInDb.get().getCreatedTime(), is(notNullValue()));
 		assertThat(prescriptionInDb.get().getUpdatedTime(), is(notNullValue()));
+		
+	}
+	
+	@Test
+	void test_FindById_ReturnsEmptyOptional_WhenIdNotPresentInDatabase() {
+		assertThat(repository.findById(1L), equalTo(Optional.empty()));
+	}
+	
+	@Test
+	void test_FindPrescriptionsForPatient_ReturnsListOfPrescriptions_WhenPrescriptionsExistForPatient() {
+		 
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		patient.setLastName("testing");
+		patient.setCreatedTime();
+		patient.setUpdatedTime();
+		
+		patientRepository.save(patient);
+		
+		Prescription prescription = new Prescription();
+		prescription.setCreatedTime();
+		prescription.setUpdatedTime();
+		prescription.setPatientId(1L);
+		repository.save(prescription);
+		
+		assertThat(repository.findPrescriptionsForPatient(1L).size(), equalTo(1));
 		
 	}
 
