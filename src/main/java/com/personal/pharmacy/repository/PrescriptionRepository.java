@@ -8,6 +8,7 @@ public interface PrescriptionRepository extends CrudRepository<Prescription, Lon
 
 	List<Prescription> findPrescriptionsForPatient(Long id);
 	List<Prescription> findPrescriptionsForEmployee(Long id);
-
+	Integer addMedicineToPrescription(Long prescriptionId, Long medicineId);
+	List<Long> getIdsOfMedicineInPrescription(Long id);
 	
 }

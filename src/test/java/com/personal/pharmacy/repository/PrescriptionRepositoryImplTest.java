@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.personal.pharmacy.model.Employee;
+import com.personal.pharmacy.model.Medicine;
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.model.Prescription;
 
@@ -36,25 +38,34 @@ class PrescriptionRepositoryImplTest {
     @Autowired
     EmployeeRepository employeeRepository;
     
+    @Autowired
+    MedicineRepository medicineRepository;
+    
     @BeforeEach
     void createTable() {
-    	//create patient table before hand as it is referenced later
+    	
+    	jdbcTemplate.execute("CREATE TABLE medicine ( id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "name varchar(50) NOT NULL, dosage int, duration varchar(50), creation_timestamp DATETIME, "
+    			+ "updated_timestamp DATETIME)");
     	
     	jdbcTemplate.execute("CREATE TABLE employees ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME)");
     	
+    	//create patient table before hand as it is referenced later
     	jdbcTemplate.execute("CREATE TABLE patient ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
     			+ "FIRST_NAME varchar(50) NOT NULL, LAST_NAME varchar(50) NOT NULL, "
     			+ "CREATION_TIMESTAMP DATETIME, "
     			+ "UPDATED_TIMESTAMP DATETIME);");
     	
     	jdbcTemplate.execute("CREATE TABLE prescription ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    			+ "CREATION_TIMESTAMP DATETIME, "
-    			+ "UPDATED_TIMESTAMP DATETIME, "
-    			+ "patient_id bigint REFERENCES patient(id), "
-    			+ "employee_id bigint REFERENCES employees(id));");
+    			+ "CREATION_TIMESTAMP DATETIME, UPDATED_TIMESTAMP DATETIME, "
+    			+ "patient_id bigint REFERENCES patient(id), employee_id bigint REFERENCES employees(id));");
+    	
+    	jdbcTemplate.execute("CREATE TABLE prescription_medicine ( prescription_id bigint NOT NULL "
+    			+ "AUTO_INCREMENT, CREATION_TIMESTAMP DATETIME, "
+    			+ "UPDATED_TIMESTAMP DATETIME, medicine_id bigint);");
     }
     
     @AfterEach
@@ -62,6 +73,8 @@ class PrescriptionRepositoryImplTest {
     	jdbcTemplate.execute("DROP TABLE IF EXISTS prescription");
     	jdbcTemplate.execute("DROP TABLE IF EXISTS patient");
     	jdbcTemplate.execute("DROP TABLE IF EXISTS employees");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS medicine");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS prescription_medicine");
 
     }
  
@@ -185,6 +198,61 @@ class PrescriptionRepositoryImplTest {
 		
 		assertThat(repository.findPrescriptionsForEmployee(1L).size(), equalTo(0));
 		
+	}
+	
+	@Test
+	void test_AddMedicine_ReturnsCorrectResponse_WhenGivenIds() {
+		assertThat(repository.addMedicineToPrescription(1L, 1L), equalTo(1));
+	}
+	
+	@Test
+	void test_GetIdsOfMedicineInPrescription_ReturnsCorrectList_WhenMedicinesPresentWithPrescriptionId() {
+		
+		Prescription prescription = new Prescription();
+		repository.save(prescription);
+		
+		Medicine medicine = new Medicine();
+		medicine.setName("test");
+		medicine.setDosage(1);
+		medicine.setDuration("1 day");
+		medicineRepository.save(medicine);
+		
+		Medicine secondMedicine = new Medicine();
+		secondMedicine.setName("test");
+		secondMedicine.setDosage(1);
+		secondMedicine.setDuration("1 day");
+		medicineRepository.save(secondMedicine);
+		
+		repository.addMedicineToPrescription(1L, 1L);
+		repository.addMedicineToPrescription(1L, 2L);
+		
+		List<Long> medicineIds = repository.getIdsOfMedicineInPrescription(1L);
+		
+		assertThat(medicineIds.size(), equalTo(2));
+		assertThat(medicineIds.get(0), equalTo(1L));
+		assertThat(medicineIds.get(1), equalTo(2L));
+
+	}
+	
+	@Test
+	void test_GetIdsOfMedicineInPrescription_ReturnsEmptyList_WhenMedicinesNotPresentWithPrescriptionId() {
+		
+		Prescription prescription = new Prescription();
+		repository.save(prescription);
+		
+		List<Long> medicineIds = repository.getIdsOfMedicineInPrescription(1L);
+		
+		assertThat(medicineIds.size(), equalTo(0));
+
+	}
+	
+	@Test
+	void test_GetIdsOfMedicineInPrescription_ReturnsEmptyList_WhenPrescriptionIdNotPresent() {
+		
+		List<Long> medicineIds = repository.getIdsOfMedicineInPrescription(1L);
+		
+		assertThat(medicineIds.size(), equalTo(0));
+
 	}
 
 }

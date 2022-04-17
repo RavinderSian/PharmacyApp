@@ -88,4 +88,20 @@ public class PrescriptionRepositoryImpl implements PrescriptionRepository{
 
 	}
 
+	@Override
+	public Integer addMedicineToPrescription(Long prescriptionId, Long medicineId) {
+		
+		return jdbcTemplate.update("INSERT INTO prescription_medicine (prescription_id, medicine_id, "
+						+ "creation_timestamp, updated_timestamp) values(?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
+						, prescriptionId, medicineId);
+		
+	}
+	
+	@Override
+	public List<Long> getIdsOfMedicineInPrescription(Long id) {
+		
+		return jdbcTemplate.queryForList("SELECT medicine_id FROM prescription_medicine WHERE prescription_id = " + id, Long.class);
+
+	}
+
 }

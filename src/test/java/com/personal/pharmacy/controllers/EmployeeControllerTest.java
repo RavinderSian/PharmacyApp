@@ -145,6 +145,7 @@ class EmployeeControllerTest {
 		
 		this.mockMvc.perform(get("/employee/1/prescriptions"))
 		.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(status().isOk())
 		.andExpect((jsonPath("$[0].prescriptionId", is(1))))
 		.andExpect((jsonPath("$[0].patientId", is(1))))
 		.andExpect((jsonPath("$[1].prescriptionId", is(2))))

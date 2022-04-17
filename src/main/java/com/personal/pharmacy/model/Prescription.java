@@ -2,7 +2,6 @@ package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;

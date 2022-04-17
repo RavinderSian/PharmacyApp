@@ -1,20 +1,14 @@
 package com.personal.pharmacy.model;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "ingredients")
 public class Medicine {
 
 	private Long medicineId;
@@ -26,19 +20,6 @@ public class Medicine {
 	
 	private String duration;
 	
-	@JsonIgnore
-	private Set<Ingredient> ingredients = new HashSet<>();
-	
-	public void addIngredient(Ingredient ingredient) {
-		this.ingredients.add(ingredient);
-		//ingredient.setMedicine(this);
-	}
-	
-	public void removeIngredient(Ingredient ingredient) {
-		this.ingredients.remove(ingredient);
-		//ingredient.setMedicine(null);
-	}
-    
 	private Timestamp createdTime;
 	
 	private Timestamp updatedTime;
