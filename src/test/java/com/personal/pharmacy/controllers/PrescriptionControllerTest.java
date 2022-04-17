@@ -65,11 +65,39 @@ class PrescriptionControllerTest {
 	void test_Save_ReturnsCorrectStatusAndPrescription_WhenGivenPrescription() throws Exception {
 		Prescription prescription = new Prescription();
 		prescription.setPrescriptionId(1L);
+		prescription.setEmployeeId(1L);
+		prescription.setPatientId(1L);
 		when(service.save(prescription)).thenReturn(prescription);
 	    ObjectMapper mapper = new ObjectMapper();
 		
 		this.mockMvc.perform(put("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
 		.andExpect(status().isOk());
+	}
+	
+	@Test
+	void test_Save_ReturnsCorrectStatusAndResponse_WhenNoEmployeeId() throws Exception {
+		Prescription prescription = new Prescription();
+		prescription.setPrescriptionId(1L);
+		prescription.setPatientId(1L);
+		when(service.save(prescription)).thenReturn(prescription);
+	    ObjectMapper mapper = new ObjectMapper();
+		
+		this.mockMvc.perform(put("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().json("{'employeeId' : 'Please enter a valid employee id'}"));
+	}
+	
+	@Test
+	void test_Save_ReturnsCorrectStatusAndResponse_WhenNoPatientId() throws Exception {
+		Prescription prescription = new Prescription();
+		prescription.setPrescriptionId(1L);
+		prescription.setEmployeeId(1L);
+		when(service.save(prescription)).thenReturn(prescription);
+	    ObjectMapper mapper = new ObjectMapper();
+		
+		this.mockMvc.perform(put("/prescription/save").contentType(MediaType.APPLICATION_JSON_VALUE).content(mapper.writer().writeValueAsString(prescription)))
+		.andExpect(status().isBadRequest())
+		.andExpect(content().json("{'patientId' : 'Please enter a valid patient id'}"));
 	}
 	
 	@Test
