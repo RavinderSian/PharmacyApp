@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.personal.pharmacy.model.Ingredient;
+import com.personal.pharmacy.model.Medicine;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -28,17 +29,26 @@ class IngredientRepositoryImplTest {
     @Autowired
 	IngredientRepository repository;
     
+    @Autowired
+	MedicineRepository medicineRepository;
+    
     @BeforeEach
     void createTable() {
+    	
+    	jdbcTemplate.execute("CREATE TABLE medicine ( id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
+    			+ "name varchar(50) NOT NULL, dosage int, duration varchar(50), creation_timestamp DATETIME, "
+    			+ "updated_timestamp DATETIME)");
+    	
     	jdbcTemplate.execute("CREATE TABLE ingredient ( ID bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    			+ "NAME varchar(50) NOT NULL, "
-    			+ "CREATION_TIMESTAMP DATETIME, "
-    			+ "UPDATED_TIMESTAMP DATETIME)");
+    			+ "NAME varchar(50) NOT NULL, CREATION_TIMESTAMP DATETIME, UPDATED_TIMESTAMP DATETIME, "
+    			+ "medicine_id bigint REFERENCES medicine(id))");
     }
     
     @AfterEach
     void deleteTable() {
     	jdbcTemplate.execute("DROP TABLE IF EXISTS ingredient");
+    	jdbcTemplate.execute("DROP TABLE IF EXISTS medicine");
+
     }
  
 	@Test
@@ -107,6 +117,51 @@ class IngredientRepositoryImplTest {
 	@Test
 	void test_UpdateFirstName_ThrowsNoException_WhenIdDoesNotExist() {
 		assertThat(repository.updateName(1L, "updated"), equalTo(0));
+		
+	}
+	
+	@Test
+	void test_FindIngredientsForMedicine_ReturnsListOfIngredients_WhenIngredientsExistForMedicine() {
+		 
+		Medicine medicine = new Medicine();
+		medicine.setName("test");
+		medicine.setDosage(2);
+		medicine.setDuration("testing");
+		
+		medicineRepository.save(medicine);
+		
+		Ingredient ingredient = new Ingredient();
+		ingredient.setName("test");
+		ingredient.setMedicineId(1L);
+		repository.save(ingredient);
+		
+		Ingredient secondIngredient = new Ingredient();
+		secondIngredient.setName("testing");
+		secondIngredient.setMedicineId(1L);
+		repository.save(secondIngredient);
+		
+		assertThat(repository.findIngredientsByMedicine(1L).size(), equalTo(2));
+
+		
+	}
+	
+	@Test
+	void test_FindIngredientsForMedicine_ReturnsListOfIngredients_WhenIngredientsDoNotExistForMedicine() {
+		 
+		Medicine medicine = new Medicine();
+		medicine.setName("test");
+		medicine.setDosage(2);
+		
+		medicineRepository.save(medicine);
+		
+		assertThat(repository.findIngredientsByMedicine(1L).size(), equalTo(0));
+		
+	}
+	
+	@Test
+	void test_FindIngredientsForMedicine_ReturnsListOfIngredients_WhenMedicineDoesNotExist() {
+		 
+		assertThat(repository.findIngredientsByMedicine(1L).size(), equalTo(0));
 		
 	}
 	

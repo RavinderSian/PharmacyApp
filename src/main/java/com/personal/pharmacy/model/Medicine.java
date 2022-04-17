@@ -27,12 +27,7 @@ public class Medicine {
 	private String duration;
 	
 	@JsonIgnore
-//	@OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL)
 	private Set<Ingredient> ingredients = new HashSet<>();
-	
-	@JsonIgnore
-//	@ManyToOne
-	private Prescription prescription;
 	
 	public void addIngredient(Ingredient ingredient) {
 		this.ingredients.add(ingredient);

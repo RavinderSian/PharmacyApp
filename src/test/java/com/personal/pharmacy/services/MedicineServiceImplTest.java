@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.personal.pharmacy.model.Medicine;
+import com.personal.pharmacy.repository.IngredientRepository;
 import com.personal.pharmacy.repository.MedicineRepository;
 
 @SpringBootTest
@@ -22,11 +23,14 @@ class MedicineServiceImplTest {
 	MedicineRepository medicineRepository;
 	
 	@Mock
+	IngredientRepository ingredientRepository;
+	
+	@Mock
 	Medicine medicineMock;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		medicineService = new MedicineServiceImpl(medicineRepository);
+		medicineService = new MedicineServiceImpl(medicineRepository, ingredientRepository);
 	}
 
 	@Test

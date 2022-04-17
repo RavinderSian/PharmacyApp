@@ -31,10 +31,7 @@ class MedicineRepositoryImplTest {
     @BeforeEach
     void createTable() {
     	jdbcTemplate.execute("CREATE TABLE medicine ( id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT, "
-    			+ "name varchar(50) NOT NULL, "
-    			+ "dosage int,"
-    			+ "duration varchar(50),"
-    			+ "creation_timestamp DATETIME, "
+    			+ "name varchar(50) NOT NULL, dosage int, duration varchar(50), creation_timestamp DATETIME, "
     			+ "updated_timestamp DATETIME)");
     }
     

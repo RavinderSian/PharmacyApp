@@ -132,6 +132,19 @@ class PrescriptionRepositoryImplTest {
 		
 	}
 	
+	@Test
+	void test_FindPrescriptionsForPatient_ReturnsEmptyList_WhenPrescriptionsDoNotExistForPatient() {
+		 
+		Patient patient = new Patient();
+		patient.setFirstName("test");
+		patient.setLastName("testing");
+		
+		patientRepository.save(patient);
+		
+		assertThat(repository.findPrescriptionsForPatient(1L).size(), equalTo(0));
+		
+	}
+	
 	
 	@Test
 	void test_FindPrescriptionsForEmployee_ReturnsListOfPrescriptions_WhenPrescriptionsExistForEmployee() {
@@ -148,9 +161,29 @@ class PrescriptionRepositoryImplTest {
 		
 		Prescription secondPrescription = new Prescription();
 		secondPrescription.setEmployeeId(1L);
-		repository.save(prescription);
+		repository.save(secondPrescription);
 		
 		assertThat(repository.findPrescriptionsForEmployee(1L).size(), equalTo(2));
+		
+	}
+	
+	@Test
+	void test_FindPrescriptionsForEmployee_ReturnsEmptyList_WhenPrescriptionsDoNotExistForEmployee() {
+		 
+		Employee employee = new Employee();
+		employee.setFirstName("test");
+		employee.setLastName("testing");
+		
+		employeeRepository.save(employee);
+		
+		assertThat(repository.findPrescriptionsForEmployee(1L).size(), equalTo(0));
+		
+	}
+	
+	@Test
+	void test_FindPrescriptionsForEmployee_ReturnsEmptyList_WhenEmployeeDosentExist() {
+		
+		assertThat(repository.findPrescriptionsForEmployee(1L).size(), equalTo(0));
 		
 	}
 
