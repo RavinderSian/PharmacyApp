@@ -1,12 +1,15 @@
 package com.personal.pharmacy.repository;
 
-import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
 
 import com.personal.pharmacy.model.Medicine;
 
-public interface MedicineRepository extends CrudRepository<Medicine, Long>{
+public interface MedicineRepository extends CrudRepository<Medicine, Long> {
 
-	Medicine findByName(String name);
+	Optional<Medicine> findByName(String name);
+
+	Integer updateName(Long id, String name);
 
 }
 

@@ -95,11 +95,9 @@ class IngredientControllerTest {
 	@Test
 	void test_Delete_ReturnsCorrectStatus_WhenIngredientPresent() throws Exception {
 		
-		Ingredient ingredient = new Ingredient();
-		ingredient.setIngredientId(1L);
-		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
+		when(ingredientService.delete(1L)).thenReturn(1);
 		
-		this.mockMvc.perform(delete("/ingredient/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		this.mockMvc.perform(delete("/ingredient/delete/1"))
 		.andExpect(status().isOk());
 	}
 	
@@ -112,16 +110,10 @@ class IngredientControllerTest {
 	@Test
 	void test_UpdateName_CorrectlyUpdatesName_WhenGivenNameSalicylicAcidAndId1() throws Exception {
 		
-		Ingredient ingredient = new Ingredient();
-		ingredient.setName("paracetamol");
-		ingredient.setIngredientId(1L);
-		when(ingredientService.findById(1L)).thenReturn(Optional.of(ingredient));
-		ingredient.setName("new");
-		when(ingredientService.updateIngredientName(ingredient, "new")).thenReturn(ingredient);
+		when(ingredientService.updateIngredientName(1L, "new")).thenReturn(1);
 		
 		this.mockMvc.perform(patch("/ingredient/1/updatename").contentType(MediaType.APPLICATION_JSON_VALUE).content("new"))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'ingredientId': 1, 'name': 'new'}"));
+		.andExpect(status().isOk());;
 	}
 	
 	@Test

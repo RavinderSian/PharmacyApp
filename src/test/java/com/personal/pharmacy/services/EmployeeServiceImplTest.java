@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.personal.pharmacy.model.Employee;
 import com.personal.pharmacy.repository.EmployeeRepository;
+import com.personal.pharmacy.repository.PrescriptionRepository;
 
 @SpringBootTest
 class EmployeeServiceImplTest {
@@ -23,11 +24,14 @@ class EmployeeServiceImplTest {
 	EmployeeRepository employeeRepository;
 	
 	@Mock
+	PrescriptionRepository prescriptionRepository;
+	
+	@Mock
 	Employee employeeMock;
 	
 	@BeforeEach
 	public void setUp() throws Exception {
-		employeeService = new EmployeeServiceImpl(employeeRepository);
+		employeeService = new EmployeeServiceImpl(employeeRepository, prescriptionRepository);
 	}
 	
 	@Test
@@ -42,17 +46,6 @@ class EmployeeServiceImplTest {
 	void test_FindById_ReturnsEmptyOptional_WhenCalledWithId5() {
 		//Assert
 		Assertions.assertTrue(employeeService.findById(5L).isEmpty());
-	}
-	
-	@Test
-	void test_UpdateFirstName_ReturnsEmployeeWithCorrectName_WhenGivenStringNewName() {
-		//Arrange
-		Employee employee = new Employee();
-		employee.setFirstName("test");
-		//Act
-		employeeService.updateFirstName(employee, "new name");
-		//Assert
-		Assertions.assertEquals("new name", employee.getFirstName());
 	}
 	
 }

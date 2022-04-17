@@ -6,44 +6,47 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.personal.pharmacy.model.Patient;
+import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.repository.PatientRepository;
-
-import lombok.AllArgsConstructor;
+import com.personal.pharmacy.repository.PrescriptionRepository;
 
 @Service
-@AllArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
-	private final PatientRepository patientRepository;
+	private final PatientRepository repository;
 	
+	private final PrescriptionRepository prescriptionRepository;
+	
+	public PatientServiceImpl(PatientRepository repository, PrescriptionRepository prescriptionRepository) {
+		this.repository = repository;
+		this.prescriptionRepository = prescriptionRepository;
+	}
+
 	@Override
 	public Patient save(Patient patient) {
-		return patientRepository.save(patient);
+		return repository.save(patient);
 	}
 
 	@Override
-	public void delete(Patient patient) {
-		patient.getPrescriptions().forEach(prescription -> prescription.setPatient(null));
-		patientRepository.delete(patient);
-	}
-
-	@Override
-	public List<Patient> findAll() {
-		return (List<Patient>) patientRepository.findAll();
+	public Integer delete(Long id) {
+		return repository.deleteById(id);
 	}
 
 	@Override
 	public Optional<Patient> findById(Long id) {
 		
-		return patientRepository.findById(id).isEmpty()
+		return repository.findById(id).isEmpty()
 		? Optional.empty()
-		: patientRepository.findById(id);
+		: repository.findById(id);
 	}
 
 	@Override
-	public Patient updateFirstName(Patient patient, String firstName) {
-		patient.setFirstName(firstName);
-		return patientRepository.save(patient);
+	public Integer updateFirstName(Long id, String firstName) {
+		return repository.updateFirstName(id, firstName);
+	}
+	
+	public List<Prescription> findPrescriptionsForPatient(Long id){
+		return prescriptionRepository.findPrescriptionsForPatient(id);
 	}
 
 }

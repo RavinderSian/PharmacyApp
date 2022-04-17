@@ -31,19 +31,20 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 
 	@Override
 	public ResponseEntity<?> getById(Long id) {
-		return ingredientServices.findById(id).isEmpty()
+		
+		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
+		
+		return ingredientOptional.isEmpty()
 		? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-		: new ResponseEntity<>(ingredientServices.findById(id).get(), HttpStatus.OK);
+		: new ResponseEntity<>(ingredientOptional.get(), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<?> deleteById(Long id) {
-		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
-		if (ingredientOptional.isEmpty()) {
+		if (ingredientServices.delete(id) == 0) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		ingredientServices.delete(ingredientOptional.get());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -60,14 +61,12 @@ public class IngredientController implements CrudController<Ingredient, Long> {
 	
 	@PatchMapping("{id}/updatename")
 	public ResponseEntity<?> updateName(@PathVariable Long id, @RequestBody String name){
-		Optional<Ingredient> ingredientOptional = ingredientServices.findById(id);
-		if (ingredientOptional.isEmpty()) {
+		if (ingredientServices.updateIngredientName(id, name) == 0) {
 			log.info("Id not present in database");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Ingredient ingredient = ingredientOptional.get();
-		ingredientServices.updateIngredientName(ingredient, name);
-		return new ResponseEntity<>(ingredient, HttpStatus.OK);
+		log.info("Ingredient name updated");
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

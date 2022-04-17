@@ -4,5 +4,5 @@ import com.personal.pharmacy.model.Ingredient;
 
 public interface IngredientService extends CrudService<Ingredient, Long> {
 
-	Ingredient updateIngredientName(Ingredient ingredient, String name);
+	Integer updateIngredientName(Long id, String name);
 }

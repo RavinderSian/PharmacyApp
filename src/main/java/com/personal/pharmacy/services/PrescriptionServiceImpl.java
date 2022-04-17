@@ -1,6 +1,5 @@
 package com.personal.pharmacy.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,32 +11,30 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class PrescriptionServiceImpl implements PrescriptionService {
+public class PrescriptionServiceImpl implements PrescriptionService{
 
-	private final PrescriptionRepository prescriptionRepository;
+	private final PrescriptionRepository repository;
 	
 	@Override
 	public Prescription save(Prescription prescription) {
-		return prescriptionRepository.save(prescription);
+		return repository.save(prescription);
 	}
 
 	@Override
-	public void delete(Prescription prescription) {
-		prescription.setEmployee(null);
-		prescriptionRepository.delete(prescription);
-	}
-
-	@Override
-	public List<Prescription> findAll() {
-		return (List<Prescription>) prescriptionRepository.findAll();
+	public Integer delete(Long id) {
+		return repository.deleteById(id);
 	}
 
 	@Override
 	public Optional<Prescription> findById(Long id) {
-		
-		return prescriptionRepository.findById(id).isEmpty()
+		return repository.findById(id).isEmpty()
 		? Optional.empty()
-		: prescriptionRepository.findById(id);
+		: repository.findById(id);
+	}
+
+	@Override
+	public Integer addMedicine(Long prescriptionId, Long medicineId) {
+		return repository.addMedicineToPrescription(prescriptionId, medicineId);
 	}
 
 }

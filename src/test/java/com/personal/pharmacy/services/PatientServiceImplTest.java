@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.personal.pharmacy.model.Patient;
 import com.personal.pharmacy.repository.PatientRepository;
+import com.personal.pharmacy.repository.PrescriptionRepository;
 
 @SpringBootTest
 class PatientServiceImplTest {
@@ -22,9 +23,12 @@ class PatientServiceImplTest {
 	@Mock
 	PatientRepository patientRepository;
 	
+	@Mock
+	PrescriptionRepository prescriptionRepository;
+	
 	@BeforeEach
 	void setUp() throws Exception {
-		patientService = new PatientServiceImpl(patientRepository);
+		patientService = new PatientServiceImpl(patientRepository, prescriptionRepository);
 	}
 
 	@Test
@@ -34,14 +38,4 @@ class PatientServiceImplTest {
 		Assertions.assertTrue(patientOptional.isEmpty());
 	}
 	
-	@Test
-	void test_UpdateFirstName_UpdatesFirstNameCorrectly_WhenGivenStringNewName() {
-		//Arrange
-		Patient patient = new Patient();
-		patient.setFirstName("test");
-		//Act
-		patientService.updateFirstName(patient, "new name");
-		//Assert
-		Assertions.assertEquals(patient.getFirstName(), "new name");
-	}
 }

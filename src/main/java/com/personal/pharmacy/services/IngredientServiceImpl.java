@@ -1,6 +1,5 @@
 package com.personal.pharmacy.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -8,13 +7,14 @@ import org.springframework.stereotype.Service;
 import com.personal.pharmacy.model.Ingredient;
 import com.personal.pharmacy.repository.IngredientRepository;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
 	private final IngredientRepository ingredientRepository;
+	
+	public IngredientServiceImpl(IngredientRepository ingredientRepository) {
+		this.ingredientRepository = ingredientRepository;
+	}
 
 	@Override
 	public Ingredient save(Ingredient ingredient) {
@@ -22,14 +22,9 @@ public class IngredientServiceImpl implements IngredientService {
 	}
 
 	@Override
-	public void delete(Ingredient ingredient) {
-		ingredientRepository.delete(ingredient);
+	public Integer delete(Long id) {
+		return ingredientRepository.deleteById(id);
 		
-	}
-
-	@Override
-	public List<Ingredient> findAll() {
-		return (List<Ingredient>) ingredientRepository.findAll();
 	}
 
 	@Override
@@ -39,9 +34,8 @@ public class IngredientServiceImpl implements IngredientService {
 		: ingredientRepository.findById(id);
 	}
 	
-	public Ingredient updateIngredientName(Ingredient ingredient, String name) {
-		ingredient.setName(name);
-		return ingredientRepository.save(ingredient);
+	public Integer updateIngredientName(Long id, String name) {
+		return ingredientRepository.updateName(id, name);
 	}
 	
 }

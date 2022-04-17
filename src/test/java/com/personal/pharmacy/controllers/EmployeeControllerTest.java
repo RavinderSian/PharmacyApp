@@ -1,5 +1,6 @@
 package com.personal.pharmacy.controllers;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
@@ -9,8 +10,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.pharmacy.model.Employee;
+import com.personal.pharmacy.model.Prescription;
 import com.personal.pharmacy.services.EmployeeService;
 
 @WebMvcTest(EmployeeController.class)
@@ -99,40 +103,58 @@ class EmployeeControllerTest {
 	@Test
 	void test_Delete_ReturnsCorrectStatus_WhenEmployeePresent() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setLastName("testing");
-		employee.setEmployeeId(1L);
-		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
+		when(employeeService.delete(1L)).thenReturn(1);
 		
-		this.mockMvc.perform(delete("/employee/delete/1").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		this.mockMvc.perform(delete("/employee/delete/1"))
 		.andExpect(status().isOk());
 	}
 	
 	@Test
 	void test_Delete_ReturnsNotFound_WhenGivenId5() throws Exception {
-		this.mockMvc.perform(delete("/employee/delete/5").contentType(MediaType.APPLICATION_JSON_VALUE).content("test"))
+		this.mockMvc.perform(delete("/employee/delete/5"))
 		.andExpect(status().isNotFound());
 	}
 	
 	@Test
 	void test_UpdateFirstName_CorrectlyUpdatesFirstName_WhenGivenFirstNameJohnAndId1() throws Exception {
 		
-		Employee employee = new Employee();
-		employee.setEmployeeId(1L);
-		employee.setFirstName("test");
-		employee.setLastName("testing");
-		when(employeeService.findById(1L)).thenReturn(Optional.of(employee));
-		employee.setFirstName("John");
-		when(employeeService.updateFirstName(employee, "John")).thenReturn(employee);
+		when(employeeService.updateFirstName(1L, "John")).thenReturn(1);
 		
 		this.mockMvc.perform(patch("/employee/1/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
-		.andExpect(status().isOk())
-		.andExpect(content().json("{'employeeId': 1, 'firstName': 'John'}"));
+		.andExpect(status().isOk());
 	}
 	
 	@Test
-	void test_UpdateFirstName_ReturnsNoDataForId5_WhenGivenFirstNameJohnAndId5() throws Exception {
+	void test_UpdateFirstName_ReturnsNotFound_WhenGivenFirstNameJohnAndIdDoesNotExist() throws Exception {
 		this.mockMvc.perform(patch("/employee/5/updatefirstname").contentType(MediaType.APPLICATION_JSON_VALUE).content("John"))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void test_GetPrescriptions_ReturnsListOfPrescrptions_WhenGivenExistingId() throws Exception {
+		
+		Prescription prescription = new Prescription();
+		prescription.setPrescriptionId(1L);
+		prescription.setPatientId(1L);
+		
+		Prescription secondPrescription = new Prescription();
+		secondPrescription.setPrescriptionId(2L);
+		secondPrescription.setPatientId(1L);
+		
+		when(employeeService.findPrescriptionsForEmployee(1L)).thenReturn(Arrays.asList(prescription, secondPrescription));
+		
+		this.mockMvc.perform(get("/employee/1/prescriptions"))
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(status().isOk())
+		.andExpect((jsonPath("$[0].prescriptionId", is(1))))
+		.andExpect((jsonPath("$[0].patientId", is(1))))
+		.andExpect((jsonPath("$[1].prescriptionId", is(2))))
+		.andExpect((jsonPath("$[1].patientId", is(1))));
+	}
+	
+	@Test
+	void test_GetPrescriptions_ReturnsNotFound_WhenGivenNonExistingId() throws Exception {
+		this.mockMvc.perform(get("/employee/5/prescriptions"))
 		.andExpect(status().isNotFound());
 	}
 	

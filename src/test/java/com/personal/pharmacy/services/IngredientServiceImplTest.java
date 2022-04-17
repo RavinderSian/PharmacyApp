@@ -44,15 +44,4 @@ class IngredientServiceImplTest {
 		Assertions.assertTrue(ingredientService.findById(5L).isEmpty());
 	}
 	
-	@Test
-	void test_UpdateIngredientName_ReturnsIngredientWithCorrectName_WhenGivenStringNewName() {
-		//Arrange
-		Ingredient ingredient = new Ingredient();
-		ingredient.setName("test");
-		//Act
-		ingredientService.updateIngredientName(ingredient, "new name");
-		//Assert
-		Assertions.assertEquals("new name", ingredient.getName());
-	}
-
 }
